@@ -86,4 +86,8 @@
   .bg-white-200_gray-800 {
     @apply bg-white-200 dark:bg-gray-800;
   }
+
+  .text-gray-900_white {
+    @apply text-gray-900 dark:text-white;
+  }
 }
