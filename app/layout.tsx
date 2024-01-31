@@ -1,5 +1,4 @@
 import React from "react";
-
 import type { Metadata } from "next";
 
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -22,12 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={jakarta.className}>
-        <ThemeProvider>
+      <ThemeProvider>
+        <body
+          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
+        >
           <NavBar />
           {children}
-        </ThemeProvider>
-      </body>
+        </body>
+      </ThemeProvider>
     </html>
   );
 }
