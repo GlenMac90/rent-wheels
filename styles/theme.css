@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .bold-32 {
+    @apply font-bold text-[32px] leading-[38px];
+  }
+
+  .semibold-32 {
+    @apply font-semibold text-[32px] leading-[38px];
+  }
+
+  .bold-20 {
+    @apply font-bold text-[20px] leading-[26px];
+  }
+
+  .semibold-20 {
+    @apply font-semibold text-[20px] leading-[26px];
+  }
+
+  .medium-20 {
+    @apply font-medium text-[20px] leading-[26px];
+  }
+
+  .base-20 {
+    @apply font-normal text-[20px] leading-[26px];
+  }
+
+  .extrabold-18 {
+    @apply font-extrabold text-[18px] leading-[22px];
+  }
+
+  .medium-18 {
+    @apply font-medium text-[18px] leading-[22px];
+  }
+
+  .bold-16 {
+    @apply font-bold text-[16px] leading-[20px];
+  }
+
+  .semibold-16 {
+    @apply font-semibold text-[16px] leading-[20px];
+  }
+
+  .medium-16 {
+    @apply font-medium text-[16px] leading-[20px];
+  }
+
+  .bold-14 {
+    @apply font-bold text-[14px] leading-[18px];
+  }
+
+  .medium-14 {
+    @apply font-medium text-[14px] leading-[18px];
+  }
+
+  .base-14 {
+    @apply font-normal text-[14px] leading-[18px];
+  }
+
+  .base-12 {
+    @apply font-normal text-[12px] leading-[16px];
+  }
+
+  .bg-white-200_gray-900 {
+    @apply bg-white-200 dark:bg-gray-900;
+  }
+
+  .bg-white_gray-900 {
+    @apply bg-white dark:bg-gray-900;
+  }
+
+  .bg-white_gray-850 {
+    @apply bg-white dark:bg-gray-850;
+  }
+
+  .bg-white-200_gray-800 {
+    @apply bg-white-200 dark:bg-gray-800;
+  }
+
+  .text-gray-900_white {
+    @apply text-gray-900 dark:text-white;
+  }
+}
