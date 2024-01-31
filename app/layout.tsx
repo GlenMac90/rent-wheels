@@ -1,10 +1,14 @@
 import React from "react";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
+import { ThemeProvider } from "@/providers/ThemeProvider";
+
+import { Plus_Jakarta_Sans as PlusJakartaSans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import NavBar from "@/components/nav-bar/NavBar";
+const jakarta = PlusJakartaSans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Rent Wheels",
@@ -18,7 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={jakarta.className}>
+        <ThemeProvider>
+          <NavBar />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
