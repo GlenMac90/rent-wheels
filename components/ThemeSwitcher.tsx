@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTheme } from "next-themes";
 
 const ThemeSwitcher = () => {
@@ -12,10 +13,17 @@ const ThemeSwitcher = () => {
     }
   };
 
+  const imageSource = theme === "light" ? "/sun.svg" : "/moon.svg";
+
   return (
-    <div>
-      <button onClick={handleClick}>Switch Theme</button>
-    </div>
+    <button onClick={handleClick}>
+      <Image
+        src={imageSource}
+        height={20}
+        width={20}
+        alt={`Button to switch light or dark mode. Currrent mode is ${theme} mode`}
+      />
+    </button>
   );
 };
 
