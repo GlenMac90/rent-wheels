@@ -21,7 +21,7 @@ const ThemeSwitcher = () => {
         src={imageSource}
         height={20}
         width={20}
-        alt={`Button to switch light or dark mode. Currrent mode is ${theme} mode`}
+        alt={`Button to switch light or dark mode. Current mode is ${theme} mode`}
       />
     </button>
   );
