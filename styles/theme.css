@@ -19,6 +19,10 @@
     @apply font-semibold text-[32px] leading-[38px];
   }
 
+  .bold-24 {
+    @apply font-bold text-[24px] leading-[39px];
+  }
+
   .bold-20 {
     @apply font-bold text-[20px] leading-[26px];
   }
@@ -59,6 +63,10 @@
     @apply font-bold text-[14px] leading-[18px];
   }
 
+  .semibold-14 {
+    @apply font-semibold text-[14px] leading-[18px];
+  }
+
   .medium-14 {
     @apply font-medium text-[14px] leading-[18px];
   }
@@ -79,8 +87,16 @@
     @apply bg-white dark:bg-gray-900;
   }
 
+  .bg-white_gray-700 {
+    @apply bg-white dark:bg-gray-700;
+  }
+
   .bg-white_gray-850 {
     @apply bg-white dark:bg-gray-850;
+  }
+
+  .bg-white-100_gray-850 {
+    @apply bg-white-100 dark:bg-gray-850;
   }
 
   .bg-white-200_gray-800 {
@@ -89,5 +105,9 @@
 
   .text-gray-900_white {
     @apply text-gray-900 dark:text-white;
+  }
+
+  .text-gray-700_white-200 {
+    @apply text-gray-700 dark:text-white-200;
   }
 }

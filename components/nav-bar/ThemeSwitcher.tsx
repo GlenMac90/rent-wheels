@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const ThemeSwitcher = () => {
   const { setTheme, theme } = useTheme();
   const handleClick = () => {
     if (theme === "light") {
       setTheme("dark");
+      localStorage.theme = "dark";
     } else {
       setTheme("light");
+      localStorage.theme = "light";
     }
   };
 
