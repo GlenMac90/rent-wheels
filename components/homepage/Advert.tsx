@@ -1,14 +1,8 @@
 import Image from "next/image";
 
-const Advert = ({
-  title,
-  description,
-  left = false,
-}: {
-  title: string;
-  description: string;
-  left?: boolean;
-}) => {
+import { AdvertProps } from "@/types/homepage.index";
+
+const Advert = ({ title, description, left = false }: AdvertProps) => {
   return (
     <div
       className={`${left ? "flex bg-[url('/advert-bg-1.png')]" : "hidden bg-[url('/advert-bg-2.png')] md:flex"} h-[14.5rem] w-full flex-col justify-between rounded-ten p-4 text-white md:h-[22.5rem] md:p-6`}
