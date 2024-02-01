@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <ThemeProvider>
         <body
-          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
+          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none pt-[7.65rem] sm:pt-[8.25rem]`}
         >
           <NavBar />
           {children}

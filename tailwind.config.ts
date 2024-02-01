@@ -18,6 +18,9 @@ const config: Config = {
         xxs: "320px",
         xs: "400px",
       },
+      borderRadius: {
+        ten: "10px",
+      },
       colors: {
         blue: {
           500: "#3563E9",
