@@ -5,4 +5,5 @@ export interface ButtonProps {
   width: string;
   height: string;
   className?: string;
+  submit?: boolean;
 }
