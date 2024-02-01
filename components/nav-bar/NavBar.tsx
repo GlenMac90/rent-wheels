@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 import Logo from "../Logo";
-import NavBarLinks from "../NavBarLinks";
-import ThemeSwitcher from "../ThemeSwitcher";
+import NavBarLinks from "./NavBarLinks";
+import ThemeSwitcher from "./ThemeSwitcher";
 import Button from "../Button";
 import Avatar from "./Avatar";
 import MobileNavBar from "./MobileNavBar";
@@ -62,14 +62,7 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-      {showMobileNavbar && (
-        <div
-          className="fixed flex h-screen w-screen justify-center bg-black/40 px-3 pt-6 dark:bg-black/10"
-          onClick={handleCloseClick}
-        >
-          <MobileNavBar handleCloseClick={handleCloseClick} />
-        </div>
-      )}
+      {showMobileNavbar && <MobileNavBar handleCloseClick={handleCloseClick} />}
     </>
   );
 };

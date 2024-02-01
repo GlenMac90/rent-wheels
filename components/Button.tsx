@@ -1,16 +1,6 @@
-import { ReactNode } from "react";
+import { ButtonProps } from "@/types/shared.index";
 
-const Button = ({
-  children,
-  width,
-  height,
-  className,
-}: {
-  children: ReactNode;
-  width: string;
-  height: string;
-  className?: string;
-}) => {
+const Button = ({ children, width, height, className }: ButtonProps) => {
   return (
     <button
       className={`semibold-16 flex-center rounded bg-blue-500 text-white ${width} ${height} ${className}`}
