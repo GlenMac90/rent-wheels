@@ -2,7 +2,7 @@ import Advert from "./Advert";
 
 const Hero = () => {
   return (
-    <section className="flex w-full gap-8">
+    <section className="flex w-full gap-8 ">
       <Advert
         title="The Best Platform for Car Rental"
         description="Ease of doing car rental safely and reliably, and at a low price."

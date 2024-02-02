@@ -5,7 +5,7 @@ import { AdvertProps } from "@/types/homepage.index";
 const Advert = ({ title, description, left = false }: AdvertProps) => {
   return (
     <div
-      className={`${left ? "flex bg-[url('/advert-bg-1.png')]" : "hidden bg-[url('/advert-bg-2.png')] md:flex"} h-[14.5rem] w-full flex-col justify-between rounded-ten p-4 text-white md:h-[22.5rem] md:p-6`}
+      className={`${left ? "flex bg-[url('/advert-bg-1.png')]" : "hidden bg-[url('/advert-bg-2.png')] md:flex"} h-[14.5rem] w-full flex-col justify-between rounded-ten bg-cover p-4 text-white md:h-[22.5rem] md:p-6`}
     >
       <div className="flex flex-col gap-3 md:gap-4">
         <h1 className="semibold-20 sm:semibold-32">{title}</h1>
