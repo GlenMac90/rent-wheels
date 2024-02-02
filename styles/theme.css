@@ -79,6 +79,10 @@
     @apply font-normal text-[14px] leading-[18px];
   }
 
+  .semibold-12 {
+    @apply font-semibold text-[12px] leading-[16px];
+  }
+
   .base-12 {
     @apply font-normal text-[12px] leading-[16px];
   }
@@ -121,6 +125,14 @@
 
   .text-gray-400_white-200 {
     @apply text-gray-400 dark:text-white-200;
+  }
+
+  .text-blue-500_blue-300 {
+    @apply text-blue-500 dark:text-blue-300;
+  }
+
+  .text-blue-300_blue-500 {
+    @apply text-blue-300 dark:text-blue-500;
   }
 }
 
