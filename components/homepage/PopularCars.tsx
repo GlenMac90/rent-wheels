@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CarCard from "./CarCard";
 
 const PopularCars = () => {
   const [showMore, setShowMore] = useState(false);
@@ -17,7 +18,11 @@ const PopularCars = () => {
           {showMore ? "View Less" : "View All"}
         </button>
       </div>
-      <p>content</p>
+      <div className="relative flex gap-5 overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: showMore ? 12 : 4 }, (_, index) => (
+          <CarCard key={index} />
+        ))}
+      </div>
     </section>
   );
 };

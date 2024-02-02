@@ -15,3 +15,13 @@ export const navBarLinks = [
     path: "/cars/new",
   },
 ];
+
+export const dummyCarData = {
+  name: "Skoda Octavia",
+  type: "Sedan",
+  image: "/dummy-car.png",
+  fuelCapacity: 50,
+  transmission: "Manual",
+  capacity: 5,
+  price: 99,
+};

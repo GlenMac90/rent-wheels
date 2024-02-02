@@ -34,7 +34,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="flex-center bg-white_gray-900 fixed top-0 h-[5.75rem] w-full border-b border-b-blue-50/40 px-6 dark:border-b-gray-850 sm:h-[6.25rem]">
+      <nav className="flex-center bg-white_gray-900 fixed top-0 z-40 h-[5.75rem] w-full border-b border-b-blue-50/40 px-6 dark:border-b-gray-850 sm:h-[6.25rem]">
         <div className="flex-between w-full max-w-[82rem]">
           <Logo />
           <div className="flex items-center gap-2.5 sm:gap-5">
