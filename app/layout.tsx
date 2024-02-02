@@ -7,6 +7,8 @@ import { Plus_Jakarta_Sans as PlusJakartaSans } from "next/font/google";
 import "./globals.css";
 
 import NavBar from "@/components/nav-bar/NavBar";
+import Footer from "@/components/nav-bar/Footer";
+
 const jakarta = PlusJakartaSans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,17 +18,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <ThemeProvider>
         <body
-          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none pt-[7.65rem] sm:pt-[8.25rem]`}
+          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
         >
           <NavBar />
           {children}
+          <Footer />
         </body>
       </ThemeProvider>
     </html>

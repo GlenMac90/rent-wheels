@@ -16,7 +16,21 @@ import Button from "./Button";
 import ArrowDownIcon from "./ArrowDownIcon";
 import { formatDate } from "@/utils";
 import { searchBarSchema } from "@/schemas";
-import { searchBarStyles } from "@/constants";
+
+export const searchBarStyles = {
+  outerDivStyles: "flex w-full flex-col gap-3 relative",
+  innerDivStyles: "flex w-full gap-2",
+  inputDivStyles:
+    "bg-white-200_gray-800 flex-between h-14 w-full rounded-md px-2.5",
+  labelStyles: "semibold-14 md:semibold-16 text-gray-900_white",
+  inputStyles:
+    "bg-white-200_gray-800 outline-none w-full text-gray-400_white-200 placeholder:base-12 placeholder:md:base-14 placeholder:text-gray-400_white-200",
+  placeholderStyles: "base-12 md:base-14 text-gray-400_white-200",
+  errorMessageStyles:
+    "base-12 text-red-500 md:absolute md:bottom-0 md:translate-y-5",
+  calendarStyles:
+    "bg-white_gray-900 m-[-2px] rounded-md border border-white-200 dark:border-gray-850",
+};
 
 type FormFields = z.infer<typeof searchBarSchema>;
 
@@ -93,7 +107,7 @@ const SearchBar = () => {
                 autoComplete="off"
                 {...register("location")}
                 placeholder="Select your location"
-                className={`${inputStyles} placeholder:base-12 placeholder:md:base-14 placeholder:text-gray-400_white-200`}
+                className={inputStyles}
               />
               <ArrowDownIcon />
             </div>
@@ -178,7 +192,7 @@ const SearchBar = () => {
         <Button
           width="w-full md:w-[4.625rem] lg:w-[10rem]"
           height="h-[3rem] md:h-[3.5rem]"
-          className="gap-1.5 self-end"
+          className="gap-1.5 self-end rounded-md"
           submit
         >
           <Image

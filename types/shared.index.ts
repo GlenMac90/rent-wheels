@@ -6,4 +6,5 @@ export interface ButtonProps {
   height: string;
   className?: string;
   submit?: boolean;
+  handleClick?: () => void;
 }

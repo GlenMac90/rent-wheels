@@ -22,7 +22,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
 
   return (
     <div
-      className="fixed flex h-screen w-screen justify-center bg-black/40 px-3 pt-6 dark:bg-black/10"
+      className="fixed z-50 flex h-screen w-screen justify-center bg-black/40 px-3 pt-6 dark:bg-black/10"
       onClick={handleCloseClick}
     >
       <div
