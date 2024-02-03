@@ -45,7 +45,7 @@ const {
   calendarStyles,
 } = searchBarStyles;
 
-const SearchBar = () => {
+const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
   const [selectedFromDate, setSelectedFromDate] =
     useState<string>("Select your date");
   const [selectedToDate, setSelectedToDate] =
@@ -89,8 +89,12 @@ const SearchBar = () => {
       className="bg-white-200_gray-900 md:bg-white_gray-850 flex w-full flex-col rounded-ten md:flex-row md:px-4 md:py-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex w-full flex-col gap-5 md:flex-row md:gap-4">
-        <div className="bg-white_gray-850 flex w-full flex-col gap-5 rounded-ten px-3 py-5 md:flex-row md:gap-4 md:p-0">
+      <div
+        className={`flex w-full flex-col gap-5  md:gap-4 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
+      >
+        <div
+          className={`bg-white_gray-850 flex w-full flex-col gap-5 rounded-ten px-3 py-5  md:gap-4 md:p-0 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
+        >
           <div className={outerDivStyles}>
             <div className={innerDivStyles}>
               <Image
@@ -190,7 +194,7 @@ const SearchBar = () => {
         </div>
 
         <Button
-          width="w-full md:w-[4.625rem] lg:w-[10rem]"
+          width={`w-full ${searchPage ? "xl:w-[10rem]" : "md:w-[4.625rem] lg:w-[10rem]"} `}
           height="h-[3rem] md:h-[3.5rem]"
           className="gap-1.5 self-end rounded-md"
           submit
