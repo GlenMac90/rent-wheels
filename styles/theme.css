@@ -127,6 +127,14 @@
     @apply text-gray-700 dark:text-white-200;
   }
 
+  .text-gray-700_white-100 {
+    @apply text-gray-700 dark:text-white-100;
+  }
+
+  .text-gray-blue-100 {
+    @apply text-gray-700 dark:text-blue-100;
+  }
+
   .text-gray-800_white {
     @apply text-gray-800 dark:text-white;
   }
