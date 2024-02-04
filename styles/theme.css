@@ -7,6 +7,10 @@
     @apply flex h-full w-screen justify-center px-6 pt-[7.65rem] sm:pt-[8.25rem] pb-12 md:pb-16;
   }
 
+  .search-page-styles {
+    @apply flex h-full w-screen justify-center px-6 lg:pl-0 lg:pr-6 pt-[7.65rem] sm:pt-[6.25rem] pb-12 md:pb-16 lg:pb-0;
+  }
+
   .flex-center {
     @apply flex items-center justify-center;
   }
@@ -121,6 +125,14 @@
 
   .text-gray-700_white-200 {
     @apply text-gray-700 dark:text-white-200;
+  }
+
+  .text-gray-700_white-100 {
+    @apply text-gray-700 dark:text-white-100;
+  }
+
+  .text-gray-blue-100 {
+    @apply text-gray-700 dark:text-blue-100;
   }
 
   .text-gray-800_white {
