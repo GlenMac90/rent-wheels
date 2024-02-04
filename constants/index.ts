@@ -25,3 +25,49 @@ export const dummyCarData = {
   capacity: 5,
   price: 99,
 };
+
+export const carTypes = [
+  {
+    id: "sport",
+    label: "Sport",
+  },
+  {
+    id: "suv",
+    label: "SUV",
+  },
+  {
+    id: "mpv",
+    label: "MPV",
+  },
+  {
+    id: "sedan",
+    label: "Sedan",
+  },
+  {
+    id: "coupe",
+    label: "Coupe",
+  },
+  {
+    id: "hatchback",
+    label: "Hatchback",
+  },
+];
+
+export const carCapacity = [
+  {
+    id: "2",
+    label: "2 Persons",
+  },
+  {
+    id: "4",
+    label: "4 Persons",
+  },
+  {
+    id: "6",
+    label: "6 Persons",
+  },
+  {
+    id: "8",
+    label: "8 Persons or More",
+  },
+];
