@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,24 @@ const SearchPageFilters = () => {
     watch,
     formState: { errors },
   } = form;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setShowMobileFilters(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleClose = () => {
+    setShowMobileFilters(false);
+  };
 
   console.log(errors, "errors");
 
@@ -76,12 +94,15 @@ const SearchPageFilters = () => {
           <div className="hidden lg:flex lg:flex-col">
             <OptionalSearchFilters form={form} currentPrice={currentPrice} />
           </div>
-          {/* <button type="submit" className="mt-5 rounded-ten bg-blue-100 py-3">
-            submit
-          </button> */}
         </form>
+        {showMobileFilters && (
+          <MobileSearchFilters
+            form={form}
+            currentPrice={currentPrice}
+            handleClose={handleClose}
+          />
+        )}
       </Form>
-      {showMobileFilters && <MobileSearchFilters form={form} />}
     </>
   );
 };

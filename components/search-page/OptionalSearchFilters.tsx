@@ -9,12 +9,15 @@ import { OptionalSearchFiltersProps } from "@/types/searchpage.index";
 const OptionalSearchFilters = ({
   form,
   currentPrice,
+  mobileFilters = false,
 }: OptionalSearchFiltersProps) => {
   return (
     <>
-      <FormItem className="mt-14 flex flex-col">
-        <FormLabel className="semibold-12 mb-7 text-blue-100">
-          Car Type
+      <FormItem className={`${!mobileFilters && "mt-14"}  flex flex-col`}>
+        <FormLabel
+          className={`${mobileFilters ? "mb-3" : "mb-7"} semibold-12  text-blue-100`}
+        >
+          TYPE
         </FormLabel>
         <div className="flex flex-col gap-2">
           {carTypes.map((type) => (
@@ -49,9 +52,13 @@ const OptionalSearchFilters = ({
           ))}
         </div>
       </FormItem>
-      <FormItem className="mt-14 flex flex-col">
-        <FormLabel className="semibold-12 mb-7 text-blue-100">
-          Capacity
+      <FormItem
+        className={`${mobileFilters ? "mt-8" : "mt-14"}  flex flex-col`}
+      >
+        <FormLabel
+          className={`${mobileFilters ? "mb-3" : " mb-7"} semibold-12 text-blue-100`}
+        >
+          CAPACITY
         </FormLabel>
         <div className="flex flex-col gap-2">
           {carCapacity.map((capacity) => (
@@ -86,8 +93,12 @@ const OptionalSearchFilters = ({
           ))}
         </div>
       </FormItem>
-      <FormItem className="mt-14 flex flex-col">
-        <FormLabel className="semibold-12 mb-7 text-blue-100">Price</FormLabel>
+      <FormItem className={`${mobileFilters ? "mt-8" : "mt-14"} flex flex-col`}>
+        <FormLabel
+          className={`${mobileFilters ? "mb-3" : "mb-7"} semibold-12  text-blue-100`}
+        >
+          PRICE
+        </FormLabel>
         <Slider
           defaultValue={[50]}
           max={1000}

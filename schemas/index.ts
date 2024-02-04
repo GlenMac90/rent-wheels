@@ -7,7 +7,7 @@ export const searchBarSchema = z.object({
 });
 
 export const searchFiltersSchema = z.object({
-  carName: z.string().min(1).max(10),
+  carName: z.string().min(1).max(20),
   carType: z.array(z.string()),
   carCapacity: z.array(z.string()),
   carMaxPrice: z.number().min(1).max(1000).optional(),
