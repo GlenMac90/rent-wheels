@@ -206,7 +206,7 @@ const SearchPageFilters = () => {
           />
         </FormItem>
         <FormLabel className="semibold-12 mt-4 text-gray-700">
-          {currentPrice === 1000 && "Max Price:"} ${currentPrice}
+          Max Price: ${currentPrice}
         </FormLabel>
       </form>
     </Form>
