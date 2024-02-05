@@ -20,7 +20,13 @@ export const dummyCarData = {
   name: "Skoda Octavia",
   type: "Sedan",
   image: "/dummy-car.png",
-  galleryImages: [],
+  description:
+    "The Skoda Octavia is a small family car produced by the Czech car manufacturer Skoda Auto since 1996. It shares its name with an earlier model.",
+  galleryImages: [
+    "/dummy-car-one.png",
+    "/dummy-car-two.png",
+    "/dummy-car-three.png",
+  ],
   fuelCapacity: 50,
   transmission: "Manual",
   capacity: 5,
