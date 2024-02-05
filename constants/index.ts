@@ -20,6 +20,7 @@ export const dummyCarData = {
   name: "Skoda Octavia",
   type: "Sedan",
   image: "/dummy-car.png",
+  galleryImages: [],
   fuelCapacity: 50,
   transmission: "Manual",
   capacity: 5,
