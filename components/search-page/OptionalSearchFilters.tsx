@@ -100,7 +100,7 @@ const OptionalSearchFilters = ({
           PRICE
         </FormLabel>
         <Slider
-          defaultValue={[50]}
+          defaultValue={currentPrice ? [currentPrice] : [50]}
           max={1000}
           step={1}
           className="w-full"
