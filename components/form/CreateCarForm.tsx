@@ -34,6 +34,7 @@ const CreateCarForm = () => {
   });
 
   const formValues = watch();
+  console.log(formValues.rentPrice);
 
   const onSubmit: SubmitHandler<CarFormFields> = (data) => {
     console.log(data);
