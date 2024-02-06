@@ -4,6 +4,7 @@ import { MouseEvent, useState } from "react";
 
 import { dummyCarData } from "@/constants";
 import CarModalScreenOne from "./CarModalScreenOne";
+import CarModalScreenTwo from "./CarModalScreenTwo";
 
 const CarCardModal = ({
   handleCloseModal,
@@ -26,20 +27,22 @@ const CarCardModal = ({
     setShowModalScreenTwo(false);
   };
 
+  const modalProps = {
+    data: dummyCarData,
+    handleClick,
+    handleClose,
+    handleButtonClick,
+  };
+
   return (
     <div
       className="flex-center fixed left-0 top-0 z-50 h-screen w-screen bg-black/40 p-2 px-3 pt-6 dark:bg-black/30 lg:p-4"
       onClick={handleClose}
     >
       {showModalScreenTwo ? (
-        <div>content</div>
+        <CarModalScreenTwo {...modalProps} />
       ) : (
-        <CarModalScreenOne
-          data={dummyCarData}
-          handleClick={handleClick}
-          handleClose={handleClose}
-          handleButtonClick={handleButtonClick}
-        />
+        <CarModalScreenOne {...modalProps} />
       )}
     </div>
   );
