@@ -71,13 +71,13 @@ const OptionalSearchFilters = ({
                   <FormItem className="flex items-center gap-2">
                     <FormControl>
                       <Checkbox
-                        checked={field.value?.includes(capacity.id)}
+                        checked={field.value?.includes(capacity.id.toString())}
                         onCheckedChange={(checked) => {
                           return checked
                             ? field.onChange([...field.value, capacity.id])
                             : field.onChange(
                                 field.value?.filter(
-                                  (value) => value !== capacity.id
+                                  (value) => value !== capacity.id.toString()
                                 )
                               );
                         }}
