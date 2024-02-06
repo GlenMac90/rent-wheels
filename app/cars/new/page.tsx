@@ -1,9 +1,11 @@
+import CreateCarForm from "@/components/form/CreateCarForm";
+
 const CreateNewCar = () => {
   return (
-    <div>
-      CreateNewCar
-    </div>
-  )
-}
+    <main className="page-styles">
+      <CreateCarForm />
+    </main>
+  );
+};
 
-export default CreateNewCar
+export default CreateNewCar;

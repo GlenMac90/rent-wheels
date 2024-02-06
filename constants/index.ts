@@ -62,19 +62,30 @@ export const carTypes = [
 
 export const carCapacity = [
   {
-    id: "2",
+    id: 2,
     label: "2 Persons",
   },
   {
-    id: "4",
+    id: 4,
     label: "4 Persons",
   },
   {
-    id: "6",
+    id: 6,
     label: "6 Persons",
   },
   {
-    id: "8",
+    id: 8,
     label: "8 Persons or More",
+  },
+];
+
+export const carTransmission = [
+  {
+    id: "auto",
+    label: "Automatic",
+  },
+  {
+    id: "manual",
+    label: "Manual",
   },
 ];
