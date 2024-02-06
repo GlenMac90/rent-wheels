@@ -27,7 +27,7 @@ export const searchBarStyles = {
     "bg-white-200_gray-800 outline-none w-full text-gray-400_white-200 placeholder:base-12 placeholder:md:base-14 placeholder:text-gray-400_white-200",
   placeholderStyles: "base-12 md:base-14 text-gray-400_white-200",
   errorMessageStyles:
-    "base-12 text-red-500 md:absolute md:bottom-0 md:translate-y-5",
+    "base-12 text-red-500 md:absolute md:bottom-0 md:translate-y-4",
   calendarStyles:
     "bg-white_gray-900 m-[-2px] rounded-md border border-white-200 dark:border-gray-850",
 };

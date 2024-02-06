@@ -20,15 +20,9 @@ export const pickupDropoffSchema = z.object({
   pickupDate: z
     .date()
     .min(new Date(), { message: "Pickup date cannot be in the past" }),
-  pickupTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-    message: "Pickup time must be in HH:MM format",
-  }),
   dropoffDate: z
     .date()
     .min(new Date(), { message: "Dropoff date cannot be in the past" }),
-  dropoffTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-    message: "Dropoff time must be in HH:MM format",
-  }),
 });
 
 export type PickupDropoffFields = z.infer<typeof pickupDropoffSchema>;

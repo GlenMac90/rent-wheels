@@ -10,6 +10,7 @@ import { Calendar } from "../ui/calendar";
 import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
 import ArrowDownIcon from "../ArrowDownIcon";
 import { formatDate } from "@/utils";
+import Button from "../Button";
 
 const CarModalScreenTwo = ({
   data,
@@ -77,7 +78,7 @@ const CarModalScreenTwo = ({
 
   return (
     <div
-      className="bg-white_gray-850 flex w-full max-w-[31.25rem] flex-col rounded-ten p-4 lg:p-10"
+      className="bg-white_gray-850 flex h-fit w-full max-w-[31.25rem] flex-col rounded-ten p-4 lg:p-10"
       onClick={handleClick}
     >
       <div className="flex-between w-full">
@@ -121,6 +122,11 @@ const CarModalScreenTwo = ({
               {...register("location")}
             />
           </div>
+          {errors.location && (
+            <span className="light-12 text-red-500">
+              {errors.location.message}
+            </span>
+          )}
         </div>
         <div className="flex w-full gap-2.5">
           <div className={calendarImagesStyles}>
@@ -152,23 +158,9 @@ const CarModalScreenTwo = ({
                 />
               </PopoverContent>
             </Popover>
-          </div>
-          <div className={calendarImagesStyles}>
-            <div className="flex gap-1.5">
-              <Image
-                src="/calendar.svg"
-                height={16}
-                width={16}
-                alt="search icon for location field"
-                className="shrink-0"
-              />
-              <label className={labelStyles}>Pick-Up Time</label>
-            </div>
-            <Popover>
-              <PopoverTrigger className={popoverTriggerStyles}>
-                Select your time <ArrowDownIcon />
-              </PopoverTrigger>
-            </Popover>
+            {errors.pickupDate && (
+              <span className="light-12 text-red-500">Please pick a date</span>
+            )}
           </div>
         </div>
         <div className="flex w-full gap-2.5">
@@ -201,25 +193,14 @@ const CarModalScreenTwo = ({
                 />
               </PopoverContent>
             </Popover>
-          </div>
-          <div className={calendarImagesStyles}>
-            <div className="flex gap-1.5">
-              <Image
-                src="/calendar.svg"
-                height={16}
-                width={16}
-                alt="search icon for location field"
-                className="shrink-0"
-              />
-              <label className={labelStyles}>Drop-Off Time</label>
-            </div>
-            <Popover>
-              <PopoverTrigger className={popoverTriggerStyles}>
-                Select your time <ArrowDownIcon />
-              </PopoverTrigger>
-            </Popover>
+            {errors.dropoffDate && (
+              <span className="light-12 text-red-500">Please pick a date</span>
+            )}
           </div>
         </div>
+        <Button width="w-full" height="h-14" submit>
+          Rent Now
+        </Button>
       </form>
     </div>
   );

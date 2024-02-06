@@ -45,7 +45,7 @@ const CarModalScreenOne = ({
   return (
     <div
       onClick={handleClick}
-      className="bg-white_gray-850 relative flex w-full max-w-[22.5rem] flex-col gap-6 rounded-ten p-4 lg:max-w-5xl lg:flex-row lg:p-8"
+      className="bg-white_gray-850 relative flex h-fit w-full max-w-[22.5rem] flex-col gap-6 rounded-ten p-4 lg:max-w-5xl lg:flex-row lg:p-8"
     >
       <button
         className="bg-white_gray-850 absolute -top-5 right-2 size-6 lg:hidden"
