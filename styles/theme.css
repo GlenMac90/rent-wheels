@@ -27,6 +27,10 @@
     @apply font-semibold text-[32px] leading-[38px];
   }
 
+  .bold-28 {
+    @apply font-bold text-[28px] leading-[34px];
+  }
+
   .bold-24 {
     @apply font-bold text-[24px] leading-[39px];
   }
@@ -45,6 +49,10 @@
 
   .base-20 {
     @apply font-normal text-[20px] leading-[26px];
+  }
+
+  .light-20 {
+    @apply font-light text-[20px] leading-[26px];
   }
 
   .extrabold-18 {
@@ -89,6 +97,10 @@
 
   .base-12 {
     @apply font-normal text-[12px] leading-[16px];
+  }
+
+  .light-12 {
+    @apply font-light text-[12px] leading-[16px];
   }
 
   .medium-12 {
