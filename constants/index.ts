@@ -89,3 +89,10 @@ export const carTransmission = [
     label: "Manual",
   },
 ];
+
+export const profileDummyData = {
+  name: "John Doe",
+  jobTitle: "Software Engineer",
+  profileImage: "/dummy-profile-image.jpg",
+  bannerImage: "/dummy-banner-image.webp",
+};
