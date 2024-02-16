@@ -59,6 +59,10 @@
     @apply font-extrabold text-[18px] leading-[22px];
   }
 
+  .bold-18 {
+    @apply font-bold text-[18px] leading-[22px];
+  }
+
   .semibold-18 {
     @apply font-semibold text-[18px] leading-[22px];
   }
