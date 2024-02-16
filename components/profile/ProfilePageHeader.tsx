@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import Button from "../Button";
 import { profileDummyData } from "@/constants";
+import ProfileInfoEditButton from "./ProfileInfoEditButton";
 import ProfileBannerEditButton from "./ProfileBannerEditButton";
 
 const ProfilePageHeader = () => {
@@ -30,9 +30,7 @@ const ProfilePageHeader = () => {
           <span className="text-gray-900_white bold-20">{name}</span>
           <span className="base-14 text-blue-100">{jobTitle}</span>
         </div>
-        <Button height="h-9 md:h-12" width="w-28 md:w-32" className="self-end">
-          Edit Profile
-        </Button>
+        <ProfileInfoEditButton />
       </div>
     </header>
   );
