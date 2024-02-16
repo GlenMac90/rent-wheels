@@ -1,14 +1,17 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Avatar = () => {
   return (
-    <Image
-      src="/text-avatar.png"
-      height={28}
-      width={28}
-      alt="Profile Image"
-      className="shrink-0 rounded-full"
-    />
+    <Link href="/profile">
+      <Image
+        src="/text-avatar.png"
+        height={28}
+        width={28}
+        alt="Profile Image"
+        className="shrink-0 rounded-full"
+      />
+    </Link>
   );
 };
 
