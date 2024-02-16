@@ -59,7 +59,7 @@ const ProfileInfoEditButton = () => {
             onClick={handleInnerClick}
           >
             <div className="flex-between w-full">
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-2">
                 <span className="text-gray-900_white bold-18 md:bold-20">
                   Edit Profile
                 </span>
@@ -80,7 +80,7 @@ const ProfileInfoEditButton = () => {
                     alt="Profile Image"
                     height={86}
                     width={86}
-                    className="size-[4.5rem] shrink-0 rounded-full md:size-[5.5rem]"
+                    className="size-[4.5rem] shrink-0 rounded-full object-cover md:size-[5.5rem]"
                   />
                   <input
                     {...register("profileImage")}
