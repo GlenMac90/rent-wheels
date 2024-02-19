@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node express/index",
     "lint": "next lint"
   },
   "dependencies": {
@@ -24,6 +24,8 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-tailwindcss": "^3.14.1",
     "lucide-react": "^0.321.0",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.3",
     "next": "14.1.0",
     "prettier": "^3.2.4",
     "react": "^18",
