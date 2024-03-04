@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useRef, useState, MouseEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -8,11 +9,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
+import { useDropzone } from "react-dropzone";
+import { FiUpload } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
 import { carTypes, carCapacity, carTransmission } from "@/constants";
 import { PopoverClose } from "@radix-ui/react-popover";
+import Image from "next/image";
 
 const rowStyles = "flex flex-col gap-6 md:flex-row md:gap-8 mt-6";
 const labelInputContainerStyles =
@@ -23,6 +28,8 @@ const inputStyles =
 const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
 const CreateCarForm = () => {
+  const [images, setImages] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -33,11 +40,29 @@ const CreateCarForm = () => {
     resolver: zodResolver(carFormSchema),
   });
 
+  console.log(images);
   const formValues = watch();
-  console.log(formValues.rentPrice);
 
   const onSubmit: SubmitHandler<CarFormFields> = (data) => {
     console.log(data);
+  };
+
+  const onDrop = useCallback((acceptedFiles: any) => {
+    const file = acceptedFiles[0];
+    const urlString = URL.createObjectURL(file);
+    setImages((prev) => [...prev, urlString]);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const handleImageDelete = (e: MouseEvent<HTMLButtonElement>) => {
+    const index = images.findIndex((img) => img === e.currentTarget.value);
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
   };
 
   return (
@@ -260,6 +285,57 @@ const CreateCarForm = () => {
           )}
         </div>
       </div>
+
+      {images && images.length > 0 && (
+        <div className="mt-6 flex w-full flex-wrap justify-center gap-4">
+          {images.map((image) => (
+            <div key={image} className="relative flex">
+              <button
+                className="absolute right-1 top-1 bg-white/50 text-xl text-slate-600"
+                onClick={handleImageDelete}
+                type="button"
+              >
+                <IoClose />
+              </button>
+              <Image
+                src={image}
+                alt="car image"
+                width={180}
+                height={180}
+                className="object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6 flex w-full flex-col gap-5">
+        <label className="semibold-14 md:semibold-16 text-gray-900_white">
+          Upload Image
+        </label>
+        <div
+          {...getRootProps()}
+          className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 ${isDragActive && "bg-white-200_gray-800"}`}
+        >
+          <input {...getInputProps()} className="hidden" ref={fileInputRef} />
+          <button type="button" onClick={handleButtonClick}>
+            <FiUpload className="text-2xl text-blue-500" />
+          </button>
+          <p className="medium-14 text-gray-blue-100 mt-4">
+            Drag and drop an image, or{" "}
+            <span
+              className="cursor-pointer text-blue-500"
+              onClick={handleButtonClick}
+            >
+              Browse
+            </span>
+          </p>
+          <span className="base-14 text-gray-400_white-100 mt-2">
+            High resolution images (png, jpg, gif)
+          </span>
+        </div>
+      </div>
+
       <Button width="w-full md:w-32" height="h-12" className="mt-8" submit>
         Register Car
       </Button>
