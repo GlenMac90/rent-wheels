@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ButtonProps } from "@/types/shared.index";
 
 const Button = ({
@@ -5,9 +7,21 @@ const Button = ({
   width,
   height,
   className,
+  linkPath = "",
   submit = false,
   handleClick,
 }: ButtonProps) => {
+  if (linkPath) {
+    return (
+      <Link
+        href={linkPath}
+        className={`semibold-16 flex-center shrink-0 rounded bg-blue-500 text-white ${width} ${height} ${className}`}
+      >
+        {children}
+      </Link>
+    );
+  }
+
   return (
     <button
       type={submit ? "submit" : "button"}

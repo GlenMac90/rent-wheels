@@ -42,3 +42,20 @@ export const carFormSchema = z.object({
 });
 
 export type CarFormFields = z.infer<typeof carFormSchema>;
+
+export const profileFormSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  jobTitle: z.string().min(1, { message: "Job title is required" }),
+  profileImage: z.string().min(1, { message: "Profile image is required" }),
+});
+
+export type ProfileFormFields = z.infer<typeof profileFormSchema>;
+
+export const signUpFormSchema = z.object({
+  username: z.string().min(5, { message: "Username is required" }).max(20),
+  email: z.string().email({ message: "Invalid email" }),
+  password: z.string().min(8, { message: "Password must be 8 characters" }),
+  name: z.string().min(1, { message: "Name is required" }),
+});
+
+export type SignUpFormFields = z.infer<typeof signUpFormSchema>;

@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { TbSteeringWheel } from "react-icons/tb";
+import { FaRegEdit } from "react-icons/fa";
 
 import { dummyCarData } from "@/constants";
 import Button from "../Button";
 import CarCardModal from "./CarCardModal";
 
-const CarCard = () => {
+const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
   const isLiked = false;
   const [liked, setLiked] = useState(isLiked);
   const [showModal, setShowModal] = useState(false);
@@ -28,15 +30,21 @@ const CarCard = () => {
             </span>
             <span className="base-12 md:bold-14 text-gray-400">{type}</span>
           </div>
-          <button className="self-start" onClick={() => setLiked(!liked)}>
-            <Image
-              src={liked ? "/liked-heart.svg" : "/unliked-heart.png"}
-              height={24}
-              width={24}
-              alt={`Icon showing the liked status of the car which is currently ${liked}`}
-              className="shrink-0"
-            />
-          </button>
+          {canEdit ? (
+            <Link href="/cars/123" className="self-start">
+              <FaRegEdit className="text-gray-900_white text-xl" />
+            </Link>
+          ) : (
+            <button className="self-start" onClick={() => setLiked(!liked)}>
+              <Image
+                src={liked ? "/liked-heart.svg" : "/unliked-heart.png"}
+                height={24}
+                width={24}
+                alt={`Icon showing the liked status of the car which is currently ${liked}`}
+                className="shrink-0"
+              />
+            </button>
+          )}
         </div>
         <Image
           src={image}
@@ -81,13 +89,15 @@ const CarCard = () => {
               day
             </span>
           </p>
-          <Button
-            height="h-11"
-            width="w-[7.25rem]"
-            handleClick={() => setShowModal(true)}
-          >
-            More Info
-          </Button>
+          {!canEdit && (
+            <Button
+              height="h-11"
+              width="w-[7.25rem]"
+              handleClick={() => setShowModal(true)}
+            >
+              More Info
+            </Button>
+          )}
         </div>
       </div>
       {showModal && <CarCardModal handleCloseModal={handleCloseModal} />}
