@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
+import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
@@ -28,6 +29,7 @@ const inputStyles =
 const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
 const CreateCarForm = () => {
+  const { toast } = useToast();
   const [images, setImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {
@@ -40,29 +42,52 @@ const CreateCarForm = () => {
     resolver: zodResolver(carFormSchema),
   });
 
-  console.log(images);
   const formValues = watch();
 
   const onSubmit: SubmitHandler<CarFormFields> = (data) => {
     console.log(data);
   };
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    const file = acceptedFiles[0];
-    const urlString = URL.createObjectURL(file);
-    setImages((prev) => [...prev, urlString]);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: any) => {
+      const file = acceptedFiles[0];
+      if (!file.type.startsWith("image")) {
+        toast({
+          variant: "destructive",
+          title: "Invalid file type",
+          description: "Please upload an image file",
+        });
+        return;
+      }
+      if (images.length >= 3) {
+        toast({
+          variant: "destructive",
+          title: "Maximum images reached",
+          description: "You can only upload a maximum of 3 images",
+        });
+        return;
+      }
+      const urlString = URL.createObjectURL(file);
+      setImages((prev) => [...prev, urlString]);
+    },
+    [images]
+  );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleButtonClick = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleImageDelete = (e: MouseEvent<HTMLButtonElement>) => {
-    const index = images.findIndex((img) => img === e.currentTarget.value);
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
+  const handleImageDelete = (image: string) => {
+    return (e: MouseEvent) => {
+      e.preventDefault();
+      toast({
+        variant: "info",
+        title: "Image removed",
+      });
+      setImages((prev) => prev.filter((img) => img !== image));
+    };
   };
 
   return (
@@ -292,7 +317,7 @@ const CreateCarForm = () => {
             <div key={image} className="relative flex">
               <button
                 className="absolute right-1 top-1 bg-white/50 text-xl text-slate-600"
-                onClick={handleImageDelete}
+                onClick={handleImageDelete(image)}
                 type="button"
               >
                 <IoClose />

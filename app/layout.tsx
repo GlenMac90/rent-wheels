@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
 
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           <NavBar />
           {children}
           <Footer />
+          <Toaster />
         </body>
       </ThemeProvider>
     </html>
