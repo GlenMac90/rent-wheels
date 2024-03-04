@@ -1,9 +1,5 @@
 const EditCar = () => {
-  return (
-    <div>
-      Edit Car
-    </div>
-  )
-}
+  return <div>Edit Car Page</div>;
+};
 
-export default EditCar
+export default EditCar;
