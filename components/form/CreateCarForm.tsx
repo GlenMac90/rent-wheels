@@ -13,12 +13,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import Image from "next/image";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
 import { carTypes, carCapacity, carTransmission } from "@/constants";
 import { PopoverClose } from "@radix-ui/react-popover";
-import Image from "next/image";
 
 const rowStyles = "flex flex-col gap-6 md:flex-row md:gap-8 mt-6";
 const labelInputContainerStyles =
