@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useRef, useState, MouseEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -8,6 +9,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
+import { useToast } from "@/components/ui/use-toast";
+import { useDropzone } from "react-dropzone";
+import { FiUpload } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
+import Image from "next/image";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
@@ -23,6 +29,9 @@ const inputStyles =
 const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
 const CreateCarForm = () => {
+  const { toast } = useToast();
+  const [images, setImages] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -34,10 +43,59 @@ const CreateCarForm = () => {
   });
 
   const formValues = watch();
-  console.log(formValues.rentPrice);
 
   const onSubmit: SubmitHandler<CarFormFields> = (data) => {
     console.log(data);
+  };
+
+  const imageLimitToast = () => {
+    toast({
+      variant: "destructive",
+      title: "Maximum images reached",
+      description: "You can only upload a maximum of 3 images",
+    });
+  };
+
+  const onDrop = useCallback(
+    (acceptedFiles: any) => {
+      if (acceptedFiles.length > 3) {
+        imageLimitToast();
+      }
+      acceptedFiles.slice(0, 3).forEach((file: any) => {
+        if (!file.type.startsWith("image")) {
+          toast({
+            variant: "destructive",
+            title: "Invalid file type",
+            description: "Please upload an image file",
+          });
+          return;
+        }
+        if (images.length >= 3) {
+          imageLimitToast();
+          return;
+        }
+        const urlString = URL.createObjectURL(file);
+        setImages((prev) => [...prev, urlString]);
+      });
+    },
+    [images]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const handleImageDelete = (image: string) => {
+    return (e: MouseEvent) => {
+      e.preventDefault();
+      toast({
+        variant: "info",
+        title: "Image removed",
+      });
+      setImages((prev) => prev.filter((img) => img !== image));
+    };
   };
 
   return (
@@ -260,6 +318,57 @@ const CreateCarForm = () => {
           )}
         </div>
       </div>
+
+      {images && images.length > 0 && (
+        <div className="mt-6 flex w-full flex-wrap justify-center gap-4">
+          {images.map((image) => (
+            <div key={image} className="relative flex">
+              <button
+                className="absolute right-1 top-1 bg-white/50 text-xl text-slate-600"
+                onClick={handleImageDelete(image)}
+                type="button"
+              >
+                <IoClose />
+              </button>
+              <Image
+                src={image}
+                alt="car image"
+                width={180}
+                height={180}
+                className="w-full max-w-60 object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6 flex w-full flex-col gap-5">
+        <label className="semibold-14 md:semibold-16 text-gray-900_white">
+          Upload Image
+        </label>
+        <div
+          {...getRootProps()}
+          className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 px-4 ${isDragActive && "bg-white-200_gray-800"}`}
+        >
+          <input {...getInputProps()} className="hidden" ref={fileInputRef} />
+          <button type="button" onClick={handleButtonClick}>
+            <FiUpload className="text-2xl text-blue-500" />
+          </button>
+          <p className="medium-14 text-gray-blue-100 mt-4 text-center">
+            Drag and drop an image, or{" "}
+            <span
+              className="cursor-pointer text-blue-500"
+              onClick={handleButtonClick}
+            >
+              Browse
+            </span>
+          </p>
+          <span className="base-14 text-gray-400_white-100 mt-2 text-center">
+            High resolution images (png, jpg, gif)
+          </span>
+        </div>
+      </div>
+
       <Button width="w-full md:w-32" height="h-12" className="mt-8" submit>
         Register Car
       </Button>
