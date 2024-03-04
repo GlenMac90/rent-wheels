@@ -48,27 +48,35 @@ const CreateCarForm = () => {
     console.log(data);
   };
 
+  const imageLimitToast = () => {
+    toast({
+      variant: "destructive",
+      title: "Maximum images reached",
+      description: "You can only upload a maximum of 3 images",
+    });
+  };
+
   const onDrop = useCallback(
     (acceptedFiles: any) => {
-      const file = acceptedFiles[0];
-      if (!file.type.startsWith("image")) {
-        toast({
-          variant: "destructive",
-          title: "Invalid file type",
-          description: "Please upload an image file",
-        });
-        return;
+      if (acceptedFiles.length > 3) {
+        imageLimitToast();
       }
-      if (images.length >= 3) {
-        toast({
-          variant: "destructive",
-          title: "Maximum images reached",
-          description: "You can only upload a maximum of 3 images",
-        });
-        return;
-      }
-      const urlString = URL.createObjectURL(file);
-      setImages((prev) => [...prev, urlString]);
+      acceptedFiles.slice(0, 3).forEach((file: any) => {
+        if (!file.type.startsWith("image")) {
+          toast({
+            variant: "destructive",
+            title: "Invalid file type",
+            description: "Please upload an image file",
+          });
+          return;
+        }
+        if (images.length >= 3) {
+          imageLimitToast();
+          return;
+        }
+        const urlString = URL.createObjectURL(file);
+        setImages((prev) => [...prev, urlString]);
+      });
     },
     [images]
   );
