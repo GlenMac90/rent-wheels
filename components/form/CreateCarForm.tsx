@@ -327,7 +327,7 @@ const CreateCarForm = () => {
                 alt="car image"
                 width={180}
                 height={180}
-                className="object-contain"
+                className="w-full max-w-60 object-contain"
               />
             </div>
           ))}
@@ -340,13 +340,13 @@ const CreateCarForm = () => {
         </label>
         <div
           {...getRootProps()}
-          className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 ${isDragActive && "bg-white-200_gray-800"}`}
+          className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 px-4 ${isDragActive && "bg-white-200_gray-800"}`}
         >
           <input {...getInputProps()} className="hidden" ref={fileInputRef} />
           <button type="button" onClick={handleButtonClick}>
             <FiUpload className="text-2xl text-blue-500" />
           </button>
-          <p className="medium-14 text-gray-blue-100 mt-4">
+          <p className="medium-14 text-gray-blue-100 mt-4 text-center">
             Drag and drop an image, or{" "}
             <span
               className="cursor-pointer text-blue-500"
@@ -355,7 +355,7 @@ const CreateCarForm = () => {
               Browse
             </span>
           </p>
-          <span className="base-14 text-gray-400_white-100 mt-2">
+          <span className="base-14 text-gray-400_white-100 mt-2 text-center">
             High resolution images (png, jpg, gif)
           </span>
         </div>
