@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SignUpFormFields, signUpFormSchema } from "@/schemas";
 import Button from "../Button";
+import { createUser } from "@/lib/actions/user.actions";
 
 const SignInForm = () => {
   const [secondPassword, setSecondPassword] = useState("");
@@ -21,9 +22,20 @@ const SignInForm = () => {
 
   const formValues = watch();
 
-  const onSubmit: SubmitHandler<SignUpFormFields> = (data) => {
+  const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
     if (data.password === secondPassword) {
-      console.log("success");
+      try {
+        createUser({
+          userData: {
+            username: data.username,
+            email: data.email.toLowerCase(),
+            password: data.password,
+            name: data.name,
+          },
+        });
+      } catch (error) {
+        console.error("Error creating user", error);
+      }
     } else {
       setPasswordsMatch(false);
       console.log("failure");
@@ -67,7 +79,7 @@ const SignInForm = () => {
             {...register("email")}
             autoComplete="off"
             type="email"
-            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
+            className="flex w-full bg-transparent text-gray-400 outline-none"
             value={formValues.email}
             placeholder="Enter your email Address"
           />
