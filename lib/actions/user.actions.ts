@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-import { redirect } from "next/navigation";
 
 interface CreateUserDataProps {
   userData: {
@@ -28,20 +27,69 @@ interface UpdateUserDataProps {
   };
 }
 
-export async function createUser({
-  userData,
-}: CreateUserDataProps): Promise<void> {
+export async function createUser({ userData }: CreateUserDataProps): Promise<{
+  status: number;
+  message: string;
+  existingField?: string;
+  error?: any;
+}> {
   const { password } = userData;
   const hashedPassword = await bcrypt.hash(password, 10);
   userData.password = hashedPassword;
   await connectToDB();
 
+  const user = await checkIfUserExists(userData.email, userData.username);
+  if (user.userExists) {
+    return {
+      status: 409,
+      existingField: user.existingField,
+      message: "User already exists",
+    };
+  }
+
   try {
     await User.create(userData);
+    return {
+      status: 201,
+      message: "User created successfully",
+    };
+  } catch (error: any) {
+    return {
+      status: 500,
+      message: "Failed to create user",
+      error: error.message,
+    };
+  }
+}
+
+export async function checkIfUserExists(
+  email: string,
+  username: string
+): Promise<{ existingField?: string; userExists: boolean }> {
+  await connectToDB();
+  try {
+    const userEmail = await User.findOne({ email: email.toLowerCase() });
+    const userUsername = await User.findOne({ username });
+
+    if (userEmail) {
+      return {
+        existingField: "email",
+        userExists: true,
+      };
+    }
+
+    if (userUsername) {
+      return {
+        existingField: "username",
+        userExists: true,
+      };
+    }
+
+    return {
+      userExists: false,
+    };
   } catch (error) {
-    throw new Error(`Failed to create user: ${error}`);
-  } finally {
-    redirect("/");
+    throw new Error(`Failed to check if user exists: ${error}`);
   }
 }
 

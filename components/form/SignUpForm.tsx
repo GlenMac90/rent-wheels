@@ -7,8 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpFormFields, signUpFormSchema } from "@/schemas";
 import Button from "../Button";
 import { createUser } from "@/lib/actions/user.actions";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
-const SignInForm = () => {
+const SignUpForm = () => {
+  const router = useRouter();
+  const { toast } = useToast();
   const [secondPassword, setSecondPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const {
@@ -23,22 +27,31 @@ const SignInForm = () => {
   const formValues = watch();
 
   const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
-    if (data.password === secondPassword) {
-      try {
-        createUser({
-          userData: {
-            username: data.username,
-            email: data.email.toLowerCase(),
-            password: data.password,
-            name: data.name,
-          },
-        });
-      } catch (error) {
-        console.error("Error creating user", error);
-      }
-    } else {
+    if (data.password !== secondPassword) {
       setPasswordsMatch(false);
-      console.log("failure");
+      return;
+    }
+    try {
+      const user = await createUser({
+        userData: {
+          username: data.username,
+          email: data.email.toLowerCase(),
+          password: data.password,
+          name: data.name,
+        },
+      });
+      if (user.status === 201) {
+        router.push("/");
+      }
+      if (user.status === 409) {
+        toast({
+          variant: "destructive",
+          title: `User with this ${user.existingField} already exists`,
+          description: `Please try again with a different ${user.existingField}`,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating user", error);
     }
   };
 
@@ -147,4 +160,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default SignUpForm;
