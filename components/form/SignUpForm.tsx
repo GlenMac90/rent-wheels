@@ -51,7 +51,12 @@ const SignUpForm = () => {
         });
       }
     } catch (error) {
-      console.error("Error creating user", error);
+      console.error("Error signing up user", error);
+      toast({
+        variant: "destructive",
+        title: "Error signing up user",
+        description: "Please try again",
+      });
     }
   };
 

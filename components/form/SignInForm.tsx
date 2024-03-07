@@ -49,6 +49,11 @@ const SignInForm = () => {
       }
     } catch (error) {
       console.error("Error signing in user", error);
+      toast({
+        variant: "destructive",
+        title: "Error signing in user",
+        description: "Please try again",
+      });
     }
   };
 
