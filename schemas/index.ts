@@ -59,3 +59,10 @@ export const signUpFormSchema = z.object({
 });
 
 export type SignUpFormFields = z.infer<typeof signUpFormSchema>;
+
+export const signInFormSchema = z.object({
+  password: z.string(),
+  email: z.string().email({ message: "Invalid email" }),
+});
+
+export type SignInFormFields = z.infer<typeof signInFormSchema>;

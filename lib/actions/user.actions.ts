@@ -27,6 +27,11 @@ interface UpdateUserDataProps {
   };
 }
 
+interface SignInDataProps {
+  email: string;
+  password: string;
+}
+
 export async function createUser({ userData }: CreateUserDataProps): Promise<{
   status: number;
   message: string;
@@ -153,5 +158,36 @@ export async function getAllUsers() {
     return allUsers;
   } catch (error) {
     throw new Error(`Failed to get all users: ${error}`);
+  }
+}
+
+export async function signInUser(data: SignInDataProps) {
+  await connectToDB();
+  const { email, password } = data;
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return {
+        status: 404,
+        message: "User not found",
+      };
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return {
+        status: 401,
+        message: "Invalid password",
+      };
+    }
+
+    return {
+      status: 200,
+      message: "User signed in successfully",
+    };
+  } catch (error) {
+    throw new Error(`Failed to sign in user: ${error}`);
   }
 }

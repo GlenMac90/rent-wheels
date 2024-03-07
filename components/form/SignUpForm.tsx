@@ -156,6 +156,12 @@ const SignUpForm = () => {
       <Button height="h-10" width="w-20" submit>
         Sign Up
       </Button>
+      <p className="semibold-14 md:semibold-16 text-gray-900_white">
+        Already have an account?
+      </p>
+      <Button height="h-10" width="w-20" linkPath="/sign-in">
+        Sign In
+      </Button>
     </form>
   );
 };

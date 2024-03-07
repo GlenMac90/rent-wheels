@@ -7,9 +7,6 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Plus_Jakarta_Sans as PlusJakartaSans } from "next/font/google";
 import "./globals.css";
 
-import NavBar from "@/components/nav-bar/NavBar";
-import Footer from "@/components/nav-bar/Footer";
-
 const jakarta = PlusJakartaSans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,9 +25,7 @@ export default function RootLayout({
         <body
           className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
         >
-          <NavBar />
           {children}
-          <Footer />
           <Toaster />
         </body>
       </ThemeProvider>
