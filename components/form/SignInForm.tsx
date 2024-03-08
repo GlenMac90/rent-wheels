@@ -1,75 +1,67 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
-import { SignUpFormFields, signUpFormSchema } from "@/schemas";
+import { useToast } from "@/components/ui/use-toast";
 import Button from "../Button";
-import { createUser } from "@/lib/actions/user.actions";
+import { signInUser } from "@/lib/actions/user.actions";
+import { SignInFormFields, signInFormSchema } from "@/schemas";
 
 const SignInForm = () => {
-  const [secondPassword, setSecondPassword] = useState("");
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const router = useRouter();
+  const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<SignUpFormFields>({
-    resolver: zodResolver(signUpFormSchema),
+  } = useForm<SignInFormFields>({
+    resolver: zodResolver(signInFormSchema),
   });
 
   const formValues = watch();
 
-  const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
-    if (data.password === secondPassword) {
-      try {
-        createUser({
-          userData: {
-            username: data.username,
-            email: data.email.toLowerCase(),
-            password: data.password,
-            name: data.name,
-          },
-        });
-      } catch (error) {
-        console.error("Error creating user", error);
-      }
-    } else {
-      setPasswordsMatch(false);
-      console.log("failure");
-    }
-  };
+  const onSubmit: SubmitHandler<SignInFormFields> = async (data) => {
+    try {
+      const user = await signInUser(data);
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordsMatch(true);
-    setSecondPassword(e.target.value);
+      if (user.status === 404) {
+        toast({
+          variant: "destructive",
+          title: "User not found",
+          description: "Please try again with a different email",
+        });
+      }
+
+      if (user.status === 401) {
+        toast({
+          variant: "destructive",
+          title: "Invalid password",
+          description: "Please try again with a different password",
+        });
+      }
+
+      if (user.status === 200) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Error signing in user", error);
+      toast({
+        variant: "destructive",
+        title: "Error signing in user",
+        description: "Please try again",
+      });
+    }
   };
 
   return (
     <form
-      className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
       onSubmit={handleSubmit(onSubmit)}
+      className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
     >
-      <div className="flex flex-col gap-2">
-        <label className="semibold-14 md:semibold-16 text-gray-900_white">
-          Username
-        </label>
-        <div className="bg-white-200_gray-800 rounded-ten px-4 py-2">
-          <input
-            {...register("username")}
-            autoComplete="off"
-            type="text"
-            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-            value={formValues.username}
-            placeholder="Enter your username"
-          />
-        </div>
-        {errors.username && (
-          <span className="text-red-500">{errors.username.message}</span>
-        )}
-      </div>
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Email
@@ -79,31 +71,13 @@ const SignInForm = () => {
             {...register("email")}
             autoComplete="off"
             type="email"
-            className="flex w-full bg-transparent text-gray-400 outline-none"
+            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
             value={formValues.email}
-            placeholder="Enter your email Address"
+            placeholder="Enter your email address"
           />
         </div>
         {errors.email && (
           <span className="text-red-500">{errors.email.message}</span>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <label className="semibold-14 md:semibold-16 text-gray-900_white">
-          Name
-        </label>
-        <div className="bg-white-200_gray-800 rounded-ten px-4 py-2">
-          <input
-            {...register("name")}
-            autoComplete="off"
-            type="text"
-            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-            value={formValues.name}
-            placeholder="Enter your name"
-          />
-        </div>
-        {errors.name && (
-          <span className="text-red-500">{errors.name.message}</span>
         )}
       </div>
       <div className="flex flex-col gap-2">
@@ -115,7 +89,8 @@ const SignInForm = () => {
             {...register("password")}
             autoComplete="off"
             type="password"
-            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
+            className="flex w-full bg-transparent text-gray-400 outline-none"
+            value={formValues.password}
             placeholder="Enter your password"
           />
         </div>
@@ -123,24 +98,13 @@ const SignInForm = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </div>
-      <div className="flex flex-col gap-2">
-        <label className="semibold-14 md:semibold-16 text-gray-900_white">
-          Re-enter Password
-        </label>
-        <div className="bg-white-200_gray-800 rounded-ten px-4 py-2">
-          <input
-            autoComplete="off"
-            type="password"
-            className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-            placeholder="Enter your password again"
-            onChange={handlePasswordChange}
-          />
-        </div>
-        {!passwordsMatch && (
-          <span className="text-red-500">The passwords do not match</span>
-        )}
-      </div>
       <Button height="h-10" width="w-20" submit>
+        Sign In
+      </Button>
+      <p className="semibold-14 md:semibold-16 text-gray-900_white">
+        Don&apos;t have an account?
+      </p>
+      <Button height="h-10" width="w-20" linkPath="/sign-up">
         Sign Up
       </Button>
     </form>

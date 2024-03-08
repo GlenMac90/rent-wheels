@@ -2,9 +2,9 @@ import SignInForm from "@/components/form/SignInForm";
 
 const SignIn = () => {
   return (
-    <div className="page-styles">
+    <main className="auth-page-styles">
       <SignInForm />
-    </div>
+    </main>
   );
 };
 
