@@ -9,6 +9,7 @@ import ModalBackground from "../ModalBackground";
 import CloseButton from "../CloseButton";
 import { profileFormSchema, ProfileFormFields } from "@/schemas";
 import Button from "../Button";
+import { useUploadThing } from "@/utils/uploadthing";
 
 const ProfileInfoEditButton = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -16,6 +17,8 @@ const ProfileInfoEditButton = () => {
   const [profileImage, setProfileImage] = useState<string>(
     "/dummy-profile-image.jpg"
   );
+  const [profileImageFile, setProfileImageFile] = useState<File[] | null>(null);
+  const { startUpload } = useUploadThing("media");
 
   const handleClick = () => {
     setShowEditModal(!showEditModal);
@@ -36,10 +39,27 @@ const ProfileInfoEditButton = () => {
     formState: { errors },
   } = useForm<ProfileFormFields>({
     resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      profileImage,
+      name: "John Doe",
+      jobTitle: "Software Engineer",
+    },
   });
 
-  const onSubmit: SubmitHandler<ProfileFormFields> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ProfileFormFields> = async (data) => {
+    const { profileImage } = data;
+
+    const hasImageChanged = profileImage !== "/dummy-profile-image.jpg";
+    console.log(profileImageFile);
+
+    if (hasImageChanged && profileImageFile) {
+      const imgRes = await startUpload(profileImageFile);
+      console.log("here");
+      if (imgRes) {
+        console.log(imgRes);
+        setProfileImage(imgRes[0].url);
+      }
+    }
   };
 
   return (
@@ -90,7 +110,9 @@ const ProfileInfoEditButton = () => {
                     accept="image/*"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
+                        const filesArray = Array.from(e.target.files);
                         const file = e.target.files[0];
+                        setProfileImageFile(filesArray);
                         setProfileImage(URL.createObjectURL(file));
                         setValue("profileImage", URL.createObjectURL(file));
                       }
