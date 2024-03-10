@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, MouseEvent, useRef } from "react";
+import { useState, MouseEvent, useRef, ChangeEvent } from "react";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +10,7 @@ import CloseButton from "../CloseButton";
 import { profileFormSchema, ProfileFormFields } from "@/schemas";
 import Button from "../Button";
 import { useUploadThing } from "@/utils/uploadthing";
+import { isBase64Image } from "@/utils";
 
 const ProfileInfoEditButton = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,13 +53,26 @@ const ProfileInfoEditButton = () => {
     const hasImageChanged = profileImage !== "/dummy-profile-image.jpg";
     console.log(profileImageFile);
 
-    if (hasImageChanged && profileImageFile) {
+    const isValidBase64 = isBase64Image(profileImage);
+    console.log(isValidBase64);
+
+    if (hasImageChanged && profileImageFile && !isValidBase64) {
       const imgRes = await startUpload(profileImageFile);
       console.log("here");
       if (imgRes) {
         console.log(imgRes);
         setProfileImage(imgRes[0].url);
       }
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const filesArray = Array.from(e.target.files);
+      const file = e.target.files[0];
+      setProfileImageFile(filesArray);
+      setProfileImage(URL.createObjectURL(file));
+      setValue("profileImage", URL.createObjectURL(file));
     }
   };
 
@@ -108,15 +122,7 @@ const ProfileInfoEditButton = () => {
                     type="file"
                     ref={fileInputRef}
                     accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const filesArray = Array.from(e.target.files);
-                        const file = e.target.files[0];
-                        setProfileImageFile(filesArray);
-                        setProfileImage(URL.createObjectURL(file));
-                        setValue("profileImage", URL.createObjectURL(file));
-                      }
-                    }}
+                    onChange={handleChange}
                   />
                   <button
                     type="button"
