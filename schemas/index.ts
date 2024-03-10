@@ -45,8 +45,8 @@ export type CarFormFields = z.infer<typeof carFormSchema>;
 
 export const profileFormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  jobTitle: z.string().min(1, { message: "Job title is required" }),
-  profileImage: z.string().min(1, { message: "Profile image is required" }),
+  role: z.string().min(1, { message: "Job title is required" }),
+  image: z.string().min(1, { message: "Profile image is required" }),
 });
 
 export type ProfileFormFields = z.infer<typeof profileFormSchema>;

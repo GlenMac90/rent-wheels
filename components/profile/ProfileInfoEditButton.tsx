@@ -10,14 +10,24 @@ import CloseButton from "../CloseButton";
 import { profileFormSchema, ProfileFormFields } from "@/schemas";
 import Button from "../Button";
 import { useUploadThing } from "@/utils/uploadthing";
-import { isBase64Image } from "@/utils";
+import { updateUser } from "@/lib/actions/user.actions";
+import { useToast } from "@/components/ui/use-toast";
 
-const ProfileInfoEditButton = () => {
+interface ProfileInfoEditButtonProps {
+  profileImage: string;
+  name: string;
+  role: string;
+}
+
+const ProfileInfoEditButton = ({
+  profileImage,
+  name,
+  role,
+}: ProfileInfoEditButtonProps) => {
+  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>(
-    "/dummy-profile-image.jpg"
-  );
+  const [image, setImage] = useState<string>(profileImage);
   const [profileImageFile, setProfileImageFile] = useState<File[] | null>(null);
   const { startUpload } = useUploadThing("media");
 
@@ -41,28 +51,36 @@ const ProfileInfoEditButton = () => {
   } = useForm<ProfileFormFields>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      profileImage,
-      name: "John Doe",
-      jobTitle: "Software Engineer",
+      image,
+      name,
+      role,
     },
   });
 
-  const onSubmit: SubmitHandler<ProfileFormFields> = async (data) => {
-    const { profileImage } = data;
+  const onSubmit: SubmitHandler<ProfileFormFields> = async (userData) => {
+    const { image } = userData;
 
-    const hasImageChanged = profileImage !== "/dummy-profile-image.jpg";
-    console.log(profileImageFile);
+    const hasImageChanged = image !== "/dummy-profile-image.jpg";
 
-    const isValidBase64 = isBase64Image(profileImage);
-    console.log(isValidBase64);
-
-    if (hasImageChanged && profileImageFile && !isValidBase64) {
+    if (hasImageChanged && profileImageFile) {
       const imgRes = await startUpload(profileImageFile);
-      console.log("here");
       if (imgRes) {
-        console.log(imgRes);
-        setProfileImage(imgRes[0].url);
+        setImage(imgRes[0].url);
+        userData.image = imgRes[0].url;
       }
+    }
+
+    const updatedUser = await updateUser({
+      userEmail: "glen.mccallum@live.co.uk",
+      userData,
+    });
+
+    if (updatedUser.status !== 200) {
+      toast({
+        variant: "destructive",
+        title: "Failed to update profile",
+        description: "Please try again later",
+      });
     }
   };
 
@@ -71,8 +89,8 @@ const ProfileInfoEditButton = () => {
       const filesArray = Array.from(e.target.files);
       const file = e.target.files[0];
       setProfileImageFile(filesArray);
-      setProfileImage(URL.createObjectURL(file));
-      setValue("profileImage", URL.createObjectURL(file));
+      setImage(URL.createObjectURL(file));
+      setValue("image", URL.createObjectURL(file));
     }
   };
 
@@ -110,14 +128,14 @@ const ProfileInfoEditButton = () => {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-4">
                   <Image
-                    src={profileImage}
+                    src={image}
                     alt="Profile Image"
                     height={86}
                     width={86}
                     className="size-[4.5rem] shrink-0 rounded-full object-cover md:size-[5.5rem]"
                   />
                   <input
-                    {...register("profileImage")}
+                    {...register("image")}
                     className="hidden"
                     type="file"
                     ref={fileInputRef}
@@ -132,9 +150,9 @@ const ProfileInfoEditButton = () => {
                     Upload new picture
                   </button>
                 </div>
-                {errors.profileImage && (
+                {errors.image && (
                   <span className="light-12 text-red-500">
-                    {errors.profileImage.message}
+                    {errors.image.message}
                   </span>
                 )}
               </div>
@@ -162,15 +180,15 @@ const ProfileInfoEditButton = () => {
                 </label>
                 <div className="bg-white-200_gray-800 flex w-full rounded-lg p-4">
                   <input
-                    {...register("jobTitle")}
+                    {...register("role")}
                     type="text"
                     className="bg-white-200_gray-800 text-gray-900_white w-full outline-none"
                     autoComplete="off"
                   />
                 </div>
-                {errors.jobTitle && (
+                {errors.role && (
                   <span className="light-12 text-red-500">
-                    {errors.jobTitle.message}
+                    {errors.role.message}
                   </span>
                 )}
               </div>
