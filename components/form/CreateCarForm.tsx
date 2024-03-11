@@ -19,6 +19,8 @@ import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
 import { carTypes, carCapacity, carTransmission } from "@/constants";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { useUploadThing } from "@/utils/uploadthing";
+import { createCar } from "@/lib/actions/car.actions";
 
 const rowStyles = "flex flex-col gap-6 md:flex-row md:gap-8 mt-6";
 const labelInputContainerStyles =
@@ -28,10 +30,12 @@ const inputStyles =
   "flex items-center w-full rounded-md bg-white-200_gray-800 h-12 md:h-14 px-4 md:px-6";
 const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
-const CreateCarForm = () => {
+const CreateCarForm = ({ mockId }: any) => {
   const { toast } = useToast();
   const [images, setImages] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { startUpload } = useUploadThing("media");
   const {
     register,
     handleSubmit,
@@ -44,8 +48,51 @@ const CreateCarForm = () => {
 
   const formValues = watch();
 
-  const onSubmit: SubmitHandler<CarFormFields> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
+    const imageStringsArray: string[] = [];
+    const hasImageChanged = true;
+
+    if (imageFiles.length > 0 && hasImageChanged) {
+      const uploadPromises = imageFiles.map((file) => startUpload([file]));
+
+      try {
+        const uploadResults = await Promise.all(uploadPromises);
+        uploadResults.forEach((imgRes) => {
+          if (imgRes && imgRes[0].url) {
+            imageStringsArray.push(imgRes[0].url);
+          }
+        });
+      } catch (error) {
+        console.error("Failed to upload images:", error);
+      }
+    }
+
+    const newCar = await createCar({
+      carData: {
+        owner: mockId,
+        name: data.carTitle,
+        type: data.carType,
+        description: data.carDescription,
+        transmission: data.transmission,
+        fuelCapacity: data.fuelCapacity,
+        peopleCapacity: data.capacity,
+        dailyPrice: data.rentPrice,
+        images: imageStringsArray,
+      },
+    });
+
+    if (newCar.status === 201) {
+      toast({
+        variant: "info",
+        title: "Car created successfully",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Failed to create car",
+        description: newCar.error,
+      });
+    }
   };
 
   const imageLimitToast = () => {
@@ -76,6 +123,7 @@ const CreateCarForm = () => {
         }
         const urlString = URL.createObjectURL(file);
         setImages((prev) => [...prev, urlString]);
+        setImageFiles((prev) => [...prev, file]);
       });
     },
     [images]
