@@ -51,7 +51,9 @@ const ProfileBannerEditButton = ({ bannerImage }: { bannerImage: string }) => {
         title: "Failed to update profile",
         description: "Please try again later",
       });
+      return;
     }
+    setShowEditModal(false);
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

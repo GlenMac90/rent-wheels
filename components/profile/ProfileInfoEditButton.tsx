@@ -81,7 +81,9 @@ const ProfileInfoEditButton = ({
         title: "Failed to update profile",
         description: "Please try again later",
       });
+      return;
     }
+    setShowEditModal(false);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
