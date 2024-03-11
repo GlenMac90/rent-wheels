@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, MouseEvent } from "react";
+import { useCallback, useRef, useState, MouseEvent, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -32,7 +32,6 @@ const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
 const CreateCarForm = ({ mockId }: any) => {
   const { toast } = useToast();
-  const [images, setImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
@@ -103,6 +102,10 @@ const CreateCarForm = ({ mockId }: any) => {
     });
   };
 
+  const imageUrlStrings = useMemo(() => {
+    return imageFiles.map((file) => URL.createObjectURL(file));
+  }, [imageFiles]);
+
   const onDrop = useCallback(
     (acceptedFiles: any) => {
       if (acceptedFiles.length > 3) {
@@ -117,16 +120,14 @@ const CreateCarForm = ({ mockId }: any) => {
           });
           return;
         }
-        if (images.length >= 3) {
+        if (imageUrlStrings.length >= 3) {
           imageLimitToast();
           return;
         }
-        const urlString = URL.createObjectURL(file);
-        setImages((prev) => [...prev, urlString]);
         setImageFiles((prev) => [...prev, file]);
       });
     },
-    [images]
+    [imageFiles]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -135,14 +136,14 @@ const CreateCarForm = ({ mockId }: any) => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleImageDelete = (image: string) => {
+  const handleImageDelete = (index: number) => {
     return (e: MouseEvent) => {
       e.preventDefault();
       toast({
         variant: "info",
         title: "Image removed",
       });
-      setImages((prev) => prev.filter((img) => img !== image));
+      setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
   };
 
@@ -367,13 +368,13 @@ const CreateCarForm = ({ mockId }: any) => {
         </div>
       </div>
 
-      {images && images.length > 0 && (
+      {imageUrlStrings && imageUrlStrings.length > 0 && (
         <div className="mt-6 flex w-full flex-wrap justify-center gap-4">
-          {images.map((image) => (
+          {imageUrlStrings.map((image, index) => (
             <div key={image} className="relative flex">
               <button
                 className="absolute right-1 top-1 bg-white/50 text-xl text-slate-600"
-                onClick={handleImageDelete(image)}
+                onClick={handleImageDelete(index)}
                 type="button"
               >
                 <IoClose />
