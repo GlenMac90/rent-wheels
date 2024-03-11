@@ -1,15 +1,24 @@
 "use client";
 
 import { useState, MouseEvent, useCallback, useRef } from "react";
+import Image from "next/image";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 
 import ModalBackground from "../ModalBackground";
 import CloseButton from "../CloseButton";
+import { useUploadThing } from "@/utils/uploadthing";
+import { updateUser } from "@/lib/actions/user.actions";
+import Button from "../Button";
+import { useToast } from "@/components/ui/use-toast";
 
-const ProfileBannerEditButton = () => {
+const ProfileBannerEditButton = ({ bannerImage }: { bannerImage: string }) => {
+  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [image, setImage] = useState<string | null>(bannerImage);
+  const [file, setFile] = useState<File | null>(null);
+  const { startUpload } = useUploadThing("media");
 
   const handleClick = () => {
     setShowEditModal(!showEditModal);
@@ -20,8 +29,32 @@ const ProfileBannerEditButton = () => {
   };
 
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles);
+    setFile(acceptedFiles[0]);
+    const imageURL = URL.createObjectURL(acceptedFiles[0]);
+    setImage(imageURL);
   }, []);
+
+  const handleSubmit = async () => {
+    const hasImageChanged = image !== "/dummy-profile-image.jpg";
+    if (!hasImageChanged || !file) return;
+    const imgRes = await startUpload([file]);
+    if (!imgRes || !imgRes[0].url) return;
+    const updatedUser = await updateUser({
+      userEmail: "glen.mccallum@live.co.uk",
+      userData: {
+        bannerImage: imgRes[0].url,
+      },
+    });
+    if (updatedUser.status !== 200) {
+      toast({
+        variant: "destructive",
+        title: "Failed to update profile",
+        description: "Please try again later",
+      });
+      return;
+    }
+    setShowEditModal(false);
+  };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleButtonClick = () => {
@@ -58,6 +91,15 @@ const ProfileBannerEditButton = () => {
               <label className="semibold-14 md:semibold-16 text-gray-900_white">
                 Upload Image
               </label>
+              {image && (
+                <Image
+                  src={image}
+                  alt="Profile Image"
+                  height={150}
+                  width={86}
+                  className="h-[8rem] w-full object-cover"
+                />
+              )}
               <div
                 {...getRootProps()}
                 className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 ${isDragActive && "bg-white-200_gray-800"}`}
@@ -80,6 +122,9 @@ const ProfileBannerEditButton = () => {
                   High resolution images (png, jpg, gif)
                 </span>
               </div>
+              <Button height="h-14" width="w-full" handleClick={handleSubmit}>
+                Update Profile
+              </Button>
             </div>
           </div>
         </ModalBackground>

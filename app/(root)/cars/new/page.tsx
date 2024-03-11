@@ -1,9 +1,12 @@
 import CreateCarForm from "@/components/form/CreateCarForm";
+import { getUserByEmail } from "@/lib/actions/user.actions";
 
-const CreateNewCar = () => {
+const CreateNewCar = async () => {
+  const { id: mockId } = await getUserByEmail("glen.mccallum@live.co.uk");
+  console.log(mockId);
   return (
     <main className="page-styles">
-      <CreateCarForm />
+      <CreateCarForm mockId={mockId} />
     </main>
   );
 };

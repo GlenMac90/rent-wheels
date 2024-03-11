@@ -1,6 +1,7 @@
 "use server";
 
 import bcrypt from "bcrypt";
+import { revalidatePath } from "next/cache";
 
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
@@ -98,15 +99,17 @@ export async function checkIfUserExists(
   }
 }
 
-export async function updateUser({
-  userEmail,
-  userData,
-}: UpdateUserDataProps): Promise<void> {
+export async function updateUser({ userEmail, userData }: UpdateUserDataProps) {
   await connectToDB();
   try {
     await User.findOneAndUpdate({ email: userEmail }, userData, {
       upsert: true,
     });
+    revalidatePath("/profile");
+    return {
+      status: 200,
+      message: "User updated successfully",
+    };
   } catch (error) {
     throw new Error(`Failed to update user: ${error}`);
   }
@@ -127,6 +130,30 @@ export async function getUserByEmail(email: string) {
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
     return user;
+  } catch (error) {
+    throw new Error(`Failed to get user by email: ${error}`);
+  }
+}
+
+export async function getProfileHeaderInfo(email: string) {
+  await connectToDB();
+  try {
+    const profileData = await User.findOne(
+      { email: email.toLowerCase() },
+      {
+        image: 1,
+        bannerImage: 1,
+        name: 1,
+        role: 1,
+      }
+    );
+    const { image, bannerImage, name, role } = profileData;
+    return {
+      image,
+      bannerImage,
+      name,
+      role,
+    };
   } catch (error) {
     throw new Error(`Failed to get user by email: ${error}`);
   }
