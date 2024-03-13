@@ -2,6 +2,8 @@
 
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
@@ -65,6 +67,13 @@ export async function createUser({ userData }: CreateUserDataProps): Promise<{
       message: "Failed to create user",
       error: error.message,
     };
+  }
+}
+
+export async function validateUserSession() {
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect("/sign-in");
   }
 }
 
@@ -135,8 +144,15 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function getProfileHeaderInfo(email: string) {
+export async function getProfileHeaderInfo() {
   await connectToDB();
+  const session = await getServerSession();
+
+  if (!session || !session.user?.email) {
+    redirect("/sign-in");
+  }
+  const email = session.user.email;
+
   try {
     const profileData = await User.findOne(
       { email: email.toLowerCase() },

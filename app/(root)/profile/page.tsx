@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { getProfileHeaderInfo } from "@/lib/actions/user.actions";
 
 const Profile = async () => {
-  const data = await getProfileHeaderInfo("glen.mccallum@live.co.uk");
+  const data = await getProfileHeaderInfo();
 
   return (
     <main className="page-styles">
