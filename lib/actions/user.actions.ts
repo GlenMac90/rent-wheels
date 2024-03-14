@@ -209,7 +209,6 @@ export async function signInUser(data: SignInDataProps) {
   const { email, password } = data;
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return {
         status: 404,
