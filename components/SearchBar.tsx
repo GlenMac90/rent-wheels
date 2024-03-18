@@ -100,7 +100,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
           >
             <div className={innerDivStyles}>
               <Image
-                src="/icons/mark.svg.svg"
+                src="/icons/mark.svg"
                 height={16}
                 width={16}
                 alt="Icon displaying the location input on the form"

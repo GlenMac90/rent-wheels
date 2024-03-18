@@ -19,7 +19,7 @@ export const navBarLinks = [
 export const dummyCarData = {
   name: "Skoda Octavia",
   type: "Sedan",
-  image: "/dummy-car.png",
+  image: "/dummy-images/dummy-car.png",
   description:
     "The Skoda Octavia is a small family car produced by the Czech car manufacturer Skoda Auto since 1996. It shares its name with an earlier model.",
   galleryImages: [
