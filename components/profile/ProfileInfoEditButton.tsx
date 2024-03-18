@@ -12,12 +12,7 @@ import Button from "../Button";
 import { useUploadThing } from "@/utils/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import { useToast } from "@/components/ui/use-toast";
-
-interface ProfileInfoEditButtonProps {
-  profileImage: string;
-  name: string;
-  role: string;
-}
+import { ProfileInfoEditButtonProps } from "@/types/user.index";
 
 const ProfileInfoEditButton = ({
   profileImage,

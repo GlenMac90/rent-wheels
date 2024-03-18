@@ -8,7 +8,7 @@ const Stars = ({ rating }: { rating: number }) => {
       {Array.from({ length: rating }).map((_, index) => (
         <div key={index} className="flex size-2.5 shrink-0 lg:size-4">
           <Image
-            src="/gold-star.svg"
+            src="/icons/gold-star.svg"
             height={16}
             width={16}
             alt="Star icon"
@@ -19,7 +19,7 @@ const Stars = ({ rating }: { rating: number }) => {
       {Array.from({ length: blankStars }).map((_, index) => (
         <div key={index} className="flex size-2.5 shrink-0 lg:size-4">
           <Image
-            src="/blank-star.svg"
+            src="/icons/blank-star.svg"
             height={16}
             width={16}
             alt="Star icon"

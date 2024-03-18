@@ -4,7 +4,7 @@ const CloseButton = ({ handleClose }: { handleClose: () => void }) => {
   return (
     <button onClick={handleClose} className="self-start">
       <Image
-        src="/close.svg"
+        src="/icons/close.svg"
         height={25}
         width={25}
         alt="button to close modal"

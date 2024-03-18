@@ -1,9 +1,9 @@
-const Checkout = () => {
-  return (
-    <div>
-      Checkout
-    </div>
-  )
-}
+import { validateUserSession } from "@/lib/actions/user.actions";
 
-export default Checkout
+const Checkout = async () => {
+  await validateUserSession();
+
+  return <div>Checkout</div>;
+};
+
+export default Checkout;

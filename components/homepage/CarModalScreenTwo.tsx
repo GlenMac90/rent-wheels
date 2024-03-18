@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,27 +11,12 @@ import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
 import ArrowDownIcon from "../ArrowDownIcon";
 import { formatDate } from "@/utils";
 import Button from "../Button";
+import { CarModalScreenOneProps } from "@/types/car.index";
 
 const CarModalScreenTwo = ({
-  data,
   handleClick,
   handleClose,
-  handleButtonClick,
-}: {
-  data: {
-    galleryImages: string[];
-    name: string;
-    description: string;
-    type: string;
-    transmission: string;
-    capacity: number;
-    fuelCapacity: number;
-    price: number;
-  };
-  handleClick: (e: MouseEvent) => void;
-  handleClose: () => void;
-  handleButtonClick: () => void;
-}) => {
+}: CarModalScreenOneProps) => {
   const [selectedPickupDate, setSelectedPickupDate] =
     useState<string>("Select your date");
   const [selectedDropoffDate, setSelectedDropoffDate] =
@@ -90,7 +75,7 @@ const CarModalScreenTwo = ({
         </div>
         <button onClick={handleClose} className="self-start">
           <Image
-            src="/close.svg"
+            src="/icons/close.svg"
             height={25}
             width={25}
             alt="button to close modal"
@@ -105,7 +90,7 @@ const CarModalScreenTwo = ({
         <div className="flex flex-col gap-3 lg:gap-4">
           <div className="flex gap-1.5">
             <Image
-              src="/mark.svg"
+              src="/icons/mark.svg.svg"
               height={16}
               width={16}
               alt="search icon for location field"
@@ -132,7 +117,7 @@ const CarModalScreenTwo = ({
           <div className={calendarImagesStyles}>
             <div className="flex gap-1.5">
               <Image
-                src="/calendar.svg"
+                src="/icons/calendar.svg"
                 height={16}
                 width={16}
                 alt="search icon for location field"
@@ -167,7 +152,7 @@ const CarModalScreenTwo = ({
           <div className={calendarImagesStyles}>
             <div className="flex gap-1.5">
               <Image
-                src="/calendar.svg"
+                src="/icons/calendar.svg"
                 height={16}
                 width={16}
                 alt="search icon for location field"

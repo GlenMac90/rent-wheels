@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 import Logo from "../Logo";
 import NavBarLinks from "./NavBarLinks";
@@ -10,9 +11,9 @@ import Button from "../Button";
 import Avatar from "./Avatar";
 import MobileNavBar from "./MobileNavBar";
 
-const NavBar = () => {
+const NavBar = ({ profileImage }: { profileImage: string | null }) => {
+  const { data: session } = useSession();
   const [showMobileNavbar, setShowMobileNavbar] = useState(false);
-  const isLoggedIn = true;
 
   const handleCloseClick = () => {
     setShowMobileNavbar(false);
@@ -40,19 +41,33 @@ const NavBar = () => {
           <div className="flex items-center gap-2.5 sm:gap-5">
             <div className="hidden items-center gap-5 sm:flex">
               <NavBarLinks />
-              <Button width="w-[6.875rem]" height="h-[2.75rem]">
-                Login
-              </Button>
+              {session ? (
+                <Button
+                  width="w-[6.875rem]"
+                  height="h-[2.75rem]"
+                  handleClick={() => signOut()}
+                >
+                  Sign Out
+                </Button>
+              ) : (
+                <Button
+                  width="w-[6.875rem]"
+                  height="h-[2.75rem]"
+                  linkPath="/sign-in"
+                >
+                  Login
+                </Button>
+              )}
               <span className="h-[2.25rem] border-r border-r-blue-50 dark:border-r-gray-850" />
             </div>
             <ThemeSwitcher />
-            {isLoggedIn && <Avatar />}
+            {session && <Avatar profileImage={profileImage} />}
             <button
               className="flex sm:hidden"
               onClick={() => setShowMobileNavbar(true)}
             >
               <Image
-                src="/menu.svg"
+                src="/icons/menu.svg"
                 height={24}
                 width={24}
                 alt="Mobile Menu Button"

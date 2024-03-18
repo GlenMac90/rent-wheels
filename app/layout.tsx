@@ -1,7 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
-
+import { getServerSession } from "next-auth";
+import SessionProvider from "@/components/SessionProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 import { Plus_Jakarta_Sans as PlusJakartaSans } from "next/font/google";
@@ -14,20 +15,23 @@ export const metadata: Metadata = {
   description: "A car rental app",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
   return (
     <html lang="en">
       <ThemeProvider>
-        <body
-          className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
-        >
-          {children}
-          <Toaster />
-        </body>
+        <SessionProvider session={session}>
+          <body
+            className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
+          >
+            {children}
+            <Toaster />
+          </body>
+        </SessionProvider>
       </ThemeProvider>
     </html>
   );

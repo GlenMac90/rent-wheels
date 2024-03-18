@@ -2,36 +2,16 @@
 
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-
-interface CreateUserDataProps {
-  userData: {
-    username: string;
-    email: string;
-    password: string;
-    name: string;
-  };
-}
-
-interface UpdateUserDataProps {
-  userEmail: string;
-  userData: {
-    username?: string;
-    email?: string;
-    password?: string;
-    name?: string;
-    role?: string;
-    image?: string;
-    bannerImage?: string;
-  };
-}
-
-interface SignInDataProps {
-  email: string;
-  password: string;
-}
+import {
+  CreateUserDataProps,
+  UpdateUserDataProps,
+  SignInDataProps,
+} from "@/types/user.index";
 
 export async function createUser({ userData }: CreateUserDataProps): Promise<{
   status: number;
@@ -68,6 +48,45 @@ export async function createUser({ userData }: CreateUserDataProps): Promise<{
   }
 }
 
+export async function validateUserSession() {
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect("/sign-in");
+  }
+}
+
+export async function checkActiveSession() {
+  const session = await getServerSession();
+  if (session) {
+    redirect("/");
+  }
+}
+
+export async function getProfileImage() {
+  const session = await getServerSession();
+  if (!session || !session.user || !session.user.email) return null;
+  const user = await User.findOne(
+    { email: session.user.email },
+    {
+      image: 1,
+    }
+  );
+  const { image: profileImage } = user;
+  return profileImage;
+}
+
+export async function validateUserEmail(email: string) {
+  await connectToDB();
+  try {
+    const userEmail = await User.findOne({ email: email.toLowerCase() });
+    if (!userEmail) {
+      redirect("/sign-up");
+    }
+  } catch (error) {
+    throw new Error(`Failed to validate user email: ${error}`);
+  }
+}
+
 export async function checkIfUserExists(
   email: string,
   username: string
@@ -75,7 +94,6 @@ export async function checkIfUserExists(
   await connectToDB();
   try {
     const userEmail = await User.findOne({ email: email.toLowerCase() });
-    const userUsername = await User.findOne({ username });
 
     if (userEmail) {
       return {
@@ -83,6 +101,8 @@ export async function checkIfUserExists(
         userExists: true,
       };
     }
+
+    const userUsername = await User.findOne({ username });
 
     if (userUsername) {
       return {
@@ -135,8 +155,15 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function getProfileHeaderInfo(email: string) {
+export async function getProfileHeaderInfo() {
   await connectToDB();
+  const session = await getServerSession();
+
+  if (!session || !session.user?.email) {
+    redirect("/sign-in");
+  }
+  const email = session.user.email;
+
   try {
     const profileData = await User.findOne(
       { email: email.toLowerCase() },
@@ -193,7 +220,6 @@ export async function signInUser(data: SignInDataProps) {
   const { email, password } = data;
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return {
         status: 404,

@@ -100,7 +100,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
           >
             <div className={innerDivStyles}>
               <Image
-                src="/mark.svg"
+                src="/icons/mark.svg.svg"
                 height={16}
                 width={16}
                 alt="Icon displaying the location input on the form"
@@ -129,7 +129,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
             <div className={outerDivStyles}>
               <div className={innerDivStyles}>
                 <Image
-                  src="/calendar.svg"
+                  src="/icons/calendar.svg"
                   height={16}
                   width={16}
                   alt="Icon displaying the location input on the form"
@@ -167,7 +167,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
             <div className={outerDivStyles}>
               <div className={innerDivStyles}>
                 <Image
-                  src="/calendar.svg"
+                  src="/icons/calendar.svg"
                   height={16}
                   width={16}
                   alt="Icon displaying the location input on the form"
@@ -210,7 +210,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
           submit
         >
           <Image
-            src="/search-icon.svg"
+            src="/icons/search-icon.svg"
             height={14}
             width={14}
             alt="Search icon for search bar"

@@ -3,11 +3,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 import { useToast } from "@/components/ui/use-toast";
 import Button from "../Button";
-import { signInUser } from "@/lib/actions/user.actions";
 import { SignInFormFields, signInFormSchema } from "@/schemas";
+import { signInUser } from "@/lib/actions/user.actions";
 
 const SignInForm = () => {
   const router = useRouter();
@@ -25,8 +26,22 @@ const SignInForm = () => {
   const formValues = watch();
 
   const onSubmit: SubmitHandler<SignInFormFields> = async (data) => {
+    const { email, password } = data;
     try {
-      const user = await signInUser(data);
+      const userSession = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+      const user = await signInUser({ email, password });
+
+      if (!user || !userSession) {
+        toast({
+          variant: "destructive",
+          title: "Problem Signing In",
+          description: "Please try again",
+        });
+      }
 
       if (user.status === 404) {
         toast({
@@ -52,6 +67,19 @@ const SignInForm = () => {
       toast({
         variant: "destructive",
         title: "Error signing in user",
+        description: "Please try again",
+      });
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    try {
+      await signIn("github");
+    } catch (error) {
+      console.error("Error signing in with Github", error);
+      toast({
+        variant: "destructive",
+        title: "Error signing in with Github",
         description: "Please try again",
       });
     }
@@ -98,14 +126,17 @@ const SignInForm = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </div>
-      <Button height="h-10" width="w-20" submit>
+      <Button height="h-10" width="w-full" submit>
         Sign In
       </Button>
       <p className="semibold-14 md:semibold-16 text-gray-900_white">
         Don&apos;t have an account?
       </p>
-      <Button height="h-10" width="w-20" linkPath="/sign-up">
+      <Button height="h-10" width="w-full" linkPath="/sign-up">
         Sign Up
+      </Button>
+      <Button height="h-10" width="w-full" handleClick={handleGithubSignIn}>
+        Sign In With Github
       </Button>
     </form>
   );
