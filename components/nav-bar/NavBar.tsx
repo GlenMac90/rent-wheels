@@ -13,7 +13,6 @@ import MobileNavBar from "./MobileNavBar";
 
 const NavBar = () => {
   const { data: session } = useSession();
-  console.log(session);
   const [showMobileNavbar, setShowMobileNavbar] = useState(false);
   const isLoggedIn = true;
 
@@ -52,7 +51,11 @@ const NavBar = () => {
                   Sign Out
                 </Button>
               ) : (
-                <Button width="w-[6.875rem]" height="h-[2.75rem]">
+                <Button
+                  width="w-[6.875rem]"
+                  height="h-[2.75rem]"
+                  linkPath="/sign-in"
+                >
                   Login
                 </Button>
               )}

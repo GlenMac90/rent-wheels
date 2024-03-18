@@ -3,6 +3,7 @@
 import { useState, ChangeEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 
 import { SignUpFormFields, signUpFormSchema } from "@/schemas";
 import Button from "../Button";
@@ -40,15 +41,22 @@ const SignUpForm = () => {
           name: data.name,
         },
       });
-      if (user.status === 201) {
-        router.push("/");
-      }
       if (user.status === 409) {
         toast({
           variant: "destructive",
           title: `User with this ${user.existingField} already exists`,
           description: `Please try again with a different ${user.existingField}`,
         });
+      }
+
+      const userSession = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (user.status === 201 && userSession) {
+        router.push("/");
       }
     } catch (error) {
       console.error("Error signing up user", error);
@@ -158,13 +166,13 @@ const SignUpForm = () => {
           <span className="text-red-500">The passwords do not match</span>
         )}
       </div>
-      <Button height="h-10" width="w-20" submit>
+      <Button height="h-10" width="w-full" submit>
         Sign Up
       </Button>
       <p className="semibold-14 md:semibold-16 text-gray-900_white">
         Already have an account?
       </p>
-      <Button height="h-10" width="w-20" linkPath="/sign-in">
+      <Button height="h-10" width="w-full" linkPath="/sign-in">
         Sign In
       </Button>
     </form>

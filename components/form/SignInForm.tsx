@@ -1,18 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import { useToast } from "@/components/ui/use-toast";
 import Button from "../Button";
-import { signInUser } from "@/lib/actions/user.actions";
 import { SignInFormFields, signInFormSchema } from "@/schemas";
+import { signInUser } from "@/lib/actions/user.actions";
 
 const SignInForm = () => {
-  const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -25,22 +23,26 @@ const SignInForm = () => {
     resolver: zodResolver(signInFormSchema),
   });
 
-  useEffect(() => {
-    if (session) router.push("/");
-  }, [session]);
-
   const formValues = watch();
 
   const onSubmit: SubmitHandler<SignInFormFields> = async (data) => {
     const { email, password } = data;
     try {
-      const user = await signInUser({ email, password });
       const userSession = await signIn("credentials", {
+        redirect: false,
         email,
         password,
       });
+      const user = await signInUser({ email, password });
 
-      if (!user || !userSession) return;
+      if (!user || !userSession) {
+        toast({
+          variant: "destructive",
+          title: "Problem Signing In",
+          description: "Please try again",
+        });
+      }
+
       if (user.status === 404) {
         toast({
           variant: "destructive",

@@ -21,7 +21,6 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("here");
         if (!credentials) return null;
         try {
           const user = await User.findOne({

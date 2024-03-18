@@ -77,6 +77,25 @@ export async function validateUserSession() {
   }
 }
 
+export async function checkActiveSession() {
+  const session = await getServerSession();
+  if (session) {
+    redirect("/");
+  }
+}
+
+export async function validateUserEmail(email: string) {
+  await connectToDB();
+  try {
+    const userEmail = await User.findOne({ email: email.toLowerCase() });
+    if (!userEmail) {
+      redirect("/sign-up");
+    }
+  } catch (error) {
+    throw new Error(`Failed to validate user email: ${error}`);
+  }
+}
+
 export async function checkIfUserExists(
   email: string,
   username: string

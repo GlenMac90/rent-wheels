@@ -7,5 +7,5 @@ export interface ButtonProps {
   className?: string;
   submit?: boolean;
   linkPath?: string;
-  handleClick?: () => void;
+  handleClick?: () => void | Promise<void>;
 }
