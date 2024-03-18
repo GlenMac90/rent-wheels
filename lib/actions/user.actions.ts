@@ -7,33 +7,11 @@ import { redirect } from "next/navigation";
 
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-
-interface CreateUserDataProps {
-  userData: {
-    username: string;
-    email: string;
-    password: string;
-    name: string;
-  };
-}
-
-interface UpdateUserDataProps {
-  userEmail: string;
-  userData: {
-    username?: string;
-    email?: string;
-    password?: string;
-    name?: string;
-    role?: string;
-    image?: string;
-    bannerImage?: string;
-  };
-}
-
-interface SignInDataProps {
-  email: string;
-  password: string;
-}
+import {
+  CreateUserDataProps,
+  UpdateUserDataProps,
+  SignInDataProps,
+} from "@/types/user.index";
 
 export async function createUser({ userData }: CreateUserDataProps): Promise<{
   status: number;
@@ -103,7 +81,6 @@ export async function checkIfUserExists(
   await connectToDB();
   try {
     const userEmail = await User.findOne({ email: email.toLowerCase() });
-    const userUsername = await User.findOne({ username });
 
     if (userEmail) {
       return {
@@ -111,6 +88,8 @@ export async function checkIfUserExists(
         userExists: true,
       };
     }
+
+    const userUsername = await User.findOne({ username });
 
     if (userUsername) {
       return {

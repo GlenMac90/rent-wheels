@@ -68,7 +68,7 @@ const NavBar = () => {
               onClick={() => setShowMobileNavbar(true)}
             >
               <Image
-                src="/menu.svg"
+                src="/icons/menu.svg"
                 height={24}
                 width={24}
                 alt="Mobile Menu Button"

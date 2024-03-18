@@ -52,7 +52,7 @@ const CarModalScreenOne = ({
         onClick={handleClose}
       >
         <Image
-          src="/close.svg"
+          src="/icons/close.svg"
           height={25}
           width={25}
           alt="button to close modal"
@@ -100,7 +100,7 @@ const CarModalScreenOne = ({
           </div>
           <button onClick={handleClose} className="hidden self-start lg:flex">
             <Image
-              src="/close.svg"
+              src="/icons/close.svg"
               height={25}
               width={25}
               alt="button to close modal"

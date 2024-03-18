@@ -64,7 +64,7 @@ const SearchPageFilters = () => {
           <div className="flex gap-4 lg:pt-7">
             <div className="flex-center bg-white_gray-850 flex h-12 w-full gap-4 rounded-ten border border-blue-50 px-3 dark:border-gray-800">
               <Image
-                src="/search-large.svg"
+                src="/icons/search-large.svg"
                 height={24}
                 width={24}
                 alt="Search icon"
@@ -83,7 +83,7 @@ const SearchPageFilters = () => {
               onClick={() => setShowMobileFilters(!showMobileFilters)}
             >
               <Image
-                src="/filter.svg"
+                src="/icons/filter.svg"
                 height={24}
                 width={24}
                 alt="Image for the filter button"

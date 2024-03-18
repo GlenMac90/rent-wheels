@@ -5,7 +5,7 @@ const Avatar = () => {
   return (
     <Link href="/profile">
       <Image
-        src="/text-avatar.png"
+        src="/fallback/text-avatar.png"
         height={28}
         width={28}
         alt="Profile Image"

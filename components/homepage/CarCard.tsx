@@ -37,7 +37,9 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
           ) : (
             <button className="self-start" onClick={() => setLiked(!liked)}>
               <Image
-                src={liked ? "/liked-heart.svg" : "/unliked-heart.png"}
+                src={
+                  liked ? "/icons/liked-heart.svg" : "/icons/unliked-heart.png"
+                }
                 height={24}
                 width={24}
                 alt={`Icon showing the liked status of the car which is currently ${liked}`}
@@ -56,7 +58,7 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
         <div className="flex-between medium-12 md:medium-14 gap-4 text-gray-400">
           <figure className="flex items-center gap-1 md:gap-1.5">
             <Image
-              src="/fuel.svg"
+              src="/icons/fuel.svg"
               height={14}
               width={14}
               alt={`image display fuel capacity of ${name}: ${fuelCapacity} liters`}
@@ -70,9 +72,9 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
             </span>
             {transmission}
           </div>
-          <div className="flex items-center gap-1 md:gap-1.5">
+          <div className="flex items-center gap-1 whitespace-nowrap md:gap-1.5">
             <Image
-              src="/capacity.svg"
+              src="/icons/capacity.svg"
               height={14}
               width={14}
               alt={`image display fuel capacity of ${name}: ${fuelCapacity} liters`}

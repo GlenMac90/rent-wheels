@@ -33,7 +33,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
           <Logo />
           <button onClick={handleCloseClick}>
             <Image
-              src="/close.svg"
+              src="/icons/close.svg"
               height={24}
               width={24}
               alt="Close button for mobile nav menu"
@@ -68,7 +68,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
           <div className="flex w-full flex-col gap-2.5">
             <Link href="/profile" className={logInLogOutButtonStyles}>
               <Image
-                src="/text-avatar.png"
+                src="/fallback/text-avatar.png"
                 height={20}
                 width={20}
                 alt="Profile Picture"

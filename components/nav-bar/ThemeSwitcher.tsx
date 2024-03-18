@@ -15,7 +15,7 @@ const ThemeSwitcher = () => {
     }
   };
 
-  const imageSource = theme === "light" ? "/sun.svg" : "/moon.svg";
+  const imageSource = theme === "light" ? "/icons/sun.svg" : "/icons/moon.svg";
 
   return (
     <button onClick={handleClick}>

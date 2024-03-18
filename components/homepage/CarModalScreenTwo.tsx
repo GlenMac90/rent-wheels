@@ -90,7 +90,7 @@ const CarModalScreenTwo = ({
         </div>
         <button onClick={handleClose} className="self-start">
           <Image
-            src="/close.svg"
+            src="/icons/close.svg"
             height={25}
             width={25}
             alt="button to close modal"
@@ -105,7 +105,7 @@ const CarModalScreenTwo = ({
         <div className="flex flex-col gap-3 lg:gap-4">
           <div className="flex gap-1.5">
             <Image
-              src="/mark.svg"
+              src="/icons/mark.svg.svg"
               height={16}
               width={16}
               alt="search icon for location field"
@@ -132,7 +132,7 @@ const CarModalScreenTwo = ({
           <div className={calendarImagesStyles}>
             <div className="flex gap-1.5">
               <Image
-                src="/calendar.svg"
+                src="/icons/calendar.svg"
                 height={16}
                 width={16}
                 alt="search icon for location field"
@@ -167,7 +167,7 @@ const CarModalScreenTwo = ({
           <div className={calendarImagesStyles}>
             <div className="flex gap-1.5">
               <Image
-                src="/calendar.svg"
+                src="/icons/calendar.svg"
                 height={16}
                 width={16}
                 alt="search icon for location field"

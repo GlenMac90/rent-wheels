@@ -1,17 +1,17 @@
 export const navBarLinks = [
   {
     name: "Home",
-    icon: "/home-page.svg",
+    icon: "/icons/home-page.svg",
     path: "/",
   },
   {
     name: "Search",
-    icon: "/search-page.svg",
+    icon: "/icons/search-page.svg",
     path: "/search",
   },
   {
     name: "Add Car",
-    icon: "/add-car-page.svg",
+    icon: "/icons/add-car-page.svg",
     path: "/cars/new",
   },
 ];
@@ -23,9 +23,9 @@ export const dummyCarData = {
   description:
     "The Skoda Octavia is a small family car produced by the Czech car manufacturer Skoda Auto since 1996. It shares its name with an earlier model.",
   galleryImages: [
-    "/dummy-car-one.png",
-    "/dummy-car-two.png",
-    "/dummy-car-three.png",
+    "/dummy-images/dummy-car-one.png",
+    "/dummy-images/dummy-car-two.png",
+    "/dummy-images/dummy-car-three.png",
   ],
   fuelCapacity: 50,
   transmission: "Manual",
@@ -93,6 +93,6 @@ export const carTransmission = [
 export const profileDummyData = {
   name: "John Doe",
   jobTitle: "Software Engineer",
-  profileImage: "/dummy-profile-image.jpg",
-  bannerImage: "/dummy-banner-image.webp",
+  profileImage: "/dummy-images/dummy-profile-image.jpg",
+  bannerImage: "/dummy-images/dummy-banner-image.webp",
 };
