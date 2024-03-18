@@ -11,10 +11,9 @@ import Button from "../Button";
 import Avatar from "./Avatar";
 import MobileNavBar from "./MobileNavBar";
 
-const NavBar = () => {
+const NavBar = ({ profileImage }: { profileImage: string | null }) => {
   const { data: session } = useSession();
   const [showMobileNavbar, setShowMobileNavbar] = useState(false);
-  const isLoggedIn = true;
 
   const handleCloseClick = () => {
     setShowMobileNavbar(false);
@@ -62,7 +61,7 @@ const NavBar = () => {
               <span className="h-[2.25rem] border-r border-r-blue-50 dark:border-r-gray-850" />
             </div>
             <ThemeSwitcher />
-            {isLoggedIn && <Avatar />}
+            {session && <Avatar profileImage={profileImage} />}
             <button
               className="flex sm:hidden"
               onClick={() => setShowMobileNavbar(true)}

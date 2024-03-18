@@ -62,6 +62,19 @@ export async function checkActiveSession() {
   }
 }
 
+export async function getProfileImage() {
+  const session = await getServerSession();
+  if (!session || !session.user || !session.user.email) return null;
+  const user = await User.findOne(
+    { email: session.user.email },
+    {
+      image: 1,
+    }
+  );
+  const { image: profileImage } = user;
+  return profileImage;
+}
+
 export async function validateUserEmail(email: string) {
   await connectToDB();
   try {
