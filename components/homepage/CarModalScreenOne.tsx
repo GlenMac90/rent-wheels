@@ -1,31 +1,18 @@
 "use client";
 
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 import Button from "../Button";
 import Stars from "./Stars";
+import { CarModalScreenOneProps } from "@/types/car.index";
 
 const CarModalScreenOne = ({
   data,
   handleClick,
   handleClose,
   handleButtonClick,
-}: {
-  data: {
-    galleryImages: string[];
-    name: string;
-    description: string;
-    type: string;
-    transmission: string;
-    capacity: number;
-    fuelCapacity: number;
-    price: number;
-  };
-  handleClick: (e: MouseEvent) => void;
-  handleClose: () => void;
-  handleButtonClick: () => void;
-}) => {
+}: CarModalScreenOneProps) => {
   const {
     galleryImages,
     name,

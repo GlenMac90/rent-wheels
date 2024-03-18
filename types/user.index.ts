@@ -31,3 +31,9 @@ export interface ProfilePageHeaderProps {
   name: string;
   role: string;
 }
+
+export interface ProfileInfoEditButtonProps {
+  profileImage: string;
+  name: string;
+  role: string;
+}
