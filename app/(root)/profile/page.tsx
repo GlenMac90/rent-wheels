@@ -6,6 +6,7 @@ import { getProfileHeaderInfo } from "@/lib/actions/user.actions";
 
 const Profile = async () => {
   const data = await getProfileHeaderInfo();
+  console.log(data);
 
   return (
     <main className="page-styles">
