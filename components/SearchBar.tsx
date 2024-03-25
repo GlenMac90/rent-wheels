@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useURLQuery } from "@/lib/hooks/useURLQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -46,10 +47,27 @@ const {
 } = searchBarStyles;
 
 const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
+  const [from, setFrom] = useURLQuery("from", "");
+  const [to, setTo] = useURLQuery("to", "");
+
+  const fromDate = from ? new Date(from) : new Date();
+
   const [selectedFromDate, setSelectedFromDate] =
     useState<string>("Select your date");
   const [selectedToDate, setSelectedToDate] =
     useState<string>("Select your date");
+
+  const setFromChange = (date: any) => {
+    console.log(date);
+    const dateAsString = formatDate(date);
+    setFrom(dateAsString);
+  };
+
+  const setToChange = (date: any) => {
+    console.log(date);
+    const dateAsString = formatDate(date);
+    setTo(dateAsString);
+  };
 
   const {
     register,
@@ -63,6 +81,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
 
   const availableFrom = watch("availableFrom");
   const availableTo = watch("availableTo");
+  console.log(availableTo);
 
   const handleDateSelect = (
     selectedDate: Date | undefined,
@@ -152,10 +171,8 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                     disabled={(date) =>
                       date < new Date() || date >= availableTo
                     }
-                    selected={availableFrom}
-                    onSelect={(selectedDate) =>
-                      handleDateSelect(selectedDate, "availableFrom")
-                    }
+                    selected={fromDate}
+                    onSelect={(selectedDate) => setFromChange(selectedDate)}
                     initialFocus
                   />
                 </PopoverContent>
@@ -189,9 +206,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                       date < new Date() || date <= availableFrom
                     }
                     selected={availableTo}
-                    onSelect={(selectedDate) =>
-                      handleDateSelect(selectedDate, "availableTo")
-                    }
+                    onSelect={(selectedDate) => setToChange(selectedDate)}
                     initialFocus
                   />
                 </PopoverContent>

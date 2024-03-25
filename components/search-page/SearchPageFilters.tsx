@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form";
 import OptionalSearchFilters from "./OptionalSearchFilters";
 import { FormFields, searchFiltersSchema } from "@/schemas";
 import MobileSearchFilters from "./MobileSearchFilters";
+import CarNameFilter from "./CarNameFilter";
 
 const SearchPageFilters = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -17,11 +18,9 @@ const SearchPageFilters = () => {
     defaultValues: {
       carType: [],
       carCapacity: [],
-      carMaxPrice: 50,
     },
   });
   const {
-    register,
     handleSubmit,
     watch,
     formState: { errors },
@@ -62,22 +61,7 @@ const SearchPageFilters = () => {
         >
           <h3 className="semibold-12 hidden text-blue-100 lg:block">SEARCH</h3>
           <div className="flex gap-4 lg:pt-7">
-            <div className="flex-center bg-white_gray-850 flex h-12 w-full gap-4 rounded-ten border border-blue-50 px-3 dark:border-gray-800">
-              <Image
-                src="/icons/search-large.svg"
-                height={24}
-                width={24}
-                alt="Search icon"
-                className="dark:grayscale dark:invert"
-              />
-              <input
-                {...register("carName")}
-                type="text"
-                autoComplete="off"
-                placeholder="Search by brand or title"
-                className="bg-white_gray-850 text-gray-blue-100 w-full outline-none"
-              />
-            </div>
+            <CarNameFilter form={form} />
             <button
               className="flex-center size-12 shrink-0 rounded-ten border border-blue-500 lg:hidden"
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -92,11 +76,16 @@ const SearchPageFilters = () => {
             </button>
           </div>
           <div className="hidden lg:flex lg:flex-col">
-            <OptionalSearchFilters form={form} currentPrice={currentPrice} />
+            <OptionalSearchFilters
+              form={form}
+              currentPrice={currentPrice}
+              mobileFilters={showMobileFilters}
+            />
           </div>
         </form>
         {showMobileFilters && (
           <MobileSearchFilters
+            mobileFilters={showMobileFilters}
             form={form}
             currentPrice={currentPrice}
             handleClose={handleClose}

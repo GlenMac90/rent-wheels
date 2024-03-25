@@ -34,6 +34,7 @@
     "next-auth": "^4.24.7",
     "nodemailer": "^6.9.12",
     "prettier": "^3.2.4",
+    "query-string": "^9.0.0",
     "react": "^18",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
