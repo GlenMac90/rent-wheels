@@ -2,9 +2,8 @@ import SearchBar from "@/components/searchbar/SearchBar";
 import SearchPageFilters from "@/components/search-page/SearchPageFilters";
 import SearchResults from "@/components/search-page/SearchResults";
 import { validateUserSession } from "@/lib/actions/user.actions";
-import { SearchProps } from "@/types/searchpage.index";
 
-const Search = async ({ searchParams }: { searchParams: SearchProps }) => {
+const Search = async () => {
   await validateUserSession();
   return (
     <main className="search-page-styles">
