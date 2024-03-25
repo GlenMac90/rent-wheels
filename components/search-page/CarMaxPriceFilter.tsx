@@ -3,7 +3,10 @@
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
 
-const CarMaxPriceFilter = ({ mobileFilters }: CarTypeFiltersProps) => {
+const CarMaxPriceFilter = ({
+  mobileFilters,
+  maxPrice,
+}: CarTypeFiltersProps) => {
   const [price, setPrice] = useURLQuery("maxPrice", "50", 200);
 
   return (

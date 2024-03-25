@@ -6,9 +6,11 @@ import { useURLQuery } from "@/lib/hooks/useURLQuery";
 import { carCapacity } from "@/constants";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
 
-const CarCapacityFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
+const CarCapacityFilters = ({
+  mobileFilters,
+  capacities,
+}: CarTypeFiltersProps) => {
   const [capacity, setCapacity] = useURLQuery("capacity", "");
-  const capacityArray = capacity?.split(",");
 
   const setChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const capacityAsArray = capacity.split(",");
@@ -40,7 +42,7 @@ const CarCapacityFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
               id={capacity.id.toString()}
               type="checkbox"
               onChange={(e) => setChange(e)}
-              checked={capacityArray.includes(capacity.id.toString())}
+              checked={capacities?.includes(capacity.id.toString())}
             />
             <label className="text-gray-700_white-100 semibold-20">
               {capacity.label}

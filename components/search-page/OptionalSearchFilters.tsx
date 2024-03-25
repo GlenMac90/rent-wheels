@@ -15,9 +15,12 @@ const OptionalSearchFilters = ({
 
   return (
     <>
-      <CarTypeFilters mobileFilters={mobileFilters} />
-      <CarCapacityFilters mobileFilters={mobileFilters} />
-      <CarMaxPriceFilter mobileFilters={mobileFilters} />
+      <CarTypeFilters mobileFilters={mobileFilters} types={typeArray} />
+      <CarCapacityFilters
+        mobileFilters={mobileFilters}
+        capacities={capacityArray}
+      />
+      <CarMaxPriceFilter mobileFilters={mobileFilters} maxPrice={maxPrice} />
     </>
   );
 };

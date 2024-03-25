@@ -1,5 +1,8 @@
 export interface CarTypeFiltersProps {
   mobileFilters?: boolean;
+  types?: string[];
+  capacities?: string[];
+  maxPrice?: string;
 }
 
 export interface SearchProps {

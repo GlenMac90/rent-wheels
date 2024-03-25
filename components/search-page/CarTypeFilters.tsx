@@ -6,9 +6,8 @@ import { useURLQuery } from "@/lib/hooks/useURLQuery";
 import { carTypes } from "@/constants";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
 
-const CarTypeFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
+const CarTypeFilters = ({ mobileFilters, types }: CarTypeFiltersProps) => {
   const [type, setType] = useURLQuery("type", "");
-  const typesArray = type.split(",");
 
   const setChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -41,7 +40,7 @@ const CarTypeFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
               id={type.id}
               type="checkbox"
               onChange={(e) => setChange(e)}
-              checked={typesArray.includes(type.id)}
+              checked={types?.includes(type.id)}
               className="size-4"
             />
             <label className="text-gray-700_white-100 semibold-20">
