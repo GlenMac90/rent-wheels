@@ -4,10 +4,9 @@ import React from "react";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
 
 import { carCapacity } from "@/constants";
-import { FormItem, FormLabel, FormField, FormControl } from "../ui/form";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
 
-const CarCapacityFilters = ({ form, mobileFilters }: CarTypeFiltersProps) => {
+const CarCapacityFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
   const [capacity, setCapacity] = useURLQuery("capacity", "");
   const capacityArray = capacity?.split(",");
 
@@ -28,39 +27,28 @@ const CarCapacityFilters = ({ form, mobileFilters }: CarTypeFiltersProps) => {
   };
 
   return (
-    <FormItem className={`${mobileFilters ? "mt-8" : "mt-14"}  flex flex-col`}>
-      <FormLabel
+    <div className={`${mobileFilters ? "mt-8" : "mt-14"}  flex flex-col`}>
+      <label
         className={`${mobileFilters ? "mb-3" : " mb-7"} semibold-12 text-blue-100`}
       >
         CAPACITY
-      </FormLabel>
+      </label>
       <div className="flex flex-col gap-2">
         {carCapacity.map((capacity) => (
-          <FormField
-            key={capacity.id}
-            control={form.control}
-            name="carCapacity"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center gap-2">
-                  <FormControl>
-                    <input
-                      id={capacity.id.toString()}
-                      type="checkbox"
-                      onChange={(e) => setChange(e)}
-                      checked={capacityArray.includes(capacity.id.toString())}
-                    />
-                  </FormControl>
-                  <FormLabel className="text-gray-700_white-100 semibold-20 -translate-y-1">
-                    {capacity.label}
-                  </FormLabel>
-                </FormItem>
-              );
-            }}
-          />
+          <div className="flex items-center gap-2" key={capacity.id}>
+            <input
+              id={capacity.id.toString()}
+              type="checkbox"
+              onChange={(e) => setChange(e)}
+              checked={capacityArray.includes(capacity.id.toString())}
+            />
+            <label className="text-gray-700_white-100 semibold-20">
+              {capacity.label}
+            </label>
+          </div>
         ))}
       </div>
-    </FormItem>
+    </div>
   );
 };
 

@@ -6,14 +6,18 @@ import CarCapacityFilters from "./CarCapacityFilters";
 import CarMaxPriceFilter from "./CarMaxPriceFilter";
 
 const OptionalSearchFilters = ({
-  form,
   mobileFilters,
+  urlValues,
 }: OptionalSearchFiltersProps) => {
+  const typeArray = urlValues?.type?.split(",") ?? [];
+  const capacityArray = urlValues?.capacity?.split(",") ?? [];
+  const maxPrice = urlValues?.maxPrice ?? "";
+
   return (
     <>
-      <CarTypeFilters mobileFilters={mobileFilters} form={form} />
-      <CarCapacityFilters mobileFilters={mobileFilters} form={form} />
-      <CarMaxPriceFilter mobileFilters={mobileFilters} form={form} />
+      <CarTypeFilters mobileFilters={mobileFilters} />
+      <CarCapacityFilters mobileFilters={mobileFilters} />
+      <CarMaxPriceFilter mobileFilters={mobileFilters} />
     </>
   );
 };

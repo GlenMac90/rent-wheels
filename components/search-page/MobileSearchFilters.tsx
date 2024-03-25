@@ -5,8 +5,7 @@ import { MobileSearchFiltersProps } from "@/types/searchpage.index";
 import OptionalSearchFilters from "./OptionalSearchFilters";
 
 const MobileSearchFilters = ({
-  form,
-  currentPrice,
+  urlValues,
   handleClose,
 }: MobileSearchFiltersProps) => {
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -21,11 +20,7 @@ const MobileSearchFilters = ({
         className="bg-white_gray-850 mb-4 flex h-fit w-full max-w-lg flex-col overflow-scroll rounded-ten bg-white p-6"
         onClick={handleClick}
       >
-        <OptionalSearchFilters
-          form={form}
-          currentPrice={currentPrice}
-          mobileFilters
-        />
+        <OptionalSearchFilters mobileFilters urlValues={urlValues} />
       </div>
     </div>
   );

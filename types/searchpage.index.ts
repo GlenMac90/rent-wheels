@@ -1,24 +1,20 @@
-import { FormFields } from "@/schemas";
-import { UseFormReturn } from "react-hook-form";
+export interface CarTypeFiltersProps {
+  mobileFilters?: boolean;
+}
+
+export interface SearchProps {
+  name: string | null;
+  type: string | null;
+  capacity: string | null;
+  maxPrice: string | null;
+}
 
 export interface OptionalSearchFiltersProps {
-  form: UseFormReturn<FormFields>;
-  currentPrice: number | undefined;
   mobileFilters: boolean;
+  urlValues?: SearchProps;
 }
 
 export interface MobileSearchFiltersProps extends OptionalSearchFiltersProps {
   handleClose: () => void;
-}
-
-export interface CarTypeFiltersProps {
-  mobileFilters?: boolean;
-  form: UseFormReturn<FormFields>;
-}
-
-export interface SearchProps {
-  name?: string;
-  type?: string;
-  capacity?: string;
-  maxPrice?: string;
+  urlValues?: SearchProps;
 }

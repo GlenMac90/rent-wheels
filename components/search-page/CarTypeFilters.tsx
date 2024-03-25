@@ -4,10 +4,9 @@ import React from "react";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
 
 import { carTypes } from "@/constants";
-import { FormItem, FormLabel, FormField, FormControl } from "../ui/form";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
 
-const CarTypeFilters = ({ mobileFilters, form }: CarTypeFiltersProps) => {
+const CarTypeFilters = ({ mobileFilters }: CarTypeFiltersProps) => {
   const [type, setType] = useURLQuery("type", "");
   const typesArray = type.split(",");
 
@@ -29,39 +28,29 @@ const CarTypeFilters = ({ mobileFilters, form }: CarTypeFiltersProps) => {
   };
 
   return (
-    <FormItem className={`${!mobileFilters && "mt-14"}  flex flex-col`}>
-      <FormLabel
+    <div className={`${!mobileFilters && "mt-14"}  flex flex-col`}>
+      <label
         className={`${mobileFilters ? "mb-3" : "mb-7"} semibold-12  text-blue-100`}
       >
         TYPE
-      </FormLabel>
+      </label>
       <div className="flex flex-col gap-2">
         {carTypes.map((type) => (
-          <FormField
-            key={type.id}
-            control={form.control}
-            name="carType"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center gap-2">
-                  <FormControl>
-                    <input
-                      id={type.id}
-                      type="checkbox"
-                      onChange={(e) => setChange(e)}
-                      checked={typesArray.includes(type.id)}
-                    />
-                  </FormControl>
-                  <FormLabel className="text-gray-700_white-100 semibold-20 -translate-y-1">
-                    {type.label}
-                  </FormLabel>
-                </FormItem>
-              );
-            }}
-          />
+          <div className="flex items-center gap-2" key={type.id}>
+            <input
+              id={type.id}
+              type="checkbox"
+              onChange={(e) => setChange(e)}
+              checked={typesArray.includes(type.id)}
+              className="size-4"
+            />
+            <label className="text-gray-700_white-100 semibold-20">
+              {type.label}
+            </label>
+          </div>
         ))}
       </div>
-    </FormItem>
+    </div>
   );
 };
 

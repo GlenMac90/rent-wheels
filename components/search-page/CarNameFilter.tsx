@@ -3,9 +3,7 @@
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
 import Image from "next/image";
 
-import { CarTypeFiltersProps } from "@/types/searchpage.index";
-
-const CarNameFilter = ({ form }: CarTypeFiltersProps) => {
+const CarNameFilter = () => {
   const [searchValue, setSearchValue] = useURLQuery("name", "", 500);
 
   return (
@@ -18,7 +16,6 @@ const CarNameFilter = ({ form }: CarTypeFiltersProps) => {
         className="dark:grayscale dark:invert"
       />
       <input
-        {...form.register("carName")}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         type="text"

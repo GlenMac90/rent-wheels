@@ -5,6 +5,7 @@ import { validateUserSession } from "@/lib/actions/user.actions";
 import { SearchProps } from "@/types/searchpage.index";
 
 const Search = async ({ searchParams }: { searchParams: SearchProps }) => {
+  console.log(searchParams);
   await validateUserSession();
   return (
     <main className="search-page-styles">
