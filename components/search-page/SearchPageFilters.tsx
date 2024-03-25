@@ -45,13 +45,14 @@ const SearchPageFilters = () => {
 
   return (
     <>
-      <form className="bg-white_gray-900 sticky top-[5.75rem] z-20 flex size-full w-full flex-col border-b border-r border-b-blue-50/40 border-r-white-100 p-6 dark:border-b-gray-850 dark:border-r-gray-850 sm:top-[6.25rem] lg:max-w-[20rem] lg:overflow-auto">
+      <form className="bg-white_gray-900 sticky top-[5.75rem] z-20 flex w-full flex-col border-b border-r border-b-blue-50/40 border-r-white-100 p-6 dark:border-b-gray-850 dark:border-r-gray-850 sm:top-[6.25rem] lg:max-w-[20rem] lg:overflow-scroll">
         <h3 className="semibold-12 hidden text-blue-100 lg:block">SEARCH</h3>
         <div className="flex gap-4 lg:pt-7">
           <CarNameFilter />
           <button
+            type="button"
             className="flex-center size-12 shrink-0 rounded-ten border border-blue-500 lg:hidden"
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
+            onClick={() => setShowMobileFilters((prev) => !prev)}
           >
             <Image
               src="/icons/filter.svg"

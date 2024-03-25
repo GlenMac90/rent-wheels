@@ -5,13 +5,12 @@ import { validateUserSession } from "@/lib/actions/user.actions";
 import { SearchProps } from "@/types/searchpage.index";
 
 const Search = async ({ searchParams }: { searchParams: SearchProps }) => {
-  console.log(searchParams);
   await validateUserSession();
   return (
     <main className="search-page-styles">
-      <section className="flex w-full max-w-[82rem] flex-col items-center lg:flex-row">
+      <section className="flex w-full max-w-[82rem] flex-col lg:flex-row">
         <SearchPageFilters />
-        <main className="flex w-full flex-col gap-8 p-6 lg:overflow-auto lg:pl-6 lg:pr-0">
+        <main className="flex w-full flex-col gap-8 overflow-scroll p-6 lg:pr-0">
           <SearchBar searchPage />
           <SearchResults />
         </main>

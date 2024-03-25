@@ -26,7 +26,7 @@ export default async function RootLayout({
       <ThemeProvider>
         <SessionProvider session={session}>
           <body
-            className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
+            className={`${jakarta.className} bg-white-200_gray-900 h-screen overscroll-none`}
           >
             {children}
             <Toaster />

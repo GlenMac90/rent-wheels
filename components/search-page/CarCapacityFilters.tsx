@@ -43,6 +43,7 @@ const CarCapacityFilters = ({
               type="checkbox"
               onChange={(e) => setChange(e)}
               checked={capacities?.includes(capacity.id.toString())}
+              className="size-4 cursor-pointer"
             />
             <label className="text-gray-700_white-100 semibold-20">
               {capacity.label}

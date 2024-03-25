@@ -19,8 +19,9 @@ const CarMaxPriceFilter = ({
         </label>
         <input
           type="range"
-          value={price}
+          value={maxPrice}
           onChange={(e) => setPrice(e.target.value)}
+          className="cursor-pointer"
         />
       </div>
       <label className="semibold-12 mt-4 text-gray-700">

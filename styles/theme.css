@@ -12,7 +12,7 @@
   }
 
   .search-page-styles {
-    @apply flex h-full w-screen justify-center lg:pl-0 lg:pr-6 pt-[5.75rem] sm:pt-[6.25rem] pb-12 md:pb-16 lg:pb-0;
+    @apply flex w-screen h-screen justify-center lg:pl-0 pt-[5.75rem] sm:pt-[6.25rem] pb-12 md:pb-16 lg:pb-0;
   }
 
   .flex-center {
