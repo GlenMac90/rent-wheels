@@ -1,4 +1,4 @@
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/searchbar/SearchBar";
 import Hero from "@/components/homepage/Hero";
 import PopularCars from "@/components/homepage/PopularCars";
 import RecommendedCars from "@/components/homepage/RecommendedCars";

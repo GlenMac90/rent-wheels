@@ -24,3 +24,12 @@ export function modifySearchParams(
     skipEmptyString: true,
   });
 }
+
+export function formatUrlDate(date: string) {
+  const dateParts = date.split("/");
+  const day = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10) - 1;
+  const year = parseInt(dateParts[2], 10);
+  const newDate = new Date(year, month, day);
+  return newDate;
+}

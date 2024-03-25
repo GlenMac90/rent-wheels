@@ -1,4 +1,4 @@
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/searchbar/SearchBar";
 import SearchPageFilters from "@/components/search-page/SearchPageFilters";
 import SearchResults from "@/components/search-page/SearchResults";
 import { validateUserSession } from "@/lib/actions/user.actions";
