@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,6 +52,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
   const [searchBarQuery, setSearchBarQuery] = useURLQuery("dateRange", "");
   const parsedQuery = searchBarQuery.split("-");
   const queryIsValid = parsedQuery.length === 3;
+  const router = useRouter();
 
   const initialData = {
     location: queryIsValid ? parsedQuery[2] : "",
@@ -98,7 +100,13 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
     const { location, availableFrom, availableTo } = data;
     const formattedFrom = formatDate(availableFrom);
     const formattedTo = formatDate(availableTo);
-    setSearchBarQuery(`${formattedFrom}-${formattedTo}-${location}`);
+    if (searchPage) {
+      setSearchBarQuery(`${formattedFrom}-${formattedTo}-${location}`);
+    } else {
+      router.push(
+        `/search?dateRange=${formattedFrom}-${formattedTo}-${location}`
+      );
+    }
   };
 
   return (
@@ -167,7 +175,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                     className={calendarStyles}
                     mode="single"
                     disabled={(date) =>
-                      date < new Date() || date <= availableTo
+                      date <= new Date() || date >= availableTo
                     }
                     selected={availableFrom ?? initialData.availableFrom}
                     onSelect={(selectedDate) =>

@@ -1,62 +1,29 @@
-// import prisma from "../lib/prisma";
+"use server";
 
-// import { createPosts, createTags } from "./seed/seed-posts/index";
-// import { createOnboarding, createUsers } from "./seed/seed-user/index";
-// import {
-//   createShows,
-//   createPodcastsForShows,
-// } from "./seed/seed-podcasts/index";
-// import { createGroups } from "./seed/seed-groups/index";
-// import { createMeetUps } from "./seed/seed-meetup/index";
-// import { createInterviews } from "./seed/seed-interviews/createInterview";
-// import { seedInterviewTags } from "./seed/seed-interviews/createInterviewTag";
-// import { seedTagOnInterview } from "./seed/seed-interviews/seedTagOnInterview";
+import { createUsers } from "./user.seed";
+import { createCars } from "./cars.seed";
+import { assignCarsToUsers } from "./assignCars.seed";
+import { getAllUsers } from "@/lib/actions/user.actions";
 
-// import { createShares } from "./seed/seed-posts/createPostShares";
-// import { createLikesForPost } from "./seed/seed-posts/CreateLikesForPosts";
-// import { seedMeetupsTags } from "./seed/seed-meetup/createMeetupTag";
-// import { seedTagOnMeetup } from "./seed/seed-meetup/seedTagOnMeetup";
+export async function seedDB() {
+  console.time("Execution Time");
 
-// import { createFollowings } from "./seed/seed-followings/createFollowings";
-
-// async function main() {
-//   console.time("Execution Time");
-
-//   const tags = await createTags();
-//   const users = await createUsers();
-//   const groups = await createGroups();
-//   await createOnboarding(users);
-//   await seedInterviewTags();
-//   await createInterviews(users);
-//   await seedTagOnInterview();
-//   const posts = await createPosts(users, tags, groups);
-
-//   const shows = await createShows(users);
-//   for (const show of shows) {
-//     await createPodcastsForShows(show);
-//   }
-
-//   if (posts) {
-//     for (const post of posts) {
-//       await createLikesForPost(post, users);
-//     }
-//     await createShares(users, posts);
-//   }
-
-//   await seedMeetupsTags();
-//   await createMeetUps(users);
-//   await seedTagOnMeetup();
-
-//   await createFollowings(users);
-
-//   console.timeEnd("Execution Time");
-// }
-
-// main()
-//   .catch((e) => {
-//     console.error(e);
-//     process.exit(1);
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+  try {
+    const users = await createUsers();
+    if (!users) {
+      throw new Error("Could not create users");
+    }
+    const cars = await createCars(users);
+    if (!cars) {
+      throw new Error("Could not create cars");
+    }
+    const allUsers = await getAllUsers();
+    if (!allUsers) {
+      throw new Error("Could not get all users");
+    }
+    await assignCarsToUsers({ allUsers, allCars: cars });
+  } catch (error) {
+    console.log(error);
+  }
+  console.timeEnd("Execution Time");
+}

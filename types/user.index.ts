@@ -17,6 +17,8 @@ export interface UpdateUserDataProps {
     role?: string;
     image?: string;
     bannerImage?: string;
+    rentedCars?: string[];
+    ownedCars?: string[];
   };
 }
 

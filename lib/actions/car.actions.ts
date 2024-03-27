@@ -1,10 +1,10 @@
 "use server";
 
+import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
 import { connectToDB } from "../mongoose";
 
 interface CreateCarDataProps {
-  owner: string;
   name: string;
   type: string;
   description: string;
@@ -25,9 +25,16 @@ export async function createCar({
   message: string;
   error?: any;
 }> {
+  const user = await authoriseUser();
+  if (!user) {
+    throw new Error("User not authorised to create car");
+  }
+
+  const fullCarData = { owner: user.userId, ...carData };
+
   await connectToDB();
   try {
-    await Car.create(carData);
+    await Car.create(fullCarData);
     return {
       status: 201,
       message: "Car created successfully",
@@ -38,5 +45,28 @@ export async function createCar({
       message: "Failed to create car",
       error: error.message,
     };
+  }
+}
+
+export async function getAllCars() {
+  await connectToDB();
+  try {
+    const cars = await Car.find();
+    return cars;
+  } catch (error) {
+    throw new Error(`Failed to get all cars: ${error}`);
+  }
+}
+
+export async function deleteAllCars() {
+  await connectToDB();
+  try {
+    await Car.deleteMany();
+    return {
+      status: 200,
+      message: "All cars deleted successfully",
+    };
+  } catch (error) {
+    throw new Error(`Failed to delete all cars: ${error}`);
   }
 }

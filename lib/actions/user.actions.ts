@@ -63,6 +63,7 @@ export async function checkActiveSession() {
 }
 
 export async function getProfileImage() {
+  await connectToDB();
   const session = await getServerSession();
   if (!session || !session.user || !session.user.email) return null;
   const user = await User.findOne(
@@ -72,6 +73,8 @@ export async function getProfileImage() {
     }
   );
   const { image: profileImage } = user;
+  console.log(user);
+
   return profileImage;
 }
 
@@ -205,11 +208,22 @@ export async function deleteUser(userId: string): Promise<void> {
   }
 }
 
+export async function deleteNonAdmins(): Promise<void> {
+  await connectToDB();
+  try {
+    await User.deleteMany({ email: { $ne: "glen.mccallum@live.co.uk" } });
+    console.log("Non-admin users deleted successfully.");
+  } catch (error) {
+    console.error(`Failed to delete non-admin users: ${error}`);
+    throw new Error(`Failed to delete non-admin users: ${error}`);
+  }
+}
+
 export async function getAllUsers() {
   await connectToDB();
   try {
-    const allUsers = await User.find();
-    return allUsers;
+    const users = await User.find();
+    return users;
   } catch (error) {
     throw new Error(`Failed to get all users: ${error}`);
   }

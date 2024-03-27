@@ -8,7 +8,7 @@ import Button from "../Button";
 const RecommendedCars = () => {
   const [showMore, setShowMore] = useState(false);
   return (
-    <section className="flex w-full flex-col gap-5">
+    <section className="flex w-full flex-col gap-5 pb-6">
       <h3 className="semibold-14 md:semibold-16 text-gray-400">
         Recommended Cars
       </h3>
