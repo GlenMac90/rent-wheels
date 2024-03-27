@@ -14,17 +14,17 @@ const CarModalScreenOne = ({
   handleButtonClick,
 }: CarModalScreenOneProps) => {
   const {
-    galleryImages,
+    images,
     name,
     description,
     type,
     transmission,
-    capacity,
+    peopleCapacity,
     fuelCapacity,
-    price,
+    dailyPrice,
   } = data;
 
-  const [activeImage, setActiveImage] = useState(galleryImages[0]);
+  const [activeImage, setActiveImage] = useState(images[0]);
 
   const reviewCount = 55;
   const rating = 4;
@@ -51,11 +51,12 @@ const CarModalScreenOne = ({
           src={activeImage}
           height={180}
           width={270}
+          priority
           alt="Main image of car"
           className="aspect-video w-full rounded-ten border border-blue-50 bg-white object-cover"
         />
         <div className="flex w-full justify-between gap-5">
-          {galleryImages.map((image: string) => {
+          {images.map((image: string) => {
             const isActive = activeImage === image;
             return (
               <div key={image} className="flex aspect-video">
@@ -63,6 +64,7 @@ const CarModalScreenOne = ({
                   src={image}
                   height={62}
                   width={67}
+                  priority
                   alt="Image picture"
                   className={`flex w-full cursor-pointer rounded-ten object-cover ${isActive && "border border-blue-500 p-0.5"}`}
                   onClick={() => setActiveImage(image)}
@@ -123,7 +125,7 @@ const CarModalScreenOne = ({
                 Capacity
               </label>
               <span className="base-12 lg:base-20 text-gray-700_white-200">
-                {capacity} Person
+                {peopleCapacity} Person
               </span>
             </div>
             <div className="flex-between w-full">
@@ -138,7 +140,7 @@ const CarModalScreenOne = ({
         </div>
         <div className="flex-between w-full">
           <p className="bold-20 lg:bold-28 text-gray-900_white">
-            ${price}/{" "}
+            ${dailyPrice}/{" "}
             <span className="semibold-12 lg:semibold-16 text-gray-400">
               day
             </span>

@@ -6,12 +6,14 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import User from "../models/user.model";
+import Car from "../models/car.model";
 import { connectToDB } from "../mongoose";
 import {
   CreateUserDataProps,
   UpdateUserDataProps,
   SignInDataProps,
 } from "@/types/user.index";
+import { authoriseUser } from "../auth";
 
 export async function createUser({ userData }: CreateUserDataProps): Promise<{
   status: number;
@@ -73,7 +75,6 @@ export async function getProfileImage() {
     }
   );
   const { image: profileImage } = user;
-  console.log(user);
 
   return profileImage;
 }
@@ -158,37 +159,6 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function getProfileHeaderInfo() {
-  await connectToDB();
-  const session = await getServerSession();
-
-  if (!session || !session.user?.email) {
-    redirect("/sign-in");
-  }
-  const email = session.user.email;
-
-  try {
-    const profileData = await User.findOne(
-      { email: email.toLowerCase() },
-      {
-        image: 1,
-        bannerImage: 1,
-        name: 1,
-        role: 1,
-      }
-    );
-    const { image, bannerImage, name, role } = profileData;
-    return {
-      image,
-      bannerImage,
-      name,
-      role,
-    };
-  } catch (error) {
-    throw new Error(`Failed to get user by email: ${error}`);
-  }
-}
-
 export async function getUserByUsername(username: string) {
   await connectToDB();
   try {
@@ -256,5 +226,80 @@ export async function signInUser(data: SignInDataProps) {
     };
   } catch (error) {
     throw new Error(`Failed to sign in user: ${error}`);
+  }
+}
+
+export async function getProfilePageCars() {
+  await connectToDB();
+
+  const verifiedUser = await authoriseUser();
+  if (!verifiedUser) {
+    throw new Error("User not authorised");
+  }
+  try {
+    const user = await User.findById(verifiedUser.userId)
+      .select("rentedCars ownedCars image bannerImage role name")
+      .exec();
+
+    const { rentedCars, ownedCars, image, bannerImage, role, name } = user;
+
+    if (!rentedCars) {
+      throw new Error("User not found");
+    }
+
+    const populatedRentedCars = await Promise.all(
+      rentedCars.map(async (carId: string) => {
+        const data = await Car.findById(carId).exec();
+
+        const carData = {
+          id: data._id.toString(),
+          owner: data.owner.toString(),
+          name: data.name,
+          type: data.type,
+          description: data.description,
+          transmission: data.transmission,
+          fuelCapacity: data.fuelCapacity,
+          peopleCapacity: data.peopleCapacity,
+          dailyPrice: data.dailyPrice,
+          images: data.images,
+        };
+        return carData;
+      })
+    );
+
+    const populatedOwnedCars = await Promise.all(
+      ownedCars.map(async (carId: string) => {
+        const data = await Car.findById(carId).exec();
+
+        const carData = {
+          id: data._id.toString(),
+          owner: data.owner.toString(),
+          name: data.name,
+          type: data.type,
+          description: data.description,
+          transmission: data.transmission,
+          fuelCapacity: data.fuelCapacity,
+          peopleCapacity: data.peopleCapacity,
+          dailyPrice: data.dailyPrice,
+          images: data.images,
+        };
+        return carData;
+      })
+    );
+
+    const profileData = {
+      image,
+      bannerImage,
+      role,
+      name,
+    };
+
+    return {
+      rentedCars: populatedRentedCars ?? [],
+      ownedCars: populatedOwnedCars ?? [],
+      profileData,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get rented cars: ${error}`);
   }
 }

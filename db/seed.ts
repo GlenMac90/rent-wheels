@@ -7,7 +7,6 @@ import { getAllUsers } from "@/lib/actions/user.actions";
 
 export async function seedDB() {
   console.time("Execution Time");
-
   try {
     const users = await createUsers();
     if (!users) {

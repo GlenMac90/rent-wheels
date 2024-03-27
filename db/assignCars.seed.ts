@@ -27,10 +27,7 @@ export const assignCarsToUsers = async ({
         }
         return acc;
       }, []);
-      const rentedCarCount =
-        notOwnedCars.length > 0
-          ? Math.floor(Math.random() * notOwnedCars.length) + 1
-          : 0;
+      const rentedCarCount = Math.floor(Math.random() * 10);
 
       const rentedCars = Array.from({ length: rentedCarCount }, () => {
         const randomIndex = Math.floor(Math.random() * notOwnedCars.length);
@@ -44,14 +41,10 @@ export const assignCarsToUsers = async ({
           rentedCars,
         },
       });
-
-      console.log(
-        `Updated user ${user.email} with owned and rented cars`,
-        updatedUser
-      );
+      if (!updatedUser) {
+        throw new Error("Could not update user");
+      }
     }
-
-    console.log("Cars assigned successfully");
   } catch (error) {
     console.error("Error assigning cars:", error);
   }

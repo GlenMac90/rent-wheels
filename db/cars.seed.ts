@@ -46,9 +46,9 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
   await connectToDB();
   try {
     const carPromises = users.map(async (user) => {
-      const shouldHaveCar = Math.random() < 0.5;
+      const shouldHaveCar = Math.random() < 0.8;
       if (shouldHaveCar) {
-        const numberOfCars = Math.floor(Math.random() * 7) + 1;
+        const numberOfCars = Math.floor(Math.random() * 3) + 1;
 
         const carCreatePromises = Array.from(
           { length: numberOfCars },
@@ -71,8 +71,6 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
       return [];
     });
     const cars = await Promise.all(carPromises);
-    // Flatten the array of car arrays into a single array and filter out empty values
-    console.log(cars);
     return cars.flat().filter((car) => car !== undefined) as ICar[];
   } catch (error) {
     console.error("Error seeding cars:", error);

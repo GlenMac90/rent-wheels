@@ -1,5 +1,7 @@
 "use server";
 
+import queryString from "query-string";
+
 import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
 import { connectToDB } from "../mongoose";
@@ -69,4 +71,20 @@ export async function deleteAllCars() {
   } catch (error) {
     throw new Error(`Failed to delete all cars: ${error}`);
   }
+}
+
+interface SearchParams {
+  name: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+}
+
+export async function fetchSearchResults({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  await connectToDB();
+  console.log(searchParams?.name);
 }
