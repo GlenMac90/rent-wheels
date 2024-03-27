@@ -4,14 +4,15 @@ import { useState } from "react";
 
 import CarCard from "@/components/homepage/CarCard";
 import Button from "@/components/Button";
+import { ICar } from "@/lib/models/car.model";
 
-const SearchResults = () => {
+const SearchResults = ({ cars }: { cars: ICar[] }) => {
   const [showMore, setShowMore] = useState(false);
   return (
     <section className="flex w-full flex-col gap-5">
       <div className="flex flex-col gap-5 md:grid md:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 16 }, (_, index) => (
-          <CarCard key={index} />
+        {cars.map((car) => (
+          <CarCard key={car.id} data={car} />
         ))}
       </div>
       <Button

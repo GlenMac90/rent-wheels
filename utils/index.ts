@@ -1,6 +1,7 @@
 import queryString from "query-string";
 
 import { SearchProps } from "@/types/searchpage.index";
+import { ICar } from "@/lib/models/car.model";
 
 export function formatDate(date: Date): string {
   const day = date.getDate().toString().padStart(2, "0");
@@ -33,3 +34,56 @@ export function formatUrlDate(date: string) {
   const newDate = new Date(year, month, day);
   return newDate;
 }
+
+export type CarType = "sedan" | "suv" | "coupe" | "mpv" | "hatchback" | "sport";
+
+const typesKeyArray: Record<CarType, string> = {
+  sedan: "Sedan",
+  suv: "SUV",
+  coupe: "Coupe",
+  mpv: "MPV",
+  hatchback: "Hatchback",
+  sport: "Sport",
+};
+
+export const formatTypes = (queryString: string | undefined) => {
+  if (queryString === undefined) {
+    return ["Sport", "Sedan", "SUV", "Coupe", "MPV", "Hatchback"];
+  } else {
+    const typeArray = queryString
+      ?.split(",")
+      .filter((type) => type.trim() !== "" && type in typesKeyArray);
+
+    return typeArray.map((type) => {
+      const key = type as CarType;
+      return typesKeyArray[key];
+    });
+  }
+};
+
+export const formatCapacity = (queryString: string | undefined) => {
+  if (queryString === undefined) {
+    return [2, 4, 6, 8];
+  } else {
+    return queryString
+      ?.split(",")
+      .map((capacity) => parseInt(capacity, 10))
+      .filter((capacity) => !isNaN(capacity));
+  }
+};
+
+export const formatCarData = (data: any): ICar => {
+  // @ts-ignore
+  return {
+    id: data._id.toString(),
+    owner: data.owner.toString(),
+    name: data.name,
+    type: data.type,
+    description: data.description,
+    transmission: data.transmission,
+    fuelCapacity: data.fuelCapacity,
+    peopleCapacity: data.peopleCapacity,
+    dailyPrice: data.dailyPrice,
+    images: data.images,
+  };
+};

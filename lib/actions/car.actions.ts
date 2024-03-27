@@ -1,10 +1,9 @@
 "use server";
 
-import queryString from "query-string";
-
 import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
 import { connectToDB } from "../mongoose";
+import { formatCapacity, formatCarData, formatTypes } from "@/utils";
 
 interface CreateCarDataProps {
   name: string;
@@ -74,17 +73,41 @@ export async function deleteAllCars() {
 }
 
 interface SearchParams {
-  name: string;
-  location: string;
-  startDate: string;
-  endDate: string;
+  name?: string;
+  maxPrice: string;
+  type?: string;
+  capacity?: string;
 }
 
 export async function fetchSearchResults({
-  searchParams,
+  searchQuery,
 }: {
-  searchParams: SearchParams;
+  searchQuery: SearchParams;
 }) {
   await connectToDB();
-  console.log(searchParams?.name);
+
+  const parsedMaxPrice = parseInt(searchQuery?.maxPrice, 10);
+  const maxPrice = isNaN(parsedMaxPrice) ? 200 : parsedMaxPrice;
+  const name = searchQuery?.name ?? "";
+  const formattedTypes = formatTypes(searchQuery?.type);
+  const capacityArray = formatCapacity(searchQuery?.capacity);
+
+  try {
+    const cars = await Car.find({
+      name: { $regex: name, $options: "i" },
+      type: { $in: formattedTypes },
+      peopleCapacity: { $in: capacityArray },
+      dailyPrice: { $lte: maxPrice },
+    })
+      .limit(6)
+      .exec();
+
+    const formattedCarsArray = cars.map((car) => {
+      return formatCarData(car);
+    });
+
+    return formattedCarsArray;
+  } catch (error) {
+    throw new Error(`Failed to fetch search results: ${error}`);
+  }
 }

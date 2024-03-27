@@ -14,6 +14,7 @@ import {
   SignInDataProps,
 } from "@/types/user.index";
 import { authoriseUser } from "../auth";
+import { formatCarData } from "@/utils";
 
 export async function createUser({ userData }: CreateUserDataProps): Promise<{
   status: number;
@@ -250,19 +251,7 @@ export async function getProfilePageCars() {
     const populatedRentedCars = await Promise.all(
       rentedCars.map(async (carId: string) => {
         const data = await Car.findById(carId).exec();
-
-        const carData = {
-          id: data._id.toString(),
-          owner: data.owner.toString(),
-          name: data.name,
-          type: data.type,
-          description: data.description,
-          transmission: data.transmission,
-          fuelCapacity: data.fuelCapacity,
-          peopleCapacity: data.peopleCapacity,
-          dailyPrice: data.dailyPrice,
-          images: data.images,
-        };
+        const carData = formatCarData(data);
         return carData;
       })
     );

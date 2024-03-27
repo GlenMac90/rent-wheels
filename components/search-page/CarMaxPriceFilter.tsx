@@ -7,7 +7,7 @@ const CarMaxPriceFilter = ({
   mobileFilters,
   maxPrice,
 }: CarTypeFiltersProps) => {
-  const [price, setPrice] = useURLQuery("maxPrice", "50", 200);
+  const [price, setPrice] = useURLQuery("maxPrice", "200", 200);
 
   return (
     <>
@@ -18,6 +18,7 @@ const CarMaxPriceFilter = ({
           PRICE
         </label>
         <input
+          max={500}
           type="range"
           value={maxPrice}
           onChange={(e) => setPrice(e.target.value)}
