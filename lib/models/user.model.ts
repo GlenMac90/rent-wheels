@@ -1,4 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface IUser extends Document {
+  username: string;
+  email: string;
+  password: string;
+  name: string;
+  role?: string;
+  image?: string;
+  bannerImage?: string;
+  rentedCars?: string[];
+  ownedCars?: string[];
+}
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },

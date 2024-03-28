@@ -11,7 +11,7 @@ export default async function RootLayout({
 }) {
   const profileImage = await getProfileImage();
   return (
-    <main className="overscroll-none">
+    <main className="h-screen overflow-scroll overscroll-none">
       <NavBar profileImage={profileImage} />
       {children}
       <Footer />

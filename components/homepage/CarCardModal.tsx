@@ -2,15 +2,17 @@
 
 import { MouseEvent, useState } from "react";
 
-import { dummyCarData } from "@/constants";
 import ModalBackground from "../ModalBackground";
 import CarModalScreenOne from "./CarModalScreenOne";
 import CarModalScreenTwo from "./CarModalScreenTwo";
+import { ICar } from "@/lib/models/car.model";
 
 const CarCardModal = ({
   handleCloseModal,
+  data,
 }: {
   handleCloseModal: () => void;
+  data: ICar;
 }) => {
   const [showModalScreenTwo, setShowModalScreenTwo] = useState(false);
 
@@ -29,7 +31,7 @@ const CarCardModal = ({
   };
 
   const modalProps = {
-    data: dummyCarData,
+    data,
     handleClick,
     handleClose,
     handleButtonClick,

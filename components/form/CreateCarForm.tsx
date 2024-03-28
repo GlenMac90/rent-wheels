@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState, MouseEvent, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -30,8 +31,9 @@ const inputStyles =
   "flex items-center w-full rounded-md bg-white-200_gray-800 h-12 md:h-14 px-4 md:px-6";
 const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
-const CreateCarForm = ({ mockId }: any) => {
+const CreateCarForm = () => {
   const { toast } = useToast();
+  const router = useRouter();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
@@ -68,7 +70,6 @@ const CreateCarForm = ({ mockId }: any) => {
 
     const newCar = await createCar({
       carData: {
-        owner: mockId,
         name: data.carTitle,
         type: data.carType,
         description: data.carDescription,
@@ -85,6 +86,7 @@ const CreateCarForm = ({ mockId }: any) => {
         variant: "info",
         title: "Car created successfully",
       });
+      router.push("/");
     } else {
       toast({
         variant: "destructive",
@@ -149,7 +151,7 @@ const CreateCarForm = ({ mockId }: any) => {
 
   return (
     <form
-      className="bg-white_gray-850 w-full max-w-[53.25rem] rounded-ten p-6"
+      className="bg-white_gray-850 h-fit w-full max-w-[53.25rem] rounded-ten p-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h3 className="semibold-20 text-gray-900_white">Add a Car for Rent</h3>

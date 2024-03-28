@@ -21,12 +21,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
+  console.log(session);
   return (
     <html lang="en">
       <ThemeProvider>
         <SessionProvider session={session}>
           <body
-            className={`${jakarta.className} bg-white-200_gray-900 overscroll-none`}
+            className={`${jakarta.className} bg-white-200_gray-900 h-screen overscroll-none`}
           >
             {children}
             <Toaster />

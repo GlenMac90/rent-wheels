@@ -5,9 +5,10 @@ import { MobileSearchFiltersProps } from "@/types/searchpage.index";
 import OptionalSearchFilters from "./OptionalSearchFilters";
 
 const MobileSearchFilters = ({
-  form,
-  currentPrice,
+  urlValues,
   handleClose,
+  displayPrice,
+  setDisplayPrice,
 }: MobileSearchFiltersProps) => {
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -22,9 +23,10 @@ const MobileSearchFilters = ({
         onClick={handleClick}
       >
         <OptionalSearchFilters
-          form={form}
-          currentPrice={currentPrice}
           mobileFilters
+          urlValues={urlValues}
+          displayPrice={displayPrice}
+          setDisplayPrice={setDisplayPrice}
         />
       </div>
     </div>

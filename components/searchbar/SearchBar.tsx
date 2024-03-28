@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useURLQuery } from "@/lib/hooks/useURLQuery";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -12,9 +15,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import Button from "./Button";
-import ArrowDownIcon from "./ArrowDownIcon";
-import { formatDate } from "@/utils";
+import Button from "../Button";
+import ArrowDownIcon from "../ArrowDownIcon";
+import { formatDate, formatUrlDate } from "@/utils";
 import { searchBarSchema } from "@/schemas";
 
 export const searchBarStyles = {
@@ -46,10 +49,19 @@ const {
 } = searchBarStyles;
 
 const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
-  const [selectedFromDate, setSelectedFromDate] =
-    useState<string>("Select your date");
-  const [selectedToDate, setSelectedToDate] =
-    useState<string>("Select your date");
+  const [searchBarQuery, setSearchBarQuery] = useURLQuery("dateRange", "");
+  const parsedQuery = searchBarQuery.split("-");
+  const queryIsValid = parsedQuery.length === 3;
+  const router = useRouter();
+
+  const initialData = {
+    location: queryIsValid ? parsedQuery[2] : "",
+    availableFrom: queryIsValid ? formatUrlDate(parsedQuery[0]) : new Date(),
+    availableTo: queryIsValid ? formatUrlDate(parsedQuery[1]) : undefined,
+  };
+
+  const [selectedFromDate, setSelectedFromDate] = useState<string>("");
+  const [selectedToDate, setSelectedToDate] = useState<string>("");
 
   const {
     register,
@@ -58,6 +70,11 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
     watch,
     formState: { errors },
   } = useForm<FormFields>({
+    defaultValues: {
+      location: initialData.location,
+      availableFrom: initialData.availableFrom,
+      availableTo: initialData.availableTo,
+    },
     resolver: zodResolver(searchBarSchema),
   });
 
@@ -81,7 +98,15 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     const { location, availableFrom, availableTo } = data;
-    console.log(location, availableFrom, availableTo);
+    const formattedFrom = formatDate(availableFrom);
+    const formattedTo = formatDate(availableTo);
+    if (searchPage) {
+      setSearchBarQuery(`${formattedFrom}-${formattedTo}-${location}`);
+    } else {
+      router.push(
+        `/search?dateRange=${formattedFrom}-${formattedTo}-${location}`
+      );
+    }
   };
 
   return (
@@ -140,7 +165,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                 <PopoverTrigger>
                   <div className={inputDivStyles}>
                     <span className={placeholderStyles}>
-                      {selectedFromDate}
+                      {selectedFromDate || parsedQuery[0] || "Select your date"}
                     </span>
                     <ArrowDownIcon />
                   </div>
@@ -152,7 +177,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                     disabled={(date) =>
                       date < new Date() || date >= availableTo
                     }
-                    selected={availableFrom}
+                    selected={availableFrom ?? initialData.availableFrom}
                     onSelect={(selectedDate) =>
                       handleDateSelect(selectedDate, "availableFrom")
                     }
@@ -177,7 +202,9 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
               <Popover>
                 <PopoverTrigger>
                   <div className={inputDivStyles}>
-                    <span className={placeholderStyles}>{selectedToDate}</span>
+                    <span className={placeholderStyles}>
+                      {selectedToDate || parsedQuery[1] || "Select your date"}
+                    </span>
                     <ArrowDownIcon />
                   </div>
                 </PopoverTrigger>
@@ -188,7 +215,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                     disabled={(date) =>
                       date < new Date() || date <= availableFrom
                     }
-                    selected={availableTo}
+                    selected={availableTo ?? initialData.availableTo}
                     onSelect={(selectedDate) =>
                       handleDateSelect(selectedDate, "availableTo")
                     }

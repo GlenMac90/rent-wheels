@@ -6,16 +6,29 @@ import Link from "next/link";
 import { TbSteeringWheel } from "react-icons/tb";
 import { FaRegEdit } from "react-icons/fa";
 
-import { dummyCarData } from "@/constants";
 import Button from "../Button";
 import CarCardModal from "./CarCardModal";
+import { ICar } from "@/lib/models/car.model";
 
-const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
+const CarCard = ({
+  canEdit = false,
+  data,
+}: {
+  canEdit?: boolean;
+  data: ICar;
+}) => {
   const isLiked = false;
   const [liked, setLiked] = useState(isLiked);
   const [showModal, setShowModal] = useState(false);
-  const { name, type, image, fuelCapacity, transmission, capacity, price } =
-    dummyCarData;
+  const {
+    name,
+    type,
+    images,
+    fuelCapacity,
+    transmission,
+    peopleCapacity,
+    dailyPrice,
+  } = data;
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -49,11 +62,11 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
           )}
         </div>
         <Image
-          src={image}
+          src={images[0]}
           height={70}
           width={220}
           alt={`Image of ${name}`}
-          className="my-8 w-full object-contain md:my-16"
+          className="my-4 w-full rounded-lg object-contain md:my-8"
         />
         <div className="flex-between medium-12 md:medium-14 gap-4 text-gray-400">
           <figure className="flex items-center gap-1 md:gap-1.5">
@@ -80,12 +93,12 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
               alt={`image display fuel capacity of ${name}: ${fuelCapacity} liters`}
               className="h-3.5 shrink-0 md:size-6"
             />
-            {capacity} People
+            {peopleCapacity} People
           </div>
         </div>
         <div className="flex-between mt-6 w-full">
           <p className="text-gray-900_white semibold-16 md:semibold-20">
-            ${price}/
+            ${dailyPrice}/
             <span className="semibold-12 md:semibold-14 text-gray-400">
               {" "}
               day
@@ -102,7 +115,9 @@ const CarCard = ({ canEdit = false }: { canEdit?: boolean }) => {
           )}
         </div>
       </div>
-      {showModal && <CarCardModal handleCloseModal={handleCloseModal} />}
+      {showModal && (
+        <CarCardModal handleCloseModal={handleCloseModal} data={data} />
+      )}
     </>
   );
 };

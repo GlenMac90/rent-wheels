@@ -4,7 +4,7 @@
 
 @layer utilities {
   .page-styles {
-    @apply flex h-full w-screen justify-center px-6 pt-[7.65rem] sm:pt-[8.25rem] pb-12 md:pb-16;
+    @apply flex h-full w-screen justify-center px-6 pt-[7.65rem] sm:pt-[8.25rem] pb-6 overflow-scroll;
   }
 
   .auth-page-styles {
@@ -12,7 +12,7 @@
   }
 
   .search-page-styles {
-    @apply flex h-full w-screen justify-center lg:pl-0 lg:pr-6 pt-[5.75rem] sm:pt-[6.25rem] pb-12 md:pb-16 lg:pb-0;
+    @apply flex w-screen h-screen lg:px-6 justify-center pt-[5.75rem] sm:pt-[6.25rem] pb-12 md:pb-16 lg:pb-0;
   }
 
   .flex-center {
@@ -133,6 +133,10 @@
 
   .bg-white-200_gray-900 {
     @apply bg-white-200 dark:bg-gray-900;
+  }
+
+  .bg-white-200_gray-950 {
+    @apply bg-white-200 dark:bg-gray-950;
   }
 
   .bg-white_gray-900 {

@@ -1,4 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface ICar extends Document {
+  owner: string;
+  name: string;
+  type: string;
+  description: string;
+  transmission: string;
+  fuelCapacity: number;
+  peopleCapacity: number;
+  dailyPrice: number;
+  images: string[];
+}
 
 const carSchema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -10,12 +22,6 @@ const carSchema = new mongoose.Schema({
   peopleCapacity: { type: Number, required: true },
   dailyPrice: { type: Number, required: true },
   images: [String],
-  users: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
 });
 
 const Car = mongoose.models.Car || mongoose.model("Car", carSchema);
