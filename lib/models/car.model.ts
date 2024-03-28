@@ -10,6 +10,8 @@ export interface ICar extends Document {
   peopleCapacity: number;
   dailyPrice: number;
   images: string[];
+  likedBy: string[];
+  isLikedByCurrentUser?: boolean;
 }
 
 const carSchema = new mongoose.Schema({
@@ -22,6 +24,7 @@ const carSchema = new mongoose.Schema({
   peopleCapacity: { type: Number, required: true },
   dailyPrice: { type: Number, required: true },
   images: [String],
+  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Car = mongoose.models.Car || mongoose.model("Car", carSchema);

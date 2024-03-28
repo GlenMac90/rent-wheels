@@ -4,6 +4,7 @@ import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
 import { connectToDB } from "../mongoose";
 import { formatCapacity, formatCarData, formatTypes } from "@/utils";
+import { revalidatePath } from "next/cache";
 
 interface CreateCarDataProps {
   name: string;
@@ -51,10 +52,12 @@ export async function createCar({
 
 export async function getAllCars() {
   await connectToDB();
+  const user = await authoriseUser();
+
   try {
     const cars = await Car.find().limit(4).exec();
     const formattedCarsArray = cars.map((car) => {
-      return formatCarData(car);
+      return formatCarData({ data: car, userId: user?.userId });
     });
     return formattedCarsArray;
   } catch (error) {
@@ -75,6 +78,46 @@ export async function deleteAllCars() {
   }
 }
 
+export async function toggleLike(carId: string, path: string) {
+  await connectToDB();
+  const user = await authoriseUser();
+  if (!user) {
+    throw new Error("User not authorised");
+  }
+
+  try {
+    const car = await Car.findById(carId);
+
+    if (!car) {
+      throw new Error("Car not found");
+    }
+    const index = car.likedBy.indexOf(user.userId);
+    let update;
+    let likedStatus;
+
+    if (index === -1) {
+      likedStatus = true;
+      update = { $addToSet: { likedBy: user.userId } };
+    } else {
+      likedStatus = false;
+      update = { $pull: { likedBy: user.userId } };
+    }
+
+    const updatedCar = await Car.findByIdAndUpdate(carId, update, {
+      new: true,
+    });
+
+    revalidatePath(path);
+
+    return {
+      carId: updatedCar._id.toString(),
+      likedStatus,
+    };
+  } catch (error) {
+    throw new Error(`Failed to ${path} car: ${error}`);
+  }
+}
+
 export interface SearchParams {
   name?: string;
   maxPrice: string;
@@ -89,6 +132,11 @@ export async function fetchSearchResults({
   searchQuery: SearchParams;
 }) {
   await connectToDB();
+
+  const user = await authoriseUser();
+  if (!user) {
+    throw new Error("User not authorised");
+  }
 
   const parsedMaxPrice = parseInt(searchQuery?.maxPrice, 10);
   const maxPrice = isNaN(parsedMaxPrice) ? 200 : parsedMaxPrice;
@@ -119,7 +167,10 @@ export async function fetchSearchResults({
     const moreCarsAvailable = availableCars > carsToFetch + cars.length;
 
     const formattedCarsArray = cars.map((car) => {
-      return formatCarData(car);
+      return formatCarData({
+        data: car,
+        userId: user?.userId,
+      });
     });
 
     return {

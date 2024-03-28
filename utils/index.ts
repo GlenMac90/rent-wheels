@@ -73,7 +73,14 @@ export const formatCapacity = (queryString: string | undefined) => {
   }
 };
 
-export const formatCarData = (data: any): ICar => {
+export const formatCarData = ({
+  data,
+  userId,
+}: {
+  data: any;
+  userId: string | undefined;
+}): ICar => {
+  const isLikedByCurrentUser = data.likedBy.includes(userId);
   // @ts-ignore
   return {
     id: data._id.toString(),
@@ -86,5 +93,6 @@ export const formatCarData = (data: any): ICar => {
     peopleCapacity: data.peopleCapacity,
     dailyPrice: data.dailyPrice,
     images: data.images,
+    isLikedByCurrentUser,
   };
 };
