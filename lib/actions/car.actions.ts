@@ -78,7 +78,13 @@ export async function deleteAllCars() {
   }
 }
 
-export async function toggleLike(carId: string, path: string) {
+export async function toggleLike({
+  carId,
+  path,
+}: {
+  carId: string;
+  path: string;
+}) {
   await connectToDB();
   const user = await authoriseUser();
   if (!user) {
@@ -91,6 +97,7 @@ export async function toggleLike(carId: string, path: string) {
     if (!car) {
       throw new Error("Car not found");
     }
+
     const index = car.likedBy.indexOf(user.userId);
     let update;
     let likedStatus;
@@ -147,22 +154,16 @@ export async function fetchSearchResults({
 
   const carsToFetch = page * 6;
 
-  try {
-    const cars = await Car.find({
-      name: { $regex: name, $options: "i" },
-      type: { $in: formattedTypes },
-      peopleCapacity: { $in: capacityArray },
-      dailyPrice: { $lte: maxPrice },
-    })
-      .limit(carsToFetch)
-      .exec();
+  const queryObject = {
+    name: { $regex: name, $options: "i" },
+    type: { $in: formattedTypes },
+    peopleCapacity: { $in: capacityArray },
+    dailyPrice: { $lte: maxPrice },
+  };
 
-    const availableCars = await Car.countDocuments({
-      name: { $regex: name, $options: "i" },
-      type: { $in: formattedTypes },
-      peopleCapacity: { $in: capacityArray },
-      dailyPrice: { $lte: maxPrice },
-    }).exec();
+  try {
+    const cars = await Car.find(queryObject).limit(carsToFetch).exec();
+    const availableCars = await Car.countDocuments(queryObject).exec();
 
     const moreCarsAvailable = availableCars > carsToFetch + cars.length;
 

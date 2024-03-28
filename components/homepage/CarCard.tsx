@@ -23,6 +23,7 @@ const CarCard = ({
   const [liked, setLiked] = useState(data.isLikedByCurrentUser);
   const [showModal, setShowModal] = useState(false);
   const {
+    id: carId,
     name,
     type,
     images,
@@ -38,7 +39,7 @@ const CarCard = ({
 
   const handleLikeClick = async () => {
     try {
-      const updatedCar = await toggleLike(data.id, path);
+      const updatedCar = await toggleLike({ carId, path });
       setLiked(updatedCar.likedStatus);
     } catch (error) {
       console.error("Error toggling like status", error);
