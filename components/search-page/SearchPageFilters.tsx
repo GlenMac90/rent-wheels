@@ -10,11 +10,12 @@ import CarNameFilter from "./CarNameFilter";
 
 const SearchPageFilters = () => {
   const searchParams = useSearchParams();
-
   const maxPrice = searchParams.get("maxPrice");
   const name = searchParams.get("name");
   const type = searchParams.get("type");
   const capacity = searchParams.get("capacity");
+
+  const [displayPrice, setDisplayPrice] = useState<string>(maxPrice || "250");
 
   const urlValues = {
     maxPrice,
@@ -66,6 +67,8 @@ const SearchPageFilters = () => {
         <div className="hidden lg:flex lg:flex-col">
           <OptionalSearchFilters
             mobileFilters={showMobileFilters}
+            displayPrice={displayPrice}
+            setDisplayPrice={setDisplayPrice}
             urlValues={urlValues}
           />
         </div>
@@ -74,6 +77,8 @@ const SearchPageFilters = () => {
         <MobileSearchFilters
           mobileFilters={showMobileFilters}
           handleClose={handleClose}
+          displayPrice={displayPrice}
+          setDisplayPrice={setDisplayPrice}
           urlValues={urlValues}
         />
       )}

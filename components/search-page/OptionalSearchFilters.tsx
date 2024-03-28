@@ -8,10 +8,11 @@ import CarMaxPriceFilter from "./CarMaxPriceFilter";
 const OptionalSearchFilters = ({
   mobileFilters,
   urlValues,
+  displayPrice,
+  setDisplayPrice,
 }: OptionalSearchFiltersProps) => {
   const typeArray = urlValues?.type?.split(",") ?? [];
   const capacityArray = urlValues?.capacity?.split(",") ?? [];
-  const maxPrice = urlValues?.maxPrice ?? "";
 
   return (
     <>
@@ -20,7 +21,11 @@ const OptionalSearchFilters = ({
         mobileFilters={mobileFilters}
         capacities={capacityArray}
       />
-      <CarMaxPriceFilter mobileFilters={mobileFilters} maxPrice={maxPrice} />
+      <CarMaxPriceFilter
+        mobileFilters={mobileFilters}
+        displayPrice={displayPrice}
+        setDisplayPrice={setDisplayPrice}
+      />
     </>
   );
 };

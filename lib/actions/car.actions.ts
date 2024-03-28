@@ -72,11 +72,12 @@ export async function deleteAllCars() {
   }
 }
 
-interface SearchParams {
+export interface SearchParams {
   name?: string;
   maxPrice: string;
   type?: string;
   capacity?: string;
+  page?: string;
 }
 
 export async function fetchSearchResults({
@@ -91,6 +92,9 @@ export async function fetchSearchResults({
   const name = searchQuery?.name ?? "";
   const formattedTypes = formatTypes(searchQuery?.type);
   const capacityArray = formatCapacity(searchQuery?.capacity);
+  const page = (searchQuery.page && parseInt(searchQuery?.page, 10)) || 1;
+
+  const carsToFetch = page * 6;
 
   try {
     const cars = await Car.find({
@@ -99,14 +103,26 @@ export async function fetchSearchResults({
       peopleCapacity: { $in: capacityArray },
       dailyPrice: { $lte: maxPrice },
     })
-      .limit(6)
+      .limit(carsToFetch)
       .exec();
+
+    const availableCars = await Car.countDocuments({
+      name: { $regex: name, $options: "i" },
+      type: { $in: formattedTypes },
+      peopleCapacity: { $in: capacityArray },
+      dailyPrice: { $lte: maxPrice },
+    }).exec();
+
+    const moreCarsAvailable = availableCars > carsToFetch + cars.length;
 
     const formattedCarsArray = cars.map((car) => {
       return formatCarData(car);
     });
 
-    return formattedCarsArray;
+    return {
+      cars: formattedCarsArray,
+      moreCars: moreCarsAvailable,
+    };
   } catch (error) {
     throw new Error(`Failed to fetch search results: ${error}`);
   }

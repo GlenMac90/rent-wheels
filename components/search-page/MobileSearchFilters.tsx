@@ -7,6 +7,8 @@ import OptionalSearchFilters from "./OptionalSearchFilters";
 const MobileSearchFilters = ({
   urlValues,
   handleClose,
+  displayPrice,
+  setDisplayPrice,
 }: MobileSearchFiltersProps) => {
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -20,7 +22,12 @@ const MobileSearchFilters = ({
         className="bg-white_gray-850 mb-4 flex h-fit w-full max-w-lg flex-col overflow-scroll rounded-ten bg-white p-6"
         onClick={handleClick}
       >
-        <OptionalSearchFilters mobileFilters urlValues={urlValues} />
+        <OptionalSearchFilters
+          mobileFilters
+          urlValues={urlValues}
+          displayPrice={displayPrice}
+          setDisplayPrice={setDisplayPrice}
+        />
       </div>
     </div>
   );

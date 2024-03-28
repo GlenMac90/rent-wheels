@@ -175,7 +175,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
                     className={calendarStyles}
                     mode="single"
                     disabled={(date) =>
-                      date <= new Date() || date >= availableTo
+                      date < new Date() || date >= availableTo
                     }
                     selected={availableFrom ?? initialData.availableFrom}
                     onSelect={(selectedDate) =>
