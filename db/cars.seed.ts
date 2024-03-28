@@ -37,7 +37,7 @@ const generateRandomDailyPrice = () => {
 
 const generateRandomImages = () => {
   const randomImages = Array.from({ length: 3 }, () =>
-    faker.image.urlLoremFlickr()
+    faker.image.urlLoremFlickr({ category: "cars" })
   );
   return randomImages;
 };
