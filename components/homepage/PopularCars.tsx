@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import CarCard from "./CarCard";
+import { ICar } from "@/lib/models/car.model";
 
-const PopularCars = () => {
+const PopularCars = ({ cars }: { cars: ICar[] }) => {
   const [showMore, setShowMore] = useState(false);
   return (
     <section className="flex w-full flex-col gap-5">
@@ -19,8 +20,8 @@ const PopularCars = () => {
         </button>
       </div>
       <div className="relative flex gap-5 overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4">
-        {Array.from({ length: showMore ? 12 : 4 }, (_, index) => (
-          <CarCard key={index} />
+        {cars.map((car) => (
+          <CarCard key={car.id} data={car} />
         ))}
       </div>
     </section>

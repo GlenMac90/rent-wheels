@@ -9,7 +9,7 @@ const CarMaxPriceFilter = ({
   displayPrice,
   setDisplayPrice,
 }: CarPriceFilterProps) => {
-  const [price, setPrice] = useURLQuery("maxPrice", "250", 200);
+  const [price, setPrice] = useURLQuery("maxPrice", "400", 200);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDisplayPrice(e.target.value);

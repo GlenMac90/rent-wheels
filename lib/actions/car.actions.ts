@@ -52,8 +52,11 @@ export async function createCar({
 export async function getAllCars() {
   await connectToDB();
   try {
-    const cars = await Car.find();
-    return cars;
+    const cars = await Car.find().limit(4).exec();
+    const formattedCarsArray = cars.map((car) => {
+      return formatCarData(car);
+    });
+    return formattedCarsArray;
   } catch (error) {
     throw new Error(`Failed to get all cars: ${error}`);
   }

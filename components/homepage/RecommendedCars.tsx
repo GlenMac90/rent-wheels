@@ -4,8 +4,9 @@ import { useState } from "react";
 
 import CarCard from "./CarCard";
 import Button from "../Button";
+import { ICar } from "@/lib/models/car.model";
 
-const RecommendedCars = () => {
+const RecommendedCars = ({ cars }: { cars: ICar[] }) => {
   const [showMore, setShowMore] = useState(false);
   return (
     <section className="flex w-full flex-col gap-5 pb-6">
@@ -13,8 +14,8 @@ const RecommendedCars = () => {
         Recommended Cars
       </h3>
       <div className="flex flex-col gap-5 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {Array.from({ length: showMore ? 12 : 4 }, (_, index) => (
-          <CarCard key={index} />
+        {cars.map((car) => (
+          <CarCard key={car.id} data={car} />
         ))}
       </div>
       <Button

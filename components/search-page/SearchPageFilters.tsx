@@ -15,7 +15,7 @@ const SearchPageFilters = () => {
   const type = searchParams.get("type");
   const capacity = searchParams.get("capacity");
 
-  const [displayPrice, setDisplayPrice] = useState<string>(maxPrice || "250");
+  const [displayPrice, setDisplayPrice] = useState<string>(maxPrice || "400");
 
   const urlValues = {
     maxPrice,
