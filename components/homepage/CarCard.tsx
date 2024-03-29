@@ -82,8 +82,6 @@ const CarCard = ({
           width={width}
           height={height}
           placeholder="blur"
-          // height={70}
-          // width={220}
           alt={`Image of ${name}`}
           className="my-4 w-full rounded-lg object-contain md:my-8"
         />

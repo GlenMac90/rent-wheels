@@ -44,6 +44,8 @@ export async function createCar({
       $addToSet: { ownedCars: newCar._id },
     });
 
+    revalidatePath("/profile");
+
     return {
       status: 201,
       message: "Car created successfully",
