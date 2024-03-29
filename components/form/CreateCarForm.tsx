@@ -434,7 +434,7 @@ const CreateCarForm = () => {
       </div>
 
       <Button
-        width="w-full md:w-32"
+        width="w-full md:w-36"
         height="h-12"
         className="mt-8"
         submit

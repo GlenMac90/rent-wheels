@@ -59,7 +59,7 @@ const CarCard = ({
             <span className="base-12 md:bold-14 text-gray-400">{type}</span>
           </div>
           {canEdit ? (
-            <Link href="/cars/123" className="self-start">
+            <Link href={`/cars/${data.id}`} className="self-start">
               <FaRegEdit className="text-gray-900_white text-xl" />
             </Link>
           ) : (
