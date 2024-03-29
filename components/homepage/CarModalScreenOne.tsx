@@ -14,7 +14,7 @@ const CarModalScreenOne = ({
   handleButtonClick,
 }: CarModalScreenOneProps) => {
   const {
-    images,
+    imageData,
     name,
     description,
     type,
@@ -24,7 +24,7 @@ const CarModalScreenOne = ({
     dailyPrice,
   } = data;
 
-  const [activeImage, setActiveImage] = useState(images[0]);
+  const [activeImage, setActiveImage] = useState(imageData[0]);
 
   const reviewCount = 55;
   const rating = 4;
@@ -48,23 +48,28 @@ const CarModalScreenOne = ({
       </button>
       <div className="flex size-full flex-col gap-6">
         <Image
-          src={activeImage}
+          src={activeImage.url}
+          blurDataURL={activeImage.blurDataURL}
           height={180}
           width={270}
+          placeholder="blur"
           priority
           alt="Main image of car"
           className="aspect-video w-full rounded-ten border border-blue-50 bg-white object-cover"
         />
         <div className="flex w-full justify-between gap-5">
-          {images.length > 1 &&
-            images.map((image: string) => {
+          {imageData.length > 1 &&
+            imageData.map((image: any) => {
               const isActive = activeImage === image;
+              const { url, blurDataURL, width, height } = image;
               return (
-                <div key={image} className="flex aspect-video w-full">
+                <div key={url} className="flex aspect-video w-full">
                   <Image
-                    src={image}
-                    height={62}
-                    width={67}
+                    src={url}
+                    height={width}
+                    blurDataURL={blurDataURL}
+                    width={height}
+                    placeholder="blur"
                     priority
                     alt="Image picture"
                     className={`flex w-full cursor-pointer rounded-ten object-cover ${isActive && "border border-blue-500 p-0.5"}`}

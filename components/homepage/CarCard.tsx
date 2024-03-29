@@ -33,6 +33,8 @@ const CarCard = ({
     dailyPrice,
   } = data;
 
+  const { url, blurDataURL, width, height } = imageData[0];
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -75,9 +77,13 @@ const CarCard = ({
           )}
         </div>
         <Image
-          src={imageData[0].url}
-          height={70}
-          width={220}
+          src={url}
+          blurDataURL={blurDataURL}
+          width={width}
+          height={height}
+          placeholder="blur"
+          // height={70}
+          // width={220}
           alt={`Image of ${name}`}
           className="my-4 w-full rounded-lg object-contain md:my-8"
         />

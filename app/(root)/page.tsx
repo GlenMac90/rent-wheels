@@ -12,8 +12,8 @@ export default async function Home() {
       <section className="flex w-full max-w-[82rem] flex-col items-center gap-6">
         <Hero />
         <SearchBar />
-        {/* <PopularCars cars={cars} /> */}
-        {/* <RecommendedCars cars={cars} /> */}
+        <PopularCars cars={cars} />
+        <RecommendedCars cars={cars} />
       </section>
     </main>
   );

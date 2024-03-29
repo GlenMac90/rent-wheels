@@ -20,9 +20,9 @@ const PopularCars = ({ cars }: { cars: ICar[] }) => {
         </button>
       </div>
       <div className="relative flex gap-5 overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4">
-        {/* {cars.map((car) => (
+        {cars.map((car) => (
           <CarCard key={car.id} data={car} />
-        ))} */}
+        ))}
       </div>
     </section>
   );
