@@ -10,6 +10,7 @@ const Button = ({
   linkPath = "",
   submit = false,
   handleClick,
+  disabled,
 }: ButtonProps) => {
   if (linkPath) {
     return (
@@ -24,6 +25,7 @@ const Button = ({
 
   return (
     <button
+      disabled={disabled}
       type={submit ? "submit" : "button"}
       className={`semibold-16 flex-center shrink-0 rounded bg-blue-500 text-white ${width} ${height} ${className}`}
       onClick={handleClick}

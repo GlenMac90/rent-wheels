@@ -1,7 +1,9 @@
 "use server";
 
+import { ImageDataArrayType } from "@/types/car.index";
 import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
+import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { formatCapacity, formatCarData, formatTypes } from "@/utils";
 import { revalidatePath } from "next/cache";
@@ -14,7 +16,7 @@ interface CreateCarDataProps {
   fuelCapacity: number;
   peopleCapacity: number;
   dailyPrice: number;
-  images: string[];
+  imageData: ImageDataArrayType[];
   users?: string[];
 }
 
@@ -28,7 +30,7 @@ export async function createCar({
   error?: any;
 }> {
   const user = await authoriseUser();
-  if (!user) {
+  if (!user || !user.userId) {
     throw new Error("User not authorised to create car");
   }
 
@@ -36,7 +38,14 @@ export async function createCar({
 
   await connectToDB();
   try {
-    await Car.create(fullCarData);
+    const newCar = await Car.create(fullCarData);
+
+    await User.findByIdAndUpdate(user?.userId, {
+      $addToSet: { ownedCars: newCar._id },
+    });
+
+    revalidatePath("/profile");
+
     return {
       status: 201,
       message: "Car created successfully",
@@ -56,6 +65,7 @@ export async function getAllCars() {
 
   try {
     const cars = await Car.find().limit(4).exec();
+    console.log(cars);
     const formattedCarsArray = cars.map((car) => {
       return formatCarData({ data: car, userId: user?.userId });
     });

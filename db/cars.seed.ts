@@ -6,6 +6,7 @@ import { connectToDB } from "@/lib/mongoose";
 import Car, { ICar } from "@/lib/models/car.model";
 import { carTypes, carCapacity } from "@/constants";
 import { IUser } from "@/lib/models/user.model";
+import { getBlurData } from "@/lib/actions/image.actions";
 
 const assignRandomCarType = () => {
   const randomIndex = Math.floor(Math.random() * carTypes.length);
@@ -35,11 +36,23 @@ const generateRandomDailyPrice = () => {
   return randomPrice;
 };
 
-const generateRandomImages = () => {
+const generateRandomImages = async () => {
+  const imageDataArray = [];
   const randomImages = Array.from({ length: 3 }, () =>
     faker.image.urlLoremFlickr({ category: "cars" })
   );
-  return randomImages;
+
+  for (const img of randomImages) {
+    const { blurDataURL, width, height } = await getBlurData(img);
+    imageDataArray.push({
+      url: img,
+      blurDataURL,
+      width,
+      height,
+    });
+  }
+  console.log(imageDataArray);
+  return imageDataArray;
 };
 
 export const createCars = async (users: IUser[]): Promise<ICar[]> => {
@@ -53,6 +66,7 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
         const carCreatePromises = Array.from(
           { length: numberOfCars },
           async () => {
+            const imageData = await generateRandomImages();
             return Car.create({
               owner: user._id,
               name: faker.vehicle.model(),
@@ -62,7 +76,7 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
               fuelCapacity: generateRandomFuelCapacity(),
               peopleCapacity: assignRandomCarPeopleCapacity(),
               dailyPrice: generateRandomDailyPrice(),
-              images: generateRandomImages(),
+              imageData,
             });
           }
         );
@@ -71,7 +85,11 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
       return [];
     });
     const cars = await Promise.all(carPromises);
-    return cars.flat().filter((car) => car !== undefined) as ICar[];
+    const flattenedCars = cars
+      .flat()
+      .filter((car) => car !== undefined) as ICar[];
+    console.log(flattenedCars);
+    return flattenedCars;
   } catch (error) {
     console.error("Error seeding cars:", error);
     throw error;

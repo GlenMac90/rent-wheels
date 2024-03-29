@@ -8,4 +8,5 @@ export interface ButtonProps {
   submit?: boolean;
   linkPath?: string;
   handleClick?: () => void | Promise<void>;
+  disabled?: boolean;
 }

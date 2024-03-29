@@ -22,6 +22,8 @@ import { carTypes, carCapacity, carTransmission } from "@/constants";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useUploadThing } from "@/utils/uploadthing";
 import { createCar } from "@/lib/actions/car.actions";
+import { ImageDataArrayType } from "@/types/car.index";
+import { getBlurData } from "@/lib/actions/image.actions";
 
 const rowStyles = "flex flex-col gap-6 md:flex-row md:gap-8 mt-6";
 const labelInputContainerStyles =
@@ -46,53 +48,64 @@ const CreateCarForm = () => {
   } = useForm<CarFormFields>({
     resolver: zodResolver(carFormSchema),
   });
+  const [submittingForm, setSubmittingForm] = useState(false);
 
   const formValues = watch();
 
   const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
-    const imageStringsArray: string[] = [];
+    const imageDataArray: ImageDataArrayType[] = [];
     const hasImageChanged = true;
 
-    if (imageFiles.length > 0 && hasImageChanged) {
-      const uploadPromises = imageFiles.map((file) => startUpload([file]));
+    try {
+      setSubmittingForm(true);
+      if (imageFiles.length > 0 && hasImageChanged) {
+        const uploadPromises = imageFiles.map((file) => startUpload([file]));
 
-      try {
-        const uploadResults = await Promise.all(uploadPromises);
-        uploadResults.forEach((imgRes) => {
-          if (imgRes && imgRes[0].url) {
-            imageStringsArray.push(imgRes[0].url);
+        try {
+          const uploadResults = await Promise.all(uploadPromises);
+          for (const imgRes of uploadResults) {
+            if (imgRes && imgRes[0].url) {
+              const { blurDataURL, width, height } = await getBlurData(
+                imgRes[0].url
+              );
+              imageDataArray.push({
+                url: imgRes[0].url,
+                blurDataURL,
+                width,
+                height,
+              });
+            }
           }
-        });
-      } catch (error) {
-        console.error("Failed to upload images:", error);
+        } catch (error) {
+          console.error("Failed to upload images:", error);
+        }
       }
-    }
 
-    const newCar = await createCar({
-      carData: {
-        name: data.carTitle,
-        type: data.carType,
-        description: data.carDescription,
-        transmission: data.transmission,
-        fuelCapacity: data.fuelCapacity,
-        peopleCapacity: data.capacity,
-        dailyPrice: data.rentPrice,
-        images: imageStringsArray,
-      },
-    });
+      await createCar({
+        carData: {
+          name: data.carTitle,
+          type: data.carType,
+          description: data.carDescription,
+          transmission: data.transmission,
+          fuelCapacity: data.fuelCapacity,
+          peopleCapacity: data.capacity,
+          dailyPrice: data.rentPrice,
+          imageData: imageDataArray,
+        },
+      });
 
-    if (newCar.status === 201) {
       toast({
         variant: "info",
         title: "Car created successfully",
       });
       router.push("/");
-    } else {
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Failed to create car",
-        description: newCar.error,
       });
+    } finally {
+      setSubmittingForm(false);
     }
   };
 
@@ -420,8 +433,14 @@ const CreateCarForm = () => {
         </div>
       </div>
 
-      <Button width="w-full md:w-32" height="h-12" className="mt-8" submit>
-        Register Car
+      <Button
+        width="w-full md:w-32"
+        height="h-12"
+        className="mt-8"
+        submit
+        disabled={submittingForm}
+      >
+        {submittingForm ? "Creating Car..." : "Create Car"}
       </Button>
     </form>
   );
