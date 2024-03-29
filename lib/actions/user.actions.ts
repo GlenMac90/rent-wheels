@@ -250,28 +250,22 @@ export async function getProfilePageCars() {
 
     const populatedRentedCars = await Promise.all(
       rentedCars.map(async (carId: string) => {
-        const data = await Car.findById(carId).exec();
-        const carData = formatCarData(data);
+        const car = await Car.findById(carId).exec();
+        const carData = formatCarData({
+          data: car,
+          userId: verifiedUser?.userId,
+        });
         return carData;
       })
     );
 
     const populatedOwnedCars = await Promise.all(
       ownedCars.map(async (carId: string) => {
-        const data = await Car.findById(carId).exec();
-
-        const carData = {
-          id: data._id.toString(),
-          owner: data.owner.toString(),
-          name: data.name,
-          type: data.type,
-          description: data.description,
-          transmission: data.transmission,
-          fuelCapacity: data.fuelCapacity,
-          peopleCapacity: data.peopleCapacity,
-          dailyPrice: data.dailyPrice,
-          images: data.images,
-        };
+        const car = await Car.findById(carId).exec();
+        const carData = formatCarData({
+          data: car,
+          userId: verifiedUser?.userId,
+        });
         return carData;
       })
     );

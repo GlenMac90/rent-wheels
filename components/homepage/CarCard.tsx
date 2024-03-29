@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { TbSteeringWheel } from "react-icons/tb";
@@ -9,6 +10,7 @@ import { FaRegEdit } from "react-icons/fa";
 import Button from "../Button";
 import CarCardModal from "./CarCardModal";
 import { ICar } from "@/lib/models/car.model";
+import { toggleLike } from "@/lib/actions/car.actions";
 
 const CarCard = ({
   canEdit = false,
@@ -17,10 +19,11 @@ const CarCard = ({
   canEdit?: boolean;
   data: ICar;
 }) => {
-  const isLiked = false;
-  const [liked, setLiked] = useState(isLiked);
+  const path = usePathname();
+  const [liked, setLiked] = useState(data.isLikedByCurrentUser);
   const [showModal, setShowModal] = useState(false);
   const {
+    id: carId,
     name,
     type,
     images,
@@ -33,6 +36,16 @@ const CarCard = ({
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const handleLikeClick = async () => {
+    try {
+      const updatedCar = await toggleLike({ carId, path });
+      setLiked(updatedCar.likedStatus);
+    } catch (error) {
+      console.error("Error toggling like status", error);
+    }
+  };
+
   return (
     <>
       <div className="bg-white_gray-850 w-full min-w-60 flex-col rounded-ten p-4 md:min-w-80 md:p-6 lg:min-w-full">
@@ -48,7 +61,7 @@ const CarCard = ({
               <FaRegEdit className="text-gray-900_white text-xl" />
             </Link>
           ) : (
-            <button className="self-start" onClick={() => setLiked(!liked)}>
+            <button className="self-start" onClick={handleLikeClick}>
               <Image
                 src={
                   liked ? "/icons/liked-heart.svg" : "/icons/unliked-heart.png"

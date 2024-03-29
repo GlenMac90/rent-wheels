@@ -11,7 +11,7 @@ const NavBarLinks = () => {
   return (
     <>
       {navBarLinks.map((link) => {
-        const isActive = pathname === link.path;
+        const isActive = pathname === link.page;
         return (
           <Link
             key={link.name}

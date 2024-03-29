@@ -1,16 +1,19 @@
 export const navBarLinks = [
   {
     name: "Home",
+    page: "/",
     icon: "/icons/home-page.svg",
     path: "/",
   },
   {
     name: "Search",
+    page: "/search",
     icon: "/icons/search-page.svg",
-    path: "/search",
+    path: "/search?maxPrice=400",
   },
   {
     name: "Add Car",
+    page: "/cars/new",
     icon: "/icons/add-car-page.svg",
     path: "/cars/new",
   },

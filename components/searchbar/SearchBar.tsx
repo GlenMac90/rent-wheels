@@ -104,7 +104,7 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
       setSearchBarQuery(`${formattedFrom}-${formattedTo}-${location}`);
     } else {
       router.push(
-        `/search?dateRange=${formattedFrom}-${formattedTo}-${location}`
+        `/search?maxPrice=400&?dateRange=${formattedFrom}-${formattedTo}-${location}`
       );
     }
   };
