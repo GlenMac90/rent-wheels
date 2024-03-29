@@ -105,3 +105,21 @@ export const formatCarData = ({
     isLikedByCurrentUser,
   };
 };
+
+export async function imageURLToFile({ imageURL }: { imageURL: string }) {
+  try {
+    const response = await fetch(imageURL);
+    if (!response.ok) throw new Error("Network response was not ok.");
+
+    const imageBlob = await response.blob();
+
+    const file = new File([imageBlob], "image.jpg", {
+      type: imageBlob.type,
+    });
+
+    return file;
+  } catch (error) {
+    console.error("Error converting image URL to file:", error);
+    return null;
+  }
+}

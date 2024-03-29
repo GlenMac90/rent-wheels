@@ -192,3 +192,51 @@ export async function fetchSearchResults({
     throw new Error(`Failed to fetch search results: ${error}`);
   }
 }
+
+export async function getCarById({ carId }: { carId: string }) {
+  await connectToDB();
+  const user = await authoriseUser();
+
+  if (!user || !user.userId) {
+    throw new Error("User not authorised");
+  }
+
+  try {
+    const car = await Car.findById(carId);
+
+    if (!car) {
+      throw new Error("Car not found");
+    }
+
+    if (car.owner.toString() !== user.userId) {
+      throw new Error("User not authorised to view this car");
+    }
+
+    return formatCarData({ data: car, userId: user.userId });
+  } catch (error) {
+    throw new Error(`Failed to get car by id: ${error}`);
+  }
+}
+
+export async function updateCar({
+  carId,
+  carData,
+  path,
+}: {
+  carId: string;
+  carData: CreateCarDataProps;
+  path: string;
+}) {
+  await connectToDB();
+  try {
+    await Car.findByIdAndUpdate(carId, carData, { upsert: true });
+
+    revalidatePath(path);
+    return {
+      status: 200,
+      message: "Car updated successfully",
+    };
+  } catch (error) {
+    throw new Error(`Failed to update car: ${error}`);
+  }
+}
