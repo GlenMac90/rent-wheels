@@ -1,7 +1,14 @@
 "use client";
 
-import { useCallback, useRef, useState, MouseEvent, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import {
+  useCallback,
+  useRef,
+  useState,
+  MouseEvent,
+  useEffect,
+  useMemo,
+} from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -13,30 +20,28 @@ import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
-import { IoClose } from "react-icons/io5";
-import Image from "next/image";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
 import { carTypes, carCapacity, carTransmission } from "@/constants";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useUploadThing } from "@/utils/uploadthing";
-import { createCar } from "@/lib/actions/car.actions";
+import { createCar, updateCar } from "@/lib/actions/car.actions";
 import { ImageDataArrayType } from "@/types/car.index";
 import { getBlurData } from "@/lib/actions/image.actions";
+import { ICar } from "@/lib/models/car.model";
+import { imageURLToFile } from "@/utils";
+import { FormRow, FormRowContainer, FormPreviewImages } from ".";
 
-const rowStyles = "flex flex-col gap-6 md:flex-row md:gap-8 mt-6";
-const labelInputContainerStyles =
-  "flex w-full flex-col gap-2.5 md:gap-4 relative";
-const labelStyles = "semibold-14 md:semibold-16 text-gray-900_white";
 const inputStyles =
   "flex items-center w-full rounded-md bg-white-200_gray-800 h-12 md:h-14 px-4 md:px-6";
-const errorMessageStyles = "absolute text-red-500 light-14 -bottom-5";
 
-const CreateCarForm = () => {
+const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const { toast } = useToast();
   const router = useRouter();
+  const path = usePathname();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [submittingForm, setSubmittingForm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
   const {
@@ -47,8 +52,20 @@ const CreateCarForm = () => {
     formState: { errors },
   } = useForm<CarFormFields>({
     resolver: zodResolver(carFormSchema),
+    defaultValues: {
+      carTitle: editCarData?.name,
+      carType: editCarData?.type,
+      carDescription: editCarData?.description,
+      transmission: editCarData?.transmission,
+      fuelCapacity: editCarData?.fuelCapacity,
+      capacity: editCarData?.peopleCapacity,
+      rentPrice: editCarData?.dailyPrice,
+    },
   });
-  const [submittingForm, setSubmittingForm] = useState(false);
+
+  const imageUrlStrings = useMemo(() => {
+    return imageFiles.map((file) => URL.createObjectURL(file));
+  }, [imageFiles]);
 
   const formValues = watch();
 
@@ -81,18 +98,22 @@ const CreateCarForm = () => {
         }
       }
 
-      await createCar({
-        carData: {
-          name: data.carTitle,
-          type: data.carType,
-          description: data.carDescription,
-          transmission: data.transmission,
-          fuelCapacity: data.fuelCapacity,
-          peopleCapacity: data.capacity,
-          dailyPrice: data.rentPrice,
-          imageData: imageDataArray,
-        },
-      });
+      const carData = {
+        name: data.carTitle,
+        type: data.carType,
+        description: data.carDescription,
+        transmission: data.transmission,
+        fuelCapacity: data.fuelCapacity,
+        peopleCapacity: data.capacity,
+        dailyPrice: data.rentPrice,
+        imageData: imageDataArray,
+      };
+
+      if (editCarData) {
+        await updateCar({ carData, carId: editCarData.id, path });
+      } else {
+        await createCar({ carData });
+      }
 
       toast({
         variant: "info",
@@ -117,9 +138,22 @@ const CreateCarForm = () => {
     });
   };
 
-  const imageUrlStrings = useMemo(() => {
-    return imageFiles.map((file) => URL.createObjectURL(file));
-  }, [imageFiles]);
+  useEffect(() => {
+    const fetchAndConvertImages = async () => {
+      if (!editCarData || !editCarData.imageData) return;
+
+      const imageAsFiles = await Promise.all(
+        editCarData.imageData.map(async (image) => {
+          return imageURLToFile({ imageURL: image.url });
+        })
+      );
+      const validFiles = imageAsFiles.filter(
+        (file): file is File => file !== null
+      );
+      setImageFiles(validFiles);
+    };
+    fetchAndConvertImages();
+  }, []);
 
   const onDrop = useCallback(
     (acceptedFiles: any) => {
@@ -172,9 +206,8 @@ const CreateCarForm = () => {
         Please enter your car info
       </span>
       <h4 className="extrabold-18 mt-9 text-blue-300">CAR INFO</h4>
-      <div className={rowStyles}>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Car Title</label>
+      <FormRow>
+        <FormRowContainer label="Car Title" errors={errors.carTitle?.message}>
           <div className={inputStyles}>
             <input
               {...register("carTitle")}
@@ -185,14 +218,8 @@ const CreateCarForm = () => {
               placeholder="Car Title"
             />
           </div>
-          {errors.carTitle && (
-            <span className={errorMessageStyles}>
-              {errors.carTitle.message}
-            </span>
-          )}
-        </div>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Car Type</label>
+        </FormRowContainer>
+        <FormRowContainer label="Car Type" errors={errors.carType?.message}>
           <Popover>
             <PopoverTrigger>
               <div className={inputStyles}>
@@ -221,14 +248,10 @@ const CreateCarForm = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          {errors.carType && (
-            <span className={errorMessageStyles}>{errors.carType.message}</span>
-          )}
-        </div>
-      </div>
-      <div className={rowStyles}>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Rent Price</label>
+        </FormRowContainer>
+      </FormRow>
+      <FormRow>
+        <FormRowContainer label="Rent Price" errors={errors.rentPrice?.message}>
           <div className={inputStyles}>
             <input
               autoComplete="off"
@@ -239,14 +262,8 @@ const CreateCarForm = () => {
               placeholder="Price in dollars"
             />
           </div>
-          {errors.rentPrice && (
-            <span className={errorMessageStyles}>
-              {errors.rentPrice.message}
-            </span>
-          )}
-        </div>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Capacity</label>
+        </FormRowContainer>
+        <FormRowContainer label="Capacity" errors={errors.capacity?.message}>
           <Popover>
             <PopoverTrigger>
               <div className={inputStyles}>
@@ -277,16 +294,13 @@ const CreateCarForm = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          {errors.capacity && (
-            <span className={errorMessageStyles}>
-              {errors.capacity.message}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className={rowStyles}>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Transmission</label>
+        </FormRowContainer>
+      </FormRow>
+      <FormRow>
+        <FormRowContainer
+          label="Transmission"
+          errors={errors.transmission?.message}
+        >
           <Popover>
             <PopoverTrigger>
               <div className={inputStyles}>
@@ -319,14 +333,8 @@ const CreateCarForm = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          {errors.transmission && (
-            <span className={errorMessageStyles}>
-              {errors.transmission.message}
-            </span>
-          )}
-        </div>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Location</label>
+        </FormRowContainer>
+        <FormRowContainer label="Location" errors={errors.location?.message}>
           <div className={inputStyles}>
             <input
               {...register("location")}
@@ -337,16 +345,13 @@ const CreateCarForm = () => {
               placeholder="Location"
             />
           </div>
-          {errors.location && (
-            <span className={errorMessageStyles}>
-              {errors.location.message}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className={rowStyles}>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>Fuel Capacity</label>
+        </FormRowContainer>
+      </FormRow>
+      <FormRow>
+        <FormRowContainer
+          label="Fuel Capacity"
+          errors={errors.fuelCapacity?.message}
+        >
           <div className={inputStyles}>
             <input
               autoComplete="off"
@@ -357,14 +362,11 @@ const CreateCarForm = () => {
               placeholder="Fuel Capacity"
             />
           </div>
-          {errors.fuelCapacity && (
-            <span className={errorMessageStyles}>
-              {errors.fuelCapacity.message}
-            </span>
-          )}
-        </div>
-        <div className={labelInputContainerStyles}>
-          <label className={labelStyles}>ShortDescription</label>
+        </FormRowContainer>
+        <FormRowContainer
+          label="Short Description"
+          errors={errors.carDescription?.message}
+        >
           <div className={inputStyles}>
             <input
               {...register("carDescription")}
@@ -375,35 +377,14 @@ const CreateCarForm = () => {
               placeholder="Short Description"
             />
           </div>
-          {errors.carDescription && (
-            <span className={errorMessageStyles}>
-              {errors.carDescription.message}
-            </span>
-          )}
-        </div>
-      </div>
+        </FormRowContainer>
+      </FormRow>
 
       {imageUrlStrings && imageUrlStrings.length > 0 && (
-        <div className="mt-6 flex w-full flex-wrap justify-center gap-4">
-          {imageUrlStrings.map((image, index) => (
-            <div key={image} className="relative flex">
-              <button
-                className="absolute right-1 top-1 bg-white/50 text-xl text-slate-600"
-                onClick={handleImageDelete(index)}
-                type="button"
-              >
-                <IoClose />
-              </button>
-              <Image
-                src={image}
-                alt="car image"
-                width={180}
-                height={180}
-                className="w-full max-w-60 object-contain"
-              />
-            </div>
-          ))}
-        </div>
+        <FormPreviewImages
+          imageUrlStrings={imageUrlStrings}
+          handleImageDelete={handleImageDelete}
+        />
       )}
 
       <div className="mt-6 flex w-full flex-col gap-5">
@@ -434,7 +415,7 @@ const CreateCarForm = () => {
       </div>
 
       <Button
-        width="w-full md:w-32"
+        width="w-full md:w-36"
         height="h-12"
         className="mt-8"
         submit

@@ -22,7 +22,7 @@ export async function seedDB() {
     }
     await assignCarsToUsers({ allUsers, allCars: cars });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   console.timeEnd("Execution Time");
 }
