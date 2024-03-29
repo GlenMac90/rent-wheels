@@ -415,13 +415,19 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       </div>
 
       <Button
-        width="w-full md:w-36"
+        width="w-full md:w-fit md:px-4"
         height="h-12"
         className="mt-8"
         submit
         disabled={submittingForm}
       >
-        {submittingForm ? "Creating Car..." : "Create Car"}
+        {submittingForm
+          ? editCarData
+            ? "Updating Car..."
+            : "Creating Car..."
+          : editCarData
+            ? "Update Car"
+            : "Create Car"}
       </Button>
     </form>
   );
