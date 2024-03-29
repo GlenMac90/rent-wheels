@@ -51,7 +51,6 @@ const generateRandomImages = async () => {
       height,
     });
   }
-  console.log(imageDataArray);
   return imageDataArray;
 };
 
@@ -88,7 +87,6 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
     const flattenedCars = cars
       .flat()
       .filter((car) => car !== undefined) as ICar[];
-    console.log(flattenedCars);
     return flattenedCars;
   } catch (error) {
     console.error("Error seeding cars:", error);

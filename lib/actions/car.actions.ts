@@ -65,7 +65,6 @@ export async function getAllCars() {
 
   try {
     const cars = await Car.find().limit(4).exec();
-    console.log(cars);
     const formattedCarsArray = cars.map((car) => {
       return formatCarData({ data: car, userId: user?.userId });
     });

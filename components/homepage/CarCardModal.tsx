@@ -22,7 +22,6 @@ const CarCardModal = ({
 
   const handleButtonClick = () => {
     setShowModalScreenTwo(true);
-    console.log("Button clicked");
   };
 
   const handleClose = () => {

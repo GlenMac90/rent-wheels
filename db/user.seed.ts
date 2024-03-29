@@ -26,6 +26,6 @@ export const createUsers = async () => {
     });
     return await Promise.all(userPromises);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
