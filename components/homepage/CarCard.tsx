@@ -26,7 +26,7 @@ const CarCard = ({
     id: carId,
     name,
     type,
-    images,
+    imageData,
     fuelCapacity,
     transmission,
     peopleCapacity,
@@ -75,7 +75,7 @@ const CarCard = ({
           )}
         </div>
         <Image
-          src={images[0]}
+          src={imageData[0].url}
           height={70}
           width={220}
           alt={`Image of ${name}`}

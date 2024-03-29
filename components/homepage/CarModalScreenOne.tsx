@@ -56,22 +56,23 @@ const CarModalScreenOne = ({
           className="aspect-video w-full rounded-ten border border-blue-50 bg-white object-cover"
         />
         <div className="flex w-full justify-between gap-5">
-          {images.map((image: string) => {
-            const isActive = activeImage === image;
-            return (
-              <div key={image} className="flex aspect-video">
-                <Image
-                  src={image}
-                  height={62}
-                  width={67}
-                  priority
-                  alt="Image picture"
-                  className={`flex w-full cursor-pointer rounded-ten object-cover ${isActive && "border border-blue-500 p-0.5"}`}
-                  onClick={() => setActiveImage(image)}
-                />
-              </div>
-            );
-          })}
+          {images.length > 1 &&
+            images.map((image: string) => {
+              const isActive = activeImage === image;
+              return (
+                <div key={image} className="flex aspect-video w-full">
+                  <Image
+                    src={image}
+                    height={62}
+                    width={67}
+                    priority
+                    alt="Image picture"
+                    className={`flex w-full cursor-pointer rounded-ten object-cover ${isActive && "border border-blue-500 p-0.5"}`}
+                    onClick={() => setActiveImage(image)}
+                  />
+                </div>
+              );
+            })}
         </div>
       </div>
       <div className="flex w-full flex-col justify-between gap-4">

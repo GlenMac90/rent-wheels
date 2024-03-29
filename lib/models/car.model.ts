@@ -1,3 +1,4 @@
+import { ImageDataArrayType } from "@/types/car.index";
 import mongoose, { Document } from "mongoose";
 
 export interface ICar extends Document {
@@ -9,7 +10,7 @@ export interface ICar extends Document {
   fuelCapacity: number;
   peopleCapacity: number;
   dailyPrice: number;
-  images: string[];
+  imageData: ImageDataArrayType[];
   likedBy: string[];
   isLikedByCurrentUser?: boolean;
 }
@@ -23,7 +24,16 @@ const carSchema = new mongoose.Schema({
   fuelCapacity: { type: Number, required: true },
   peopleCapacity: { type: Number, required: true },
   dailyPrice: { type: Number, required: true },
-  images: [String],
+  imageData: [
+    {
+      type: {
+        url: String,
+        blurDataURL: String,
+        width: Number,
+        height: Number,
+      },
+    },
+  ],
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 

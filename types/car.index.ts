@@ -7,3 +7,10 @@ export interface CarModalScreenOneProps {
   handleClose: () => void;
   handleButtonClick: () => void;
 }
+
+export interface ImageDataArrayType {
+  url: string;
+  blurDataURL: string;
+  width: number | undefined;
+  height: number | undefined;
+}

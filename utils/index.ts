@@ -73,6 +73,15 @@ export const formatCapacity = (queryString: string | undefined) => {
   }
 };
 
+export const formatImageData = (imageData: any) => {
+  return imageData.map((image: any) => ({
+    url: image.url,
+    blurDataURL: image.blurDataURL,
+    width: image.width,
+    height: image.height,
+  }));
+};
+
 export const formatCarData = ({
   data,
   userId,
@@ -92,7 +101,7 @@ export const formatCarData = ({
     fuelCapacity: data.fuelCapacity,
     peopleCapacity: data.peopleCapacity,
     dailyPrice: data.dailyPrice,
-    images: data.images,
+    imageData: formatImageData(data.imageData),
     isLikedByCurrentUser,
   };
 };
