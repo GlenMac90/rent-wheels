@@ -11,30 +11,27 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
-import { carTypes, carCapacity, carTransmission } from "@/constants";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { useUploadThing } from "@/utils/uploadthing";
 import { createCar, updateCar } from "@/lib/actions/car.actions";
 import { ImageDataArrayType } from "@/types/car.index";
 import { getBlurData } from "@/lib/actions/image.actions";
 import { ICar } from "@/lib/models/car.model";
 import { imageURLToFile } from "@/utils";
-import { FormRow, FormRowContainer, FormPreviewImages } from ".";
-
-const inputStyles =
-  "flex items-center w-full rounded-md bg-white-200_gray-800 h-12 md:h-14 px-4 md:px-6";
+import { FormRow, FormPreviewImages } from ".";
+import CarTitleField from "./CarTitleField";
+import CarTypeField from "./CarTypeField";
+import CarRentField from "./CarRentField";
+import CarCapacityField from "./CarCapacityField";
+import CarTransmissionField from "./CarTransmissionField";
+import CarLocationField from "./CarLocationField";
+import CarFuelField from "./CarFuelField";
+import CarDescriptionField from "./CarDescriptionField";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const { toast } = useToast();
@@ -207,177 +204,52 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       </span>
       <h4 className="extrabold-18 mt-9 text-blue-300">CAR INFO</h4>
       <FormRow>
-        <FormRowContainer label="Car Title" errors={errors.carTitle?.message}>
-          <div className={inputStyles}>
-            <input
-              {...register("carTitle")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.carTitle}
-              placeholder="Car Title"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer label="Car Type" errors={errors.carType?.message}>
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.carType ?? "Car Type"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carTypes.map((type) => {
-                    return (
-                      <CommandItem
-                        key={type.id}
-                        value={type.label}
-                        onSelect={() => setValue("carType", type.label)}
-                      >
-                        <PopoverClose className="flex w-full">
-                          {type.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
+        <CarTitleField
+          errors={errors.carTitle?.message}
+          register={register}
+          carTitle={formValues.carTitle}
+        />
+        <CarTypeField
+          errors={errors.carType?.message}
+          carType={formValues.carType}
+          setValue={setValue}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer label="Rent Price" errors={errors.rentPrice?.message}>
-          <div className={inputStyles}>
-            <input
-              autoComplete="off"
-              type="number"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.rentPrice}
-              onChange={(e) => setValue("rentPrice", Number(e.target.value))}
-              placeholder="Price in dollars"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer label="Capacity" errors={errors.capacity?.message}>
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.capacity
-                    ? `${formValues.capacity} Persons`
-                    : "Car Capacity"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carCapacity.map((capacity) => {
-                    return (
-                      <CommandItem
-                        key={capacity.id}
-                        value={capacity.label}
-                        onSelect={() => setValue("capacity", capacity.id)}
-                      >
-                        <PopoverClose className="flex w-full">
-                          {capacity.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
+        <CarRentField
+          errors={errors.rentPrice?.message}
+          rentPrice={formValues.rentPrice}
+          setValue={setValue}
+        />
+        <CarCapacityField
+          errors={errors.capacity?.message}
+          capacity={formValues.capacity}
+          setValue={setValue}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer
-          label="Transmission"
+        <CarTransmissionField
           errors={errors.transmission?.message}
-        >
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.transmission
-                    ? `${formValues.transmission}`
-                    : "Transmission"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carTransmission.map((transmission) => {
-                    return (
-                      <CommandItem
-                        key={transmission.id}
-                        value={transmission.label}
-                        onSelect={() =>
-                          setValue("transmission", transmission.id)
-                        }
-                      >
-                        <PopoverClose className="flex w-full">
-                          {transmission.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
-        <FormRowContainer label="Location" errors={errors.location?.message}>
-          <div className={inputStyles}>
-            <input
-              {...register("location")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.location}
-              placeholder="Location"
-            />
-          </div>
-        </FormRowContainer>
+          transmission={formValues.transmission}
+          setValue={setValue}
+        />
+        <CarLocationField
+          errors={errors.location?.message}
+          register={register}
+          location={formValues.location}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer
-          label="Fuel Capacity"
+        <CarFuelField
           errors={errors.fuelCapacity?.message}
-        >
-          <div className={inputStyles}>
-            <input
-              autoComplete="off"
-              onChange={(e) => setValue("fuelCapacity", Number(e.target.value))}
-              type="number"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.fuelCapacity}
-              placeholder="Fuel Capacity"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer
-          label="Short Description"
+          fuelCapacity={formValues.fuelCapacity}
+          setValue={setValue}
+        />
+        <CarDescriptionField
           errors={errors.carDescription?.message}
-        >
-          <div className={inputStyles}>
-            <input
-              {...register("carDescription")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.carDescription}
-              placeholder="Short Description"
-            />
-          </div>
-        </FormRowContainer>
+          carDescription={formValues.carDescription}
+          register={register}
+        />
       </FormRow>
 
       {imageUrlStrings && imageUrlStrings.length > 0 && (
