@@ -16,15 +16,18 @@ import { ImageDataArrayType } from "@/types/car.index";
 import { getBlurData } from "@/lib/actions/image.actions";
 import { ICar } from "@/lib/models/car.model";
 import { imageURLToFile } from "@/utils";
-import { FormRow, FormPreviewImages } from ".";
-import CarTitleField from "./CarTitleField";
-import CarTypeField from "./CarTypeField";
-import CarRentField from "./CarRentField";
-import CarCapacityField from "./CarCapacityField";
-import CarTransmissionField from "./CarTransmissionField";
-import CarLocationField from "./CarLocationField";
-import CarFuelField from "./CarFuelField";
-import CarDescriptionField from "./CarDescriptionField";
+import {
+  FormRow,
+  FormPreviewImages,
+  CarCapacityField,
+  CarDescriptionField,
+  CarFuelField,
+  CarLocationField,
+  CarRentField,
+  CarTitleField,
+  CarTransmissionField,
+  CarTypeField,
+} from ".";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const { toast } = useToast();
@@ -40,6 +43,9 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     formState: { errors, isSubmitting },
   } = useForm<CarFormFields>({
     resolver: zodResolver(carFormSchema),
+
+    // Default values for edit car page, if editCarData is present
+
     defaultValues: {
       carTitle: editCarData?.name,
       carType: editCarData?.type,
