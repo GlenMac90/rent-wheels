@@ -1,57 +1,51 @@
 "use client";
 
-import {
-  useCallback,
-  useRef,
-  useState,
-  MouseEvent,
-  useEffect,
-  useMemo,
-} from "react";
+import { useCallback, useState, MouseEvent, useEffect, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useToast } from "@/components/ui/use-toast";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
 
 import Button from "../Button";
 import { carFormSchema, CarFormFields } from "@/schemas";
-import { carTypes, carCapacity, carTransmission } from "@/constants";
-import { PopoverClose } from "@radix-ui/react-popover";
 import { useUploadThing } from "@/utils/uploadthing";
 import { createCar, updateCar } from "@/lib/actions/car.actions";
 import { ImageDataArrayType } from "@/types/car.index";
 import { getBlurData } from "@/lib/actions/image.actions";
 import { ICar } from "@/lib/models/car.model";
 import { imageURLToFile } from "@/utils";
-import { FormRow, FormRowContainer, FormPreviewImages } from ".";
-
-const inputStyles =
-  "flex items-center w-full rounded-md bg-white-200_gray-800 h-12 md:h-14 px-4 md:px-6";
+import {
+  FormRow,
+  FormPreviewImages,
+  CarCapacityField,
+  CarDescriptionField,
+  CarFuelField,
+  CarLocationField,
+  CarRentField,
+  CarTitleField,
+  CarTransmissionField,
+  CarTypeField,
+} from ".";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const { toast } = useToast();
   const router = useRouter();
   const path = usePathname();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [submittingForm, setSubmittingForm] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CarFormFields>({
     resolver: zodResolver(carFormSchema),
+
+    // Default values for edit car page, if editCarData is present
+
     defaultValues: {
       carTitle: editCarData?.name,
       carType: editCarData?.type,
@@ -63,19 +57,21 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     },
   });
 
+  // Memoised value below to auto generate image URLs
+
   const imageUrlStrings = useMemo(() => {
     return imageFiles.map((file) => URL.createObjectURL(file));
   }, [imageFiles]);
 
   const formValues = watch();
 
+  // Submit handler
+
   const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
     const imageDataArray: ImageDataArrayType[] = [];
-    const hasImageChanged = true;
 
     try {
-      setSubmittingForm(true);
-      if (imageFiles.length > 0 && hasImageChanged) {
+      if (imageFiles.length > 0) {
         const uploadPromises = imageFiles.map((file) => startUpload([file]));
 
         try {
@@ -125,10 +121,10 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         variant: "destructive",
         title: "Failed to create car",
       });
-    } finally {
-      setSubmittingForm(false);
     }
   };
+
+  // Image limit toast
 
   const imageLimitToast = () => {
     toast({
@@ -137,6 +133,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       description: "You can only upload a maximum of 3 images",
     });
   };
+
+  // Find images for edit car page
 
   useEffect(() => {
     const fetchAndConvertImages = async () => {
@@ -155,12 +153,19 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     fetchAndConvertImages();
   }, []);
 
+  // Dropzone onDrop function
+
   const onDrop = useCallback(
-    (acceptedFiles: any) => {
-      if (acceptedFiles.length > 3) {
+    (acceptedFiles: File[]) => {
+      if (
+        acceptedFiles.length > 3 ||
+        imageFiles.length >= 3 ||
+        acceptedFiles.length + imageFiles.length > 3
+      ) {
         imageLimitToast();
       }
-      acceptedFiles.slice(0, 3).forEach((file: any) => {
+      const amountToSlice = 3 - imageFiles.length;
+      acceptedFiles.slice(0, amountToSlice).forEach((file: File) => {
         if (!file.type.startsWith("image")) {
           toast({
             variant: "destructive",
@@ -176,14 +181,14 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         setImageFiles((prev) => [...prev, file]);
       });
     },
-    [imageFiles]
+    [imageFiles, imageUrlStrings]
   );
+
+  // Dropzone hook
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleButtonClick = () => {
-    if (fileInputRef.current) fileInputRef.current.click();
-  };
+  // Image delete function
 
   const handleImageDelete = (index: number) => {
     return (e: MouseEvent) => {
@@ -196,6 +201,16 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     };
   };
 
+  // Button text
+
+  const buttonText = isSubmitting
+    ? editCarData
+      ? "Updating Car..."
+      : "Creating Car..."
+    : editCarData
+      ? "Update Car"
+      : "Create Car";
+
   return (
     <form
       className="bg-white_gray-850 h-fit w-full max-w-[53.25rem] rounded-ten p-6"
@@ -206,179 +221,59 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         Please enter your car info
       </span>
       <h4 className="extrabold-18 mt-9 text-blue-300">CAR INFO</h4>
+
+      {/* Form Fields Below Organise into rows */}
+
       <FormRow>
-        <FormRowContainer label="Car Title" errors={errors.carTitle?.message}>
-          <div className={inputStyles}>
-            <input
-              {...register("carTitle")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.carTitle}
-              placeholder="Car Title"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer label="Car Type" errors={errors.carType?.message}>
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.carType ?? "Car Type"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carTypes.map((type) => {
-                    return (
-                      <CommandItem
-                        key={type.id}
-                        value={type.label}
-                        onSelect={() => setValue("carType", type.label)}
-                      >
-                        <PopoverClose className="flex w-full">
-                          {type.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
+        <CarTitleField
+          errors={errors.carTitle?.message}
+          register={register}
+          carTitle={formValues.carTitle}
+        />
+        <CarTypeField
+          errors={errors.carType?.message}
+          carType={formValues.carType}
+          setValue={setValue}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer label="Rent Price" errors={errors.rentPrice?.message}>
-          <div className={inputStyles}>
-            <input
-              autoComplete="off"
-              type="number"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.rentPrice}
-              onChange={(e) => setValue("rentPrice", Number(e.target.value))}
-              placeholder="Price in dollars"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer label="Capacity" errors={errors.capacity?.message}>
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.capacity
-                    ? `${formValues.capacity} Persons`
-                    : "Car Capacity"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carCapacity.map((capacity) => {
-                    return (
-                      <CommandItem
-                        key={capacity.id}
-                        value={capacity.label}
-                        onSelect={() => setValue("capacity", capacity.id)}
-                      >
-                        <PopoverClose className="flex w-full">
-                          {capacity.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
+        <CarRentField
+          errors={errors.rentPrice?.message}
+          rentPrice={formValues.rentPrice}
+          setValue={setValue}
+        />
+        <CarCapacityField
+          errors={errors.capacity?.message}
+          capacity={formValues.capacity}
+          setValue={setValue}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer
-          label="Transmission"
+        <CarTransmissionField
           errors={errors.transmission?.message}
-        >
-          <Popover>
-            <PopoverTrigger>
-              <div className={inputStyles}>
-                <span className="flex w-full text-gray-400">
-                  {formValues.transmission
-                    ? `${formValues.transmission}`
-                    : "Transmission"}
-                </span>
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="border-0 p-0">
-              <Command className="bg-white-200_gray-800">
-                <CommandGroup>
-                  {carTransmission.map((transmission) => {
-                    return (
-                      <CommandItem
-                        key={transmission.id}
-                        value={transmission.label}
-                        onSelect={() =>
-                          setValue("transmission", transmission.id)
-                        }
-                      >
-                        <PopoverClose className="flex w-full">
-                          {transmission.label}
-                        </PopoverClose>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </FormRowContainer>
-        <FormRowContainer label="Location" errors={errors.location?.message}>
-          <div className={inputStyles}>
-            <input
-              {...register("location")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.location}
-              placeholder="Location"
-            />
-          </div>
-        </FormRowContainer>
+          transmission={formValues.transmission}
+          setValue={setValue}
+        />
+        <CarLocationField
+          errors={errors.location?.message}
+          register={register}
+          location={formValues.location}
+        />
       </FormRow>
       <FormRow>
-        <FormRowContainer
-          label="Fuel Capacity"
+        <CarFuelField
           errors={errors.fuelCapacity?.message}
-        >
-          <div className={inputStyles}>
-            <input
-              autoComplete="off"
-              onChange={(e) => setValue("fuelCapacity", Number(e.target.value))}
-              type="number"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.fuelCapacity}
-              placeholder="Fuel Capacity"
-            />
-          </div>
-        </FormRowContainer>
-        <FormRowContainer
-          label="Short Description"
+          fuelCapacity={formValues.fuelCapacity}
+          setValue={setValue}
+        />
+        <CarDescriptionField
           errors={errors.carDescription?.message}
-        >
-          <div className={inputStyles}>
-            <input
-              {...register("carDescription")}
-              autoComplete="off"
-              type="text"
-              className="bg-white-200_gray-800 flex w-full text-gray-400 outline-none"
-              value={formValues.carDescription}
-              placeholder="Short Description"
-            />
-          </div>
-        </FormRowContainer>
+          carDescription={formValues.carDescription}
+          register={register}
+        />
       </FormRow>
+
+      {/* Image preview for dropped images */}
 
       {imageUrlStrings && imageUrlStrings.length > 0 && (
         <FormPreviewImages
@@ -386,6 +281,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
           handleImageDelete={handleImageDelete}
         />
       )}
+
+      {/* Dropzone for image upload */}
 
       <div className="mt-6 flex w-full flex-col gap-5">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
@@ -395,18 +292,13 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
           {...getRootProps()}
           className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 px-4 ${isDragActive && "bg-white-200_gray-800"}`}
         >
-          <input {...getInputProps()} className="hidden" ref={fileInputRef} />
-          <button type="button" onClick={handleButtonClick}>
+          <input {...getInputProps()} className="hidden" />
+          <button type="button">
             <FiUpload className="text-2xl text-blue-500" />
           </button>
           <p className="medium-14 text-gray-blue-100 mt-4 text-center">
             Drag and drop an image, or{" "}
-            <span
-              className="cursor-pointer text-blue-500"
-              onClick={handleButtonClick}
-            >
-              Browse
-            </span>
+            <span className="cursor-pointer text-blue-500">Browse</span>
           </p>
           <span className="base-14 text-gray-400_white-100 mt-2 text-center">
             High resolution images (png, jpg, gif)
@@ -414,20 +306,16 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         </div>
       </div>
 
+      {/* Submit Button */}
+
       <Button
         width="w-full md:w-fit md:px-4"
         height="h-12"
         className="mt-8"
         submit
-        disabled={submittingForm}
+        disabled={isSubmitting}
       >
-        {submittingForm
-          ? editCarData
-            ? "Updating Car..."
-            : "Creating Car..."
-          : editCarData
-            ? "Update Car"
-            : "Create Car"}
+        {buttonText}
       </Button>
     </form>
   );
