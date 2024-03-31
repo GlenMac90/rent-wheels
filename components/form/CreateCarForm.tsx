@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useRef,
-  useState,
-  MouseEvent,
-  useEffect,
-  useMemo,
-} from "react";
+import { useCallback, useState, MouseEvent, useEffect, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +31,6 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const router = useRouter();
   const path = usePathname();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
   const {
     register,
@@ -59,11 +51,15 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     },
   });
 
+  // Memoised value below to auto generate image URLs
+
   const imageUrlStrings = useMemo(() => {
     return imageFiles.map((file) => URL.createObjectURL(file));
   }, [imageFiles]);
 
   const formValues = watch();
+
+  // Submit handler
 
   const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
     const imageDataArray: ImageDataArrayType[] = [];
@@ -122,6 +118,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     }
   };
 
+  // Image limit toast
+
   const imageLimitToast = () => {
     toast({
       variant: "destructive",
@@ -129,6 +127,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       description: "You can only upload a maximum of 3 images",
     });
   };
+
+  // Find images for edit car page
 
   useEffect(() => {
     const fetchAndConvertImages = async () => {
@@ -147,14 +147,19 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     fetchAndConvertImages();
   }, []);
 
+  // Dropzone onDrop function
+
   const onDrop = useCallback(
-    (acceptedFiles: any) => {
-      if (acceptedFiles.length > 3) {
+    (acceptedFiles: File[]) => {
+      if (
+        acceptedFiles.length > 3 ||
+        imageFiles.length >= 3 ||
+        acceptedFiles.length + imageFiles.length > 3
+      ) {
         imageLimitToast();
       }
-      console.log(imageFiles.length);
       const amountToSlice = 3 - imageFiles.length;
-      acceptedFiles.slice(0, amountToSlice).forEach((file: any) => {
+      acceptedFiles.slice(0, amountToSlice).forEach((file: File) => {
         if (!file.type.startsWith("image")) {
           toast({
             variant: "destructive",
@@ -173,11 +178,11 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     [imageFiles, imageUrlStrings]
   );
 
+  // Dropzone hook
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleButtonClick = () => {
-    if (fileInputRef.current) fileInputRef.current.click();
-  };
+  // Image delete function
 
   const handleImageDelete = (index: number) => {
     return (e: MouseEvent) => {
@@ -189,6 +194,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
   };
+
+  // Button text
 
   const buttonText = isSubmitting
     ? editCarData
@@ -208,6 +215,9 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         Please enter your car info
       </span>
       <h4 className="extrabold-18 mt-9 text-blue-300">CAR INFO</h4>
+
+      {/* Form Fields Below Organise into rows */}
+
       <FormRow>
         <CarTitleField
           errors={errors.carTitle?.message}
@@ -257,12 +267,16 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         />
       </FormRow>
 
+      {/* Image preview for dropped images */}
+
       {imageUrlStrings && imageUrlStrings.length > 0 && (
         <FormPreviewImages
           imageUrlStrings={imageUrlStrings}
           handleImageDelete={handleImageDelete}
         />
       )}
+
+      {/* Dropzone for image upload */}
 
       <div className="mt-6 flex w-full flex-col gap-5">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
@@ -272,24 +286,21 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
           {...getRootProps()}
           className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 px-4 ${isDragActive && "bg-white-200_gray-800"}`}
         >
-          <input {...getInputProps()} className="hidden" ref={fileInputRef} />
-          <button type="button" onClick={handleButtonClick}>
+          <input {...getInputProps()} className="hidden" />
+          <button type="button">
             <FiUpload className="text-2xl text-blue-500" />
           </button>
           <p className="medium-14 text-gray-blue-100 mt-4 text-center">
             Drag and drop an image, or{" "}
-            <span
-              className="cursor-pointer text-blue-500"
-              onClick={handleButtonClick}
-            >
-              Browse
-            </span>
+            <span className="cursor-pointer text-blue-500">Browse</span>
           </p>
           <span className="base-14 text-gray-400_white-100 mt-2 text-center">
             High resolution images (png, jpg, gif)
           </span>
         </div>
       </div>
+
+      {/* Submit Button */}
 
       <Button
         width="w-full md:w-fit md:px-4"
