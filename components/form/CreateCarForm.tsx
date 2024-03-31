@@ -38,7 +38,6 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const router = useRouter();
   const path = usePathname();
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [submittingForm, setSubmittingForm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("media");
   const {
@@ -46,7 +45,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CarFormFields>({
     resolver: zodResolver(carFormSchema),
     defaultValues: {
@@ -68,11 +67,9 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
 
   const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
     const imageDataArray: ImageDataArrayType[] = [];
-    const hasImageChanged = true;
 
     try {
-      setSubmittingForm(true);
-      if (imageFiles.length > 0 && hasImageChanged) {
+      if (imageFiles.length > 0) {
         const uploadPromises = imageFiles.map((file) => startUpload([file]));
 
         try {
@@ -122,8 +119,6 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         variant: "destructive",
         title: "Failed to create car",
       });
-    } finally {
-      setSubmittingForm(false);
     }
   };
 
@@ -157,7 +152,9 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       if (acceptedFiles.length > 3) {
         imageLimitToast();
       }
-      acceptedFiles.slice(0, 3).forEach((file: any) => {
+      console.log(imageFiles.length);
+      const amountToSlice = 3 - imageFiles.length;
+      acceptedFiles.slice(0, amountToSlice).forEach((file: any) => {
         if (!file.type.startsWith("image")) {
           toast({
             variant: "destructive",
@@ -173,7 +170,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         setImageFiles((prev) => [...prev, file]);
       });
     },
-    [imageFiles]
+    [imageFiles, imageUrlStrings]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -192,6 +189,14 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
   };
+
+  const buttonText = isSubmitting
+    ? editCarData
+      ? "Updating Car..."
+      : "Creating Car..."
+    : editCarData
+      ? "Update Car"
+      : "Create Car";
 
   return (
     <form
@@ -291,15 +296,9 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         height="h-12"
         className="mt-8"
         submit
-        disabled={submittingForm}
+        disabled={isSubmitting}
       >
-        {submittingForm
-          ? editCarData
-            ? "Updating Car..."
-            : "Creating Car..."
-          : editCarData
-            ? "Update Car"
-            : "Create Car"}
+        {buttonText}
       </Button>
     </form>
   );
