@@ -130,6 +130,8 @@ const CarModalScreenOne = ({
 
         <div className="flex-between w-full gap-11">
           <div className="flex w-full flex-col gap-4">
+            {/* Car Type */}
+
             <div className="flex-between w-full">
               <label className="light-12 lg:light-20 text-gray-400">
                 Type Car
@@ -138,16 +140,21 @@ const CarModalScreenOne = ({
                 {type}
               </span>
             </div>
+
+            {/* Transmission */}
+
             <div className="flex-between w-full">
               <label className="light-12 lg:light-20 text-gray-400">
                 Trans.
               </label>
-              <span className="base-12 lg:base-20 text-gray-700_white-200">
+              <span className="base-12 lg:base-20 text-gray-700_white-200 capitalize">
                 {transmission}
               </span>
             </div>
           </div>
           <div className="flex w-full flex-col gap-4">
+            {/* People Capacity */}
+
             <div className="flex-between w-full">
               <label className="light-12 lg:light-20 text-gray-400">
                 Capacity
@@ -156,6 +163,9 @@ const CarModalScreenOne = ({
                 {peopleCapacity} Person
               </span>
             </div>
+
+            {/* Fuel Capacity */}
+
             <div className="flex-between w-full">
               <label className="light-12 lg:light-20 text-gray-400">
                 Gasoline
@@ -166,6 +176,9 @@ const CarModalScreenOne = ({
             </div>
           </div>
         </div>
+
+        {/* Price */}
+
         <div className="flex-between w-full">
           <p className="bold-20 lg:bold-28 text-gray-900_white">
             ${dailyPrice}/{" "}

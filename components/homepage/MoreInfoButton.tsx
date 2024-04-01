@@ -28,6 +28,8 @@ const MoreInfoButton = ({ data }: { data: ICar }) => {
     handleButtonClick,
   };
 
+  // Show the modal after the component is rendered to avoid SSR issues
+
   useEffect(() => {
     setIsRendered(true);
   }, []);

@@ -52,6 +52,8 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
   const pickupDate = watch("pickupDate");
   const dropoffDate = watch("dropoffDate");
 
+  // Styles
+
   const calendarImagesStyles = "flex w-full flex-col gap-3 lg:gap-4";
   const popoverTriggerStyles =
     "flex-between bg-white-200_gray-800 text-gray-400_white-200 light-12 lg:light-14 h-12 w-full rounded-md px-2.5 xs:px-4 lg:h-14 lg:px-6";
@@ -61,6 +63,8 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
 
   return (
     <div className="bg-white_gray-850 flex h-fit w-full max-w-[31.25rem] flex-col rounded-ten p-6 lg:p-10">
+      {/* Form Title */}
+
       <div className="flex-between w-full">
         <div className="flex flex-col gap-2.5">
           <h3 className="semibold-18 lg:semibold-20 text-gray-900_white">
@@ -68,6 +72,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
           </h3>
           <span className="base-14 text-gray-400">Please enter your info</span>
         </div>
+
+        {/* Close Button */}
+
         <DialogClose>
           <button onClick={handleClose} className="self-start">
             <Image
@@ -80,11 +87,16 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
           </button>
         </DialogClose>
       </div>
+
+      {/* Form */}
+
       <form
         className="mt-7 flex w-full flex-col gap-6 lg:mt-10 lg:gap-7"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-3 lg:gap-4">
+          {/* Location Label */}
+
           <div className="flex gap-1.5">
             <Image
               src="/icons/mark.svg"
@@ -95,6 +107,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
             />
             <label className={labelStyles}>Pick-up Location</label>
           </div>
+
+          {/* Location Field */}
+
           <div className="flex-center bg-white-200_gray-800 h-12 w-full rounded-md px-2.5 xs:px-4 lg:h-14 lg:px-6">
             <input
               className="bg-white-200_gray-800 placeholder:text-gray-400_white-200 placeholder:light-12 placeholder:lg:light-14 text-gray-400_white-200 light-12 lg:light-14 w-full text-gray-400 outline-none"
@@ -104,6 +119,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
               {...register("location")}
             />
           </div>
+
+          {/* Location Error Message */}
+
           {errors.location && (
             <span className="light-12 text-red-500">
               {errors.location.message}
@@ -112,6 +130,8 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
         </div>
         <div className="flex w-full gap-2.5">
           <div className={calendarImagesStyles}>
+            {/* Pickup Date Label */}
+
             <div className="flex gap-1.5">
               <Image
                 src="/icons/calendar.svg"
@@ -122,6 +142,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
               />
               <label className={labelStyles}>Pick-Up Date</label>
             </div>
+
+            {/* Pickup Date Field */}
+
             <Popover>
               <PopoverTrigger className={popoverTriggerStyles}>
                 {selectedPickupDate}
@@ -140,12 +163,17 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
                 />
               </PopoverContent>
             </Popover>
+
+            {/* Pickup Date Error Message */}
+
             {errors.pickupDate && (
               <span className="light-12 text-red-500">Please pick a date</span>
             )}
           </div>
         </div>
         <div className="flex w-full gap-2.5">
+          {/* Dropoff Date Label */}
+
           <div className={calendarImagesStyles}>
             <div className="flex gap-1.5">
               <Image
@@ -157,6 +185,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
               />
               <label className={labelStyles}>Drop-Off Date</label>
             </div>
+
+            {/* Dropoff Date Field */}
+
             <Popover>
               <PopoverTrigger className={popoverTriggerStyles}>
                 {selectedDropoffDate}
@@ -175,6 +206,9 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
                 />
               </PopoverContent>
             </Popover>
+
+            {/* Dropoff Date Error Message */}
+
             {errors.dropoffDate && (
               <span className="light-12 text-red-500">Please pick a date</span>
             )}
