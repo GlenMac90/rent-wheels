@@ -96,7 +96,6 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
           const uploadResults = await Promise.all(uploadPromises);
           for (const imgRes of uploadResults) {
             if (imgRes && imgRes[0].url) {
-              console.log(imgRes[0]);
               const { blurDataURL, width, height } = await getBlurData(
                 imgRes[0].url
               );
