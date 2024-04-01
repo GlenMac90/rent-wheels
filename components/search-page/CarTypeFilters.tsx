@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
+import { Checkbox } from "../ui/checkbox";
 
 import { carTypes } from "@/constants";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
@@ -9,10 +10,16 @@ import { CarTypeFiltersProps } from "@/types/searchpage.index";
 const CarTypeFilters = ({ mobileFilters, types }: CarTypeFiltersProps) => {
   const [type, setType] = useURLQuery("type", "");
 
-  const setChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setChange = ({
+    checked,
+    id,
+  }: {
+    checked: boolean | string;
+    id: string;
+  }) => {
     const typeArray = type.split(",");
-    const isChecked = e.target.checked;
-    const targetType = e.target.id;
+    const isChecked = checked;
+    const targetType = id;
 
     if (isChecked) {
       typeArray.push(targetType);
@@ -35,10 +42,9 @@ const CarTypeFilters = ({ mobileFilters, types }: CarTypeFiltersProps) => {
       <div className="flex flex-col gap-2">
         {carTypes.map((type) => (
           <div className="flex items-center gap-2" key={type.id}>
-            <input
+            <Checkbox
               id={type.id}
-              type="checkbox"
-              onChange={(e) => setChange(e)}
+              onCheckedChange={(checked) => setChange({ checked, id: type.id })}
               checked={types?.includes(type.id)}
               className="size-4 cursor-pointer"
             />

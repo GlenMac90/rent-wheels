@@ -1,8 +1,8 @@
 "use client";
 
-import { ChangeEvent } from "react";
 import { CarPriceFilterProps } from "@/types/searchpage.index";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
+import { Slider } from "../ui/slider";
 
 const CarMaxPriceFilter = ({
   mobileFilters,
@@ -11,9 +11,10 @@ const CarMaxPriceFilter = ({
 }: CarPriceFilterProps) => {
   const [price, setPrice] = useURLQuery("maxPrice", "400", 200);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDisplayPrice(e.target.value);
-    setPrice(e.target.value);
+  const handleChange = (price: number[]) => {
+    const priceToString = price.toString();
+    setDisplayPrice(priceToString);
+    setPrice(priceToString);
   };
 
   return (
@@ -24,12 +25,12 @@ const CarMaxPriceFilter = ({
         >
           PRICE
         </label>
-        <input
+        <Slider
           max={500}
-          type="range"
-          value={displayPrice || price}
-          onChange={handleChange}
-          className="cursor-pointer hover:bg-purple"
+          defaultValue={[+displayPrice] || [+price]}
+          value={[+displayPrice] || [price]}
+          onValueChange={handleChange}
+          className="cursor-pointer"
         />
       </div>
       <label className="semibold-12 mt-4 text-gray-700">

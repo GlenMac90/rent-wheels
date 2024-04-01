@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import { useURLQuery } from "@/lib/hooks/useURLQuery";
+import { Checkbox } from "../ui/checkbox";
 
 import { carCapacity } from "@/constants";
 import { CarTypeFiltersProps } from "@/types/searchpage.index";
@@ -12,10 +12,16 @@ const CarCapacityFilters = ({
 }: CarTypeFiltersProps) => {
   const [capacity, setCapacity] = useURLQuery("capacity", "");
 
-  const setChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setChange = ({
+    checked,
+    id,
+  }: {
+    checked: boolean | string;
+    id: number;
+  }) => {
     const capacityAsArray = capacity.split(",");
-    const isChecked = e.target.checked;
-    const targetType = e.target.id;
+    const isChecked = checked;
+    const targetType = id.toString();
 
     if (isChecked) {
       capacityAsArray.push(targetType);
@@ -38,10 +44,11 @@ const CarCapacityFilters = ({
       <div className="flex flex-col gap-2">
         {carCapacity.map((capacity) => (
           <div className="flex items-center gap-2" key={capacity.id}>
-            <input
+            <Checkbox
               id={capacity.id.toString()}
-              type="checkbox"
-              onChange={(e) => setChange(e)}
+              onCheckedChange={(checked) =>
+                setChange({ checked, id: capacity.id })
+              }
               checked={capacities?.includes(capacity.id.toString())}
               className="size-4 cursor-pointer"
             />

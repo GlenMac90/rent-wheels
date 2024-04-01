@@ -1,9 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+
+import { useTheme } from "@/providers/ThemeProvider";
 
 const Logo = () => {
+  const { theme } = useTheme();
   return (
-    <Link href="/" className="bold-24 sm:bold-32 text-blue-500">
-      MORENT
+    <Link href="/">
+      <Image
+        height={30}
+        width={90}
+        src={theme === "light" ? "/logo-light.png" : "/logo-dark.png"}
+        alt="Rent Wheels Logo"
+      />
     </Link>
   );
 };

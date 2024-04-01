@@ -13,7 +13,7 @@ const PopularCars = ({ cars }: { cars: ICar[] }) => {
           Popular Cars
         </h3>
         <button
-          className="text-blue-500_blue-300 hover:text-blue-300_blue-500 semibold-12 md:semibold-16"
+          className="semibold-12 md:semibold-16 text-purple-mid hover:text-purple"
           onClick={() => setShowMore(!showMore)}
         >
           {showMore ? "View Less" : "View All"}

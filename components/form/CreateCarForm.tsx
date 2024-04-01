@@ -242,7 +242,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       <span className="base-14 mt-2.5 flex text-gray-400">
         Please enter your car info
       </span>
-      <h4 className="extrabold-18 mt-9 text-blue-300">CAR INFO</h4>
+      <h4 className="extrabold-18 mt-9 text-purple-mid">CAR INFO</h4>
 
       {/* Form Fields Below Organise into rows */}
 

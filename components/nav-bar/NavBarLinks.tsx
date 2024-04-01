@@ -16,7 +16,7 @@ const NavBarLinks = () => {
           <Link
             key={link.name}
             href={link.path}
-            className={`${isActive ? "semibold-16 text-blue-500 dark:text-blue-300" : "text-gray-700_white-200 medium-16"}`}
+            className={`${isActive ? "semibold-16 text-purple dark:text-purple-mid" : "text-gray-700_white-200 medium-16"}`}
           >
             {link.name}
           </Link>
