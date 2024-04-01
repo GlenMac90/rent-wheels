@@ -18,6 +18,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileInfoEditButtonProps } from "@/types/user.index";
+import { getBlurData } from "@/lib/actions/image.actions";
 
 const ProfileInfoEditButton = ({
   profileImage,
@@ -28,7 +29,7 @@ const ProfileInfoEditButton = ({
   const { toast } = useToast();
   const [showEditModal, setShowEditModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<string>(profileImage);
+  const [image, setImage] = useState<string>(profileImage.url);
   const [profileImageFile, setProfileImageFile] = useState<File[] | null>(null);
   const { startUpload } = useUploadThing("media");
 
@@ -55,28 +56,36 @@ const ProfileInfoEditButton = ({
 
     const hasImageChanged = image !== "/dummy-profile-image.jpg";
 
-    if (hasImageChanged && profileImageFile) {
+    if (!hasImageChanged || !profileImageFile) return;
+    try {
       const imgRes = await startUpload(profileImageFile);
-      if (imgRes) {
-        setImage(imgRes[0].url);
-        userData.image = imgRes[0].url;
-      }
-    }
 
-    const updatedUser = await updateUser({
-      userEmail: "glen.mccallum@live.co.uk",
-      userData,
-    });
+      if (!imgRes || !imgRes[0].url) return;
+      setImage(imgRes[0].url);
+      const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
 
-    if (updatedUser.status !== 200) {
+      const imageData = {
+        url: imgRes[0].url,
+        blurDataURL,
+        width,
+        height,
+      };
+
+      await updateUser({
+        userEmail: "glen.mccallum@live.co.uk",
+        userData: {
+          image: imageData,
+        },
+      });
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Failed to update profile",
         description: "Please try again later",
       });
-      return;
+    } finally {
+      setShowEditModal(false);
     }
-    setShowEditModal(false);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +136,11 @@ const ProfileInfoEditButton = ({
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-4">
                 <Image
-                  src={image}
+                  src={image ?? "/fallback/no-user-image.png"}
+                  blurDataURL={
+                    profileImage?.blurDataURL ?? "/fallback/no-user-image.png"
+                  }
+                  placeholder="blur"
                   alt="Profile Image"
                   height={86}
                   width={86}
@@ -144,7 +157,7 @@ const ProfileInfoEditButton = ({
                 <button
                   type="button"
                   onClick={handleButtonClick}
-                  className="flex-center semibold-12 md:semibold-16 rounded-lg px-3 py-2 text-purple"
+                  className="flex-center semibold-12 md:semibold-16 z-50 rounded-lg px-3 py-2 text-purple"
                 >
                   Upload new picture
                 </button>

@@ -11,13 +11,17 @@ const ProfilePageHeader = ({ data }: { data: ProfilePageHeaderProps }) => {
     <header className="flex w-full flex-col rounded-ten">
       <div className="relative flex h-36 w-full md:h-48">
         <Image
-          src={bannerImage || "/fallback/no-banner-image.jpg"}
+          src={bannerImage.url}
+          blurDataURL={bannerImage.blurDataURL}
+          placeholder="blur"
           alt="Banner Image"
           fill
           className="rounded-t-ten object-cover"
         />
         <Image
-          src={image || "/fallback/no-user-image.png"}
+          src={image?.url ?? "/fallback/no-user-image.png"}
+          blurDataURL={image?.blurDataURL ?? "/fallback/no-user-image.png"}
+          placeholder="blur"
           alt="Profile Image"
           height={160}
           width={160}
