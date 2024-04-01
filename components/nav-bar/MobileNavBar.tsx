@@ -18,7 +18,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
   const loggedIn = false;
 
   const logInLogOutButtonStyles =
-    "flex-center bg-white_gray-700 mt-5 semibold-14 h-12 w-full gap-1.5 rounded border text-purple dark:border-none dark:text-purple";
+    "flex-center bg-white_gray-700 mt-5 semibold-14 h-12 w-full gap-1.5 rounded border text-purple dark:border-none dark:text-purple-mid";
 
   return (
     <div

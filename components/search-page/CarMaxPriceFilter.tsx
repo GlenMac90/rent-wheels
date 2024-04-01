@@ -29,7 +29,7 @@ const CarMaxPriceFilter = ({
           type="range"
           value={displayPrice || price}
           onChange={handleChange}
-          className="cursor-pointer"
+          className="cursor-pointer hover:bg-purple"
         />
       </div>
       <label className="semibold-12 mt-4 text-gray-700">

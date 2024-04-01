@@ -52,7 +52,7 @@ const SearchPageFilters = () => {
           <CarNameFilter />
           <button
             type="button"
-            className="flex-center size-12 shrink-0 rounded-ten border border-blue-500 lg:hidden"
+            className="flex-center size-12 shrink-0 rounded-ten border border-purple lg:hidden"
             onClick={() => setShowMobileFilters((prev) => !prev)}
           >
             <Image
