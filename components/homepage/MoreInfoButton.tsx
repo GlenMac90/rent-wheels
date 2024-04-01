@@ -43,6 +43,9 @@ const MoreInfoButton = ({ data }: { data: ICar }) => {
           More Info
         </Button>
       </DialogTrigger>
+
+      {/* Show modal one or modal two depending on position in sequence */}
+
       {showModalScreenTwo ? (
         <DialogContent className="flex w-full max-w-[31.25rem] p-0">
           <CarModalScreenTwo {...modalProps} />
