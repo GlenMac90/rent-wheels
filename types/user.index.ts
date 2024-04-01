@@ -1,3 +1,5 @@
+import { ImageDataArrayType } from "./car.index";
+
 export interface CreateUserDataProps {
   userData: {
     username: string;
@@ -15,8 +17,8 @@ export interface UpdateUserDataProps {
     password?: string;
     name?: string;
     role?: string;
-    image?: string;
-    bannerImage?: string;
+    image?: ImageDataArrayType;
+    bannerImage?: ImageDataArrayType;
     rentedCars?: string[];
     ownedCars?: string[];
   };
@@ -28,14 +30,14 @@ export interface SignInDataProps {
 }
 
 export interface ProfilePageHeaderProps {
-  image: string;
-  bannerImage: string;
+  image: ImageDataArrayType;
+  bannerImage: ImageDataArrayType;
   name: string;
   role: string;
 }
 
 export interface ProfileInfoEditButtonProps {
-  profileImage: string;
+  profileImage: ImageDataArrayType;
   name: string;
   role: string;
 }

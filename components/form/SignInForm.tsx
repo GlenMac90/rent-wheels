@@ -14,6 +14,8 @@ const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  // react-hook-form setup
+
   const {
     register,
     handleSubmit,
@@ -25,6 +27,8 @@ const SignInForm = () => {
 
   const formValues = watch();
 
+  // form submission
+
   const onSubmit: SubmitHandler<SignInFormFields> = async (data) => {
     const { email, password } = data;
     try {
@@ -33,6 +37,9 @@ const SignInForm = () => {
         email,
         password,
       });
+
+      // sign in user
+
       const user = await signInUser({ email, password });
 
       if (!user || !userSession) {
@@ -59,10 +66,14 @@ const SignInForm = () => {
         });
       }
 
+      // redirect user to home page
+
       if (user.status === 200) {
         router.push("/");
       }
     } catch (error) {
+      // handle errors
+
       console.error("Error signing in user", error);
       toast({
         variant: "destructive",
@@ -71,6 +82,8 @@ const SignInForm = () => {
       });
     }
   };
+
+  // sign in with Github
 
   const handleGithubSignIn = async () => {
     try {
@@ -90,6 +103,8 @@ const SignInForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
     >
+      {/* Email field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Email
@@ -108,6 +123,9 @@ const SignInForm = () => {
           <span className="text-red-500">{errors.email.message}</span>
         )}
       </div>
+
+      {/* Password field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Password
@@ -126,15 +144,24 @@ const SignInForm = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </div>
+
+      {/* Sign In button */}
+
       <Button height="h-10" width="w-full" submit>
         Sign In
       </Button>
       <p className="semibold-14 md:semibold-16 text-gray-900_white">
         Don&apos;t have an account?
       </p>
+
+      {/* Sign Up button */}
+
       <Button height="h-10" width="w-full" linkPath="/sign-up">
         Sign Up
       </Button>
+
+      {/* Sign In with Github button */}
+
       <Button height="h-10" width="w-full" handleClick={handleGithubSignIn}>
         Sign In With Github
       </Button>

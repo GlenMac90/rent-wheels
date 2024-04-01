@@ -31,6 +31,7 @@ import {
 import CarDeleteButton from "./CarDeleteButton";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
+  console.log(editCarData);
   const { toast } = useToast();
   const router = useRouter();
   const path = usePathname();
@@ -83,8 +84,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         editCarData &&
         editCarData?.imageData.length > 0
       ) {
-        const imagePaths = editCarData?.imageData.map((image) => image.url);
-        await deleteFiles(imagePaths);
+        const imagesToDelete = editCarData?.imageData.map((image) => image.key);
+        await deleteFiles(imagesToDelete);
       }
       // Upload new images
 
@@ -100,6 +101,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
               );
               imageDataArray.push({
                 url: imgRes[0].url,
+                key: imgRes[0].key,
                 blurDataURL,
                 width,
                 height,

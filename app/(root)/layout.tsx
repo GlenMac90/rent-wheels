@@ -10,6 +10,7 @@ export default async function RootLayout({
   children: ReactNode;
 }) {
   const profileImage = await getProfileImage();
+
   return (
     <main className="h-screen overflow-scroll overscroll-none">
       <NavBar profileImage={profileImage} />

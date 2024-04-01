@@ -28,6 +28,7 @@ const carSchema = new mongoose.Schema({
     {
       type: {
         url: String,
+        key: String,
         blurDataURL: String,
         width: Number,
         height: Number,

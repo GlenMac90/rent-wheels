@@ -1,3 +1,4 @@
+import { ImageDataArrayType } from "@/types/car.index";
 import mongoose, { Document } from "mongoose";
 
 export interface IUser extends Document {
@@ -6,8 +7,8 @@ export interface IUser extends Document {
   password: string;
   name: string;
   role?: string;
-  image?: string;
-  bannerImage?: string;
+  image?: ImageDataArrayType;
+  bannerImage?: ImageDataArrayType;
   rentedCars?: string[];
   ownedCars?: string[];
 }
@@ -18,8 +19,24 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   role: String,
-  image: String,
-  bannerImage: String,
+  image: {
+    type: {
+      url: String,
+      key: String,
+      blurDataURL: String,
+      width: Number,
+      height: Number,
+    },
+  },
+  bannerImage: {
+    type: {
+      url: String,
+      key: String,
+      blurDataURL: String,
+      width: Number,
+      height: Number,
+    },
+  },
   rentedCars: [
     {
       type: mongoose.Schema.Types.ObjectId,

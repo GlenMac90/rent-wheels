@@ -16,6 +16,9 @@ const SignUpForm = () => {
   const { toast } = useToast();
   const [secondPassword, setSecondPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  // react-hook-form setup
+
   const {
     register,
     handleSubmit,
@@ -27,12 +30,16 @@ const SignUpForm = () => {
 
   const formValues = watch();
 
+  // form submission
+
   const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
     if (data.password !== secondPassword) {
       setPasswordsMatch(false);
       return;
     }
     try {
+      // create user
+
       const user = await createUser({
         userData: {
           username: data.username,
@@ -49,16 +56,22 @@ const SignUpForm = () => {
         });
       }
 
+      // sign in user
+
       const userSession = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
 
+      // redirect user to home page
+
       if (user.status === 201 && userSession) {
         router.push("/");
       }
     } catch (error) {
+      // handle errors
+
       console.error("Error signing up user", error);
       toast({
         variant: "destructive",
@@ -67,6 +80,8 @@ const SignUpForm = () => {
       });
     }
   };
+
+  // handle password change
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordsMatch(true);
@@ -78,6 +93,8 @@ const SignUpForm = () => {
       className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {/* Username Field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Username
@@ -96,6 +113,9 @@ const SignUpForm = () => {
           <span className="text-red-500">{errors.username.message}</span>
         )}
       </div>
+
+      {/* Email Field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Email
@@ -114,6 +134,9 @@ const SignUpForm = () => {
           <span className="text-red-500">{errors.email.message}</span>
         )}
       </div>
+
+      {/* Name Field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Name
@@ -132,6 +155,9 @@ const SignUpForm = () => {
           <span className="text-red-500">{errors.name.message}</span>
         )}
       </div>
+
+      {/* Password Field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Password
@@ -149,6 +175,9 @@ const SignUpForm = () => {
           <span className="text-red-500">{errors.password.message}</span>
         )}
       </div>
+
+      {/* Re-enter Password Field */}
+
       <div className="flex flex-col gap-2">
         <label className="semibold-14 md:semibold-16 text-gray-900_white">
           Re-enter Password
@@ -166,12 +195,18 @@ const SignUpForm = () => {
           <span className="text-red-500">The passwords do not match</span>
         )}
       </div>
+
+      {/* Sign Up Button */}
+
       <Button height="h-10" width="w-full" submit>
         Sign Up
       </Button>
       <p className="semibold-14 md:semibold-16 text-gray-900_white">
         Already have an account?
       </p>
+
+      {/* Sign In Button */}
+
       <Button height="h-10" width="w-full" linkPath="/sign-in">
         Sign In
       </Button>

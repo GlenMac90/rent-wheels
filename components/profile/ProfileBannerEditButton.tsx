@@ -16,13 +16,19 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import Button from "../Button";
 import { useToast } from "@/components/ui/use-toast";
+import { deleteFiles, getBlurData } from "@/lib/actions/image.actions";
+import { ImageDataArrayType } from "@/types/car.index";
 
-const ProfileBannerEditButton = ({ bannerImage }: { bannerImage: string }) => {
+const ProfileBannerEditButton = ({
+  bannerImage,
+}: {
+  bannerImage: ImageDataArrayType;
+}) => {
   const { toast } = useToast();
   const [isRendered, setIsRendered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [image, setImage] = useState<string | null>(bannerImage);
+  const [image, setImage] = useState<string | null>(bannerImage.url);
   const [file, setFile] = useState<File | null>(null);
   const { startUpload } = useUploadThing("media");
 
@@ -39,23 +45,36 @@ const ProfileBannerEditButton = ({ bannerImage }: { bannerImage: string }) => {
   const handleSubmit = async () => {
     const hasImageChanged = image !== "/dummy-profile-image.jpg";
     if (!hasImageChanged || !file) return;
-    const imgRes = await startUpload([file]);
-    if (!imgRes || !imgRes[0].url) return;
-    const updatedUser = await updateUser({
-      userEmail: "glen.mccallum@live.co.uk",
-      userData: {
-        bannerImage: imgRes[0].url,
-      },
-    });
-    if (updatedUser.status !== 200) {
+
+    try {
+      await deleteFiles([bannerImage.key]);
+      const imgRes = await startUpload([file]);
+      if (!imgRes || !imgRes[0].url) return;
+      const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
+
+      const imageData = {
+        url: imgRes[0].url,
+        key: imgRes[0].key,
+        blurDataURL,
+        width,
+        height,
+      };
+
+      await updateUser({
+        userEmail: "glen.mccallum@live.co.uk",
+        userData: {
+          bannerImage: imageData,
+        },
+      });
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Failed to update profile",
         description: "Please try again later",
       });
-      return;
+    } finally {
+      setShowEditModal(false);
     }
-    setShowEditModal(false);
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -107,6 +126,8 @@ const ProfileBannerEditButton = ({ bannerImage }: { bannerImage: string }) => {
             {image && (
               <Image
                 src={image}
+                blurDataURL={bannerImage.blurDataURL}
+                placeholder="blur"
                 alt="Profile Image"
                 height={150}
                 width={86}
