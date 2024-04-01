@@ -23,6 +23,7 @@ const config = {
         xs: "400px",
       },
       colors: {
+        purple: "#833EFF",
         blue: {
           500: "#3563E9",
           300: "#5CAFFC",

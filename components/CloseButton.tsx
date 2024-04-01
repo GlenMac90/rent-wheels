@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const CloseButton = ({ handleClose }: { handleClose: () => void }) => {
+const CloseButton = ({ handleClose }: { handleClose?: () => void }) => {
   return (
     <button onClick={handleClose} className="self-start">
       <Image

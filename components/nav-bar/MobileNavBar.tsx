@@ -18,7 +18,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
   const loggedIn = false;
 
   const logInLogOutButtonStyles =
-    "flex-center bg-white_gray-700 mt-5 semibold-14 h-12 w-full gap-1.5 rounded border border-blue-50 text-blue-500 dark:border-none dark:text-blue-300";
+    "flex-center bg-white_gray-700 mt-5 semibold-14 h-12 w-full gap-1.5 rounded border text-purple dark:border-none dark:text-purple";
 
   return (
     <div
@@ -47,7 +47,7 @@ const MobileNavBar = ({ handleCloseClick }: MobileNavBarProps) => {
             return (
               <li
                 key={link.name}
-                className={`rounded p-3 dark:text-white ${isActive && "bg-blue-500 text-white"}`}
+                className={`rounded p-3 dark:text-white ${isActive && "bg-purple text-white"}`}
                 onClick={handleCloseClick}
               >
                 <Link className="medium-14 flex gap-1.5" href={link.path}>

@@ -316,11 +316,11 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         >
           <input {...getInputProps()} className="hidden" />
           <button type="button">
-            <FiUpload className="text-2xl text-blue-500" />
+            <FiUpload className="text-2xl text-purple" />
           </button>
           <p className="medium-14 text-gray-blue-100 mt-4 text-center">
             Drag and drop an image, or{" "}
-            <span className="cursor-pointer text-blue-500">Browse</span>
+            <span className="cursor-pointer text-purple">Browse</span>
           </p>
           <span className="base-14 text-gray-400_white-100 mt-2 text-center">
             High resolution images (png, jpg, gif)

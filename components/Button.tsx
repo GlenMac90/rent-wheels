@@ -17,7 +17,7 @@ const Button = ({
     return (
       <Link
         href={linkPath}
-        className={`semibold-16 flex-center shrink-0 rounded bg-blue-500 text-white ${width} ${height} ${className}`}
+        className={`semibold-16 flex-center shrink-0 rounded bg-purple text-white ${width} ${height} ${className}`}
       >
         {children}
       </Link>
@@ -28,7 +28,7 @@ const Button = ({
     <button
       disabled={disabled}
       type={submit ? "submit" : "button"}
-      className={`semibold-16 flex-center shrink-0 rounded ${deleteButton ? "bg-red-500" : "bg-blue-500"}  text-white ${width} ${height} ${className}`}
+      className={`semibold-16 flex-center shrink-0 rounded ${deleteButton ? "bg-red-500" : "bg-purple"}  text-white ${width} ${height} ${className}`}
       onClick={handleClick}
     >
       {children}
