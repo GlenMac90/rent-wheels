@@ -9,4 +9,5 @@ export interface ButtonProps {
   linkPath?: string;
   handleClick?: () => void | Promise<void>;
   disabled?: boolean;
+  deleteButton?: boolean;
 }

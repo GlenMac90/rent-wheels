@@ -13,7 +13,7 @@ import { carFormSchema, CarFormFields } from "@/schemas";
 import { useUploadThing } from "@/utils/uploadthing";
 import { createCar, updateCar } from "@/lib/actions/car.actions";
 import { ImageDataArrayType } from "@/types/car.index";
-import { getBlurData } from "@/lib/actions/image.actions";
+import { getBlurData, deleteFiles } from "@/lib/actions/image.actions";
 import { ICar } from "@/lib/models/car.model";
 import { imageURLToFile } from "@/utils";
 import {
@@ -28,6 +28,7 @@ import {
   CarTransmissionField,
   CarTypeField,
 } from ".";
+import CarDeleteButton from "./CarDeleteButton";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const { toast } = useToast();
@@ -70,7 +71,23 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   const onSubmit: SubmitHandler<CarFormFields> = async (data) => {
     const imageDataArray: ImageDataArrayType[] = [];
 
+    // Check if images have changed
+    const imagesHaveChanged =
+      imageFiles.some((image) => "path" in image) ||
+      (editCarData && imageFiles?.length < editCarData.imageData.length);
+
     try {
+      // Delete old images if they have changed
+      if (
+        imagesHaveChanged &&
+        editCarData &&
+        editCarData?.imageData.length > 0
+      ) {
+        const imagePaths = editCarData?.imageData.map((image) => image.url);
+        await deleteFiles(imagePaths);
+      }
+      // Upload new images
+
       if (imageFiles.length > 0) {
         const uploadPromises = imageFiles.map((file) => startUpload([file]));
 
@@ -94,6 +111,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         }
       }
 
+      // Car data object
+
       const carData = {
         name: data.carTitle,
         type: data.carType,
@@ -104,6 +123,8 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         dailyPrice: data.rentPrice,
         imageData: imageDataArray,
       };
+
+      // Create or update car data
 
       if (editCarData) {
         await updateCar({ carData, carId: editCarData.id, path });
@@ -117,6 +138,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
       });
       router.push("/");
     } catch (error) {
+      console.log("error", error);
       toast({
         variant: "destructive",
         title: "Failed to create car",
@@ -306,17 +328,25 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         </div>
       </div>
 
-      {/* Submit Button */}
+      <div className="flex-between w-full">
+        {/* Submit Button */}
 
-      <Button
-        width="w-full md:w-fit md:px-4"
-        height="h-12"
-        className="mt-8"
-        submit
-        disabled={isSubmitting}
-      >
-        {buttonText}
-      </Button>
+        <Button
+          width="w-full md:w-fit md:px-4"
+          height="h-12"
+          className="mt-8"
+          submit
+          disabled={isSubmitting}
+        >
+          {buttonText}
+        </Button>
+
+        {editCarData && (
+          // Delete Button for edit car page
+
+          <CarDeleteButton carId={editCarData.id.toString()} />
+        )}
+      </div>
     </form>
   );
 };

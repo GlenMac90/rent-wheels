@@ -7,6 +7,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { formatCapacity, formatCarData, formatTypes } from "@/utils";
 import { revalidatePath } from "next/cache";
+import { deleteFiles } from "./image.actions";
 
 interface CreateCarDataProps {
   name: string;
@@ -56,6 +57,47 @@ export async function createCar({
       message: "Failed to create car",
       error: error.message,
     };
+  }
+}
+
+export async function deleteCar(carId: string) {
+  await connectToDB();
+
+  const user = await authoriseUser();
+  if (!user || !user.userId) {
+    throw new Error("User not authorised to delete car");
+  }
+
+  try {
+    const car = await Car.findById(carId);
+
+    if (!car) {
+      throw new Error("Car not found");
+    }
+
+    if (car.owner.toString() !== user.userId) {
+      throw new Error("User not authorised to delete this car");
+    }
+
+    const imagePaths = car.imageData.map(
+      (image: ImageDataArrayType) => image.url
+    );
+
+    await deleteFiles(imagePaths);
+
+    await Car.findByIdAndDelete(carId);
+    await User.findByIdAndUpdate(user.userId, {
+      $pull: { ownedCars: carId },
+    });
+
+    revalidatePath("/profile");
+
+    return {
+      status: 200,
+      message: "Car deleted successfully",
+    };
+  } catch (error) {
+    throw new Error(`Failed to delete car: ${error}`);
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { DialogClose } from "@/components/ui/dialog";
 
 import Button from "../Button";
 import Stars from "./Stars";
@@ -9,7 +10,6 @@ import { CarModalScreenOneProps } from "@/types/car.index";
 
 const CarModalScreenOne = ({
   data,
-  handleClick,
   handleClose,
   handleButtonClick,
 }: CarModalScreenOneProps) => {
@@ -30,22 +30,25 @@ const CarModalScreenOne = ({
   const rating = 4;
 
   return (
-    <div
-      onClick={handleClick}
-      className="bg-white_gray-850 relative flex h-fit w-full max-w-[22.5rem] flex-col gap-6 rounded-ten p-4 lg:max-w-5xl lg:flex-row lg:p-8"
-    >
-      <button
-        className="bg-white_gray-850 absolute -top-5 right-2 size-6 lg:hidden"
-        onClick={handleClose}
-      >
-        <Image
-          src="/icons/close.svg"
-          height={25}
-          width={25}
-          alt="button to close modal"
-          className="shrink-0 dark:grayscale dark:invert"
-        />
-      </button>
+    <div className="bg-white_gray-850 relative flex h-fit w-full max-w-[22.5rem] flex-col gap-6 rounded-ten p-4 lg:max-w-5xl lg:flex-row lg:p-8">
+      {/* Close button for mobile screens */}
+
+      <DialogClose className="bg-white_gray-850 absolute -top-5 right-2 size-6 lg:hidden">
+        <button onClick={handleClose}>
+          <Image
+            src="/icons/close.svg"
+            height={25}
+            width={25}
+            alt="button to close modal"
+            className="shrink-0 dark:grayscale dark:invert"
+          />
+        </button>
+      </DialogClose>
+
+      {/* Image Gallery */}
+
+      {/* Main Image */}
+
       <div className="flex size-full flex-col gap-6">
         <Image
           src={activeImage.url}
@@ -58,6 +61,8 @@ const CarModalScreenOne = ({
           className="aspect-video w-full rounded-ten border border-blue-50 bg-white object-cover"
         />
         <div className="flex w-full justify-between gap-5">
+          {/* Secondary Images */}
+
           {imageData.length > 1 &&
             imageData.map((image: any) => {
               const isActive = activeImage === image;
@@ -80,10 +85,16 @@ const CarModalScreenOne = ({
             })}
         </div>
       </div>
+
+      {/* Car Details */}
+
       <div className="flex w-full flex-col justify-between gap-4">
         <div className="flex w-full justify-between">
           <div className="flex flex-col gap-1.5 lg:gap-2">
             <h2 className="bold-20 lg:bold-32 text-gray-900_white">{name}</h2>
+
+            {/* Star Rating and number of reviews */}
+
             <div className="flex gap-2">
               <div className="flex items-center gap-2">
                 <Stars rating={rating} />
@@ -93,19 +104,30 @@ const CarModalScreenOne = ({
               </div>
             </div>
           </div>
-          <button onClick={handleClose} className="hidden self-start lg:flex">
-            <Image
-              src="/icons/close.svg"
-              height={25}
-              width={25}
-              alt="button to close modal"
-              className="shrink-0 dark:grayscale dark:invert"
-            />
-          </button>
+
+          {/* Close button for desktop screens */}
+
+          <DialogClose className="hidden self-start lg:flex">
+            <button onClick={handleClose}>
+              <Image
+                src="/icons/close.svg"
+                height={25}
+                width={25}
+                alt="button to close modal"
+                className="shrink-0 dark:grayscale dark:invert"
+              />
+            </button>
+          </DialogClose>
         </div>
+
+        {/* Description */}
+
         <p className="light-12 lg:light-20 text-gray-700_white-200">
           {description}
         </p>
+
+        {/* Car Details */}
+
         <div className="flex-between w-full gap-11">
           <div className="flex w-full flex-col gap-4">
             <div className="flex-between w-full">

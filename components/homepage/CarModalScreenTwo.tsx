@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
+import { DialogClose } from "@/components/ui/dialog";
 
 import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
 import ArrowDownIcon from "../ArrowDownIcon";
@@ -13,10 +14,7 @@ import { formatDate } from "@/utils";
 import Button from "../Button";
 import { CarModalScreenOneProps } from "@/types/car.index";
 
-const CarModalScreenTwo = ({
-  handleClick,
-  handleClose,
-}: CarModalScreenOneProps) => {
+const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
   const [selectedPickupDate, setSelectedPickupDate] =
     useState<string>("Select your date");
   const [selectedDropoffDate, setSelectedDropoffDate] =
@@ -62,10 +60,7 @@ const CarModalScreenTwo = ({
     "bg-white_gray-900 m-[-2px] rounded-md border border-white-200 dark:border-gray-850";
 
   return (
-    <div
-      className="bg-white_gray-850 flex h-fit w-full max-w-[31.25rem] flex-col rounded-ten p-4 lg:p-10"
-      onClick={handleClick}
-    >
+    <div className="bg-white_gray-850 flex h-fit w-full max-w-[31.25rem] flex-col rounded-ten p-6 lg:p-10">
       <div className="flex-between w-full">
         <div className="flex flex-col gap-2.5">
           <h3 className="semibold-18 lg:semibold-20 text-gray-900_white">
@@ -73,15 +68,17 @@ const CarModalScreenTwo = ({
           </h3>
           <span className="base-14 text-gray-400">Please enter your info</span>
         </div>
-        <button onClick={handleClose} className="self-start">
-          <Image
-            src="/icons/close.svg"
-            height={25}
-            width={25}
-            alt="button to close modal"
-            className="shrink-0 dark:grayscale dark:invert"
-          />
-        </button>
+        <DialogClose>
+          <button onClick={handleClose} className="self-start">
+            <Image
+              src="/icons/close.svg"
+              height={25}
+              width={25}
+              alt="button to close modal"
+              className="shrink-0 dark:grayscale dark:invert"
+            />
+          </button>
+        </DialogClose>
       </div>
       <form
         className="mt-7 flex w-full flex-col gap-6 lg:mt-10 lg:gap-7"
@@ -90,7 +87,7 @@ const CarModalScreenTwo = ({
         <div className="flex flex-col gap-3 lg:gap-4">
           <div className="flex gap-1.5">
             <Image
-              src="/icons/mark.svg.svg"
+              src="/icons/mark.svg"
               height={16}
               width={16}
               alt="search icon for location field"
