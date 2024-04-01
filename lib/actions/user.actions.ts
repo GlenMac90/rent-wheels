@@ -273,12 +273,14 @@ export async function getProfilePageCars() {
     const profileData = {
       image: {
         url: image?.url,
+        key: image?.key,
         blurDataURL: image?.blurDataURL,
         width: image?.width,
         height: image?.height,
       },
       bannerImage: {
         url: bannerImage.url,
+        key: bannerImage?.key,
         blurDataURL: bannerImage.blurDataURL,
         width: bannerImage.width,
         height: bannerImage.height,

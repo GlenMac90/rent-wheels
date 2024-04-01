@@ -8,6 +8,7 @@ export interface CarModalScreenOneProps {
 
 export interface ImageDataArrayType {
   url: string;
+  key: string;
   blurDataURL: string;
   width: number | undefined;
   height: number | undefined;

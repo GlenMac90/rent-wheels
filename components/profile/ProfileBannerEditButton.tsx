@@ -16,7 +16,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import Button from "../Button";
 import { useToast } from "@/components/ui/use-toast";
-import { getBlurData } from "@/lib/actions/image.actions";
+import { deleteFiles, getBlurData } from "@/lib/actions/image.actions";
 import { ImageDataArrayType } from "@/types/car.index";
 
 const ProfileBannerEditButton = ({
@@ -47,12 +47,14 @@ const ProfileBannerEditButton = ({
     if (!hasImageChanged || !file) return;
 
     try {
+      await deleteFiles([bannerImage.key]);
       const imgRes = await startUpload([file]);
       if (!imgRes || !imgRes[0].url) return;
       const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
 
-      const bannerImage = {
+      const imageData = {
         url: imgRes[0].url,
+        key: imgRes[0].key,
         blurDataURL,
         width,
         height,
@@ -61,7 +63,7 @@ const ProfileBannerEditButton = ({
       await updateUser({
         userEmail: "glen.mccallum@live.co.uk",
         userData: {
-          bannerImage,
+          bannerImage: imageData,
         },
       });
     } catch (error) {

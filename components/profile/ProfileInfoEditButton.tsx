@@ -18,7 +18,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileInfoEditButtonProps } from "@/types/user.index";
-import { getBlurData } from "@/lib/actions/image.actions";
+import { deleteFiles, getBlurData } from "@/lib/actions/image.actions";
 
 const ProfileInfoEditButton = ({
   profileImage,
@@ -58,6 +58,7 @@ const ProfileInfoEditButton = ({
 
     if (!hasImageChanged || !profileImageFile) return;
     try {
+      await deleteFiles([profileImage.key]);
       const imgRes = await startUpload(profileImageFile);
 
       if (!imgRes || !imgRes[0].url) return;
@@ -66,6 +67,7 @@ const ProfileInfoEditButton = ({
 
       const imageData = {
         url: imgRes[0].url,
+        key: imgRes[0].key,
         blurDataURL,
         width,
         height,

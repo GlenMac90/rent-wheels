@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   image: {
     type: {
       url: String,
+      key: String,
       blurDataURL: String,
       width: Number,
       height: Number,
@@ -30,6 +31,7 @@ const userSchema = new mongoose.Schema({
   bannerImage: {
     type: {
       url: String,
+      key: String,
       blurDataURL: String,
       width: Number,
       height: Number,
