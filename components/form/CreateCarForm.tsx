@@ -15,7 +15,7 @@ import { createCar, updateCar } from "@/lib/actions/car.actions";
 import { ImageDataArrayType } from "@/types/car.index";
 import { getBlurData, deleteFiles } from "@/lib/actions/image.actions";
 import { ICar } from "@/lib/models/car.model";
-import { imageURLToFile } from "@/utils";
+import { fetchAndConvertImages } from "@/utils";
 import {
   FormRow,
   FormPreviewImages,
@@ -160,20 +160,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
   // Find images for edit car page
 
   useEffect(() => {
-    const fetchAndConvertImages = async () => {
-      if (!editCarData || !editCarData.imageData) return;
-
-      const imageAsFiles = await Promise.all(
-        editCarData.imageData.map(async (image) => {
-          return imageURLToFile({ imageURL: image.url });
-        })
-      );
-      const validFiles = imageAsFiles.filter(
-        (file): file is File => file !== null
-      );
-      setImageFiles(validFiles);
-    };
-    fetchAndConvertImages();
+    fetchAndConvertImages({ editCarData, setImageFiles });
   }, []);
 
   // Dropzone onDrop function

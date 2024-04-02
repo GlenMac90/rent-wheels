@@ -25,8 +25,9 @@ const ProfileInfoEditButton = ({
   name,
   role,
 }: ProfileInfoEditButtonProps) => {
-  const [isRendered, setIsRendered] = useState(false);
   const { toast } = useToast();
+  const [isRendered, setIsRendered] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<string>(profileImage.url);
@@ -45,7 +46,7 @@ const ProfileInfoEditButton = ({
   } = useForm<ProfileFormFields>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      image,
+      image: profileImage.url,
       name,
       role,
     },
@@ -53,30 +54,35 @@ const ProfileInfoEditButton = ({
 
   const onSubmit: SubmitHandler<ProfileFormFields> = async (userData) => {
     const { image } = userData;
+    let imageData = profileImage;
 
-    const hasImageChanged = image !== "/dummy-profile-image.jpg";
+    const hasImageChanged = image !== profileImage.url;
 
-    if (!hasImageChanged || !profileImageFile) return;
     try {
-      await deleteFiles([profileImage.key]);
-      const imgRes = await startUpload(profileImageFile);
+      setIsUploading(true);
 
-      if (!imgRes || !imgRes[0].url) return;
-      setImage(imgRes[0].url);
-      const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
+      if (hasImageChanged && profileImageFile) {
+        await deleteFiles([profileImage.key]);
+        const imgRes = await startUpload(profileImageFile);
 
-      const imageData = {
-        url: imgRes[0].url,
-        key: imgRes[0].key,
-        blurDataURL,
-        width,
-        height,
-      };
+        if (!imgRes || !imgRes[0].url) return;
+        setImage(imgRes[0].url);
+        const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
+
+        imageData = {
+          url: imgRes[0].url,
+          key: imgRes[0].key,
+          blurDataURL,
+          width,
+          height,
+        };
+      }
 
       await updateUser({
-        userEmail: "glen.mccallum@live.co.uk",
         userData: {
           image: imageData,
+          name: userData.name,
+          role: userData.role,
         },
       });
     } catch (error) {
@@ -87,6 +93,7 @@ const ProfileInfoEditButton = ({
       });
     } finally {
       setShowEditModal(false);
+      setIsUploading(false);
     }
   };
 
@@ -155,11 +162,13 @@ const ProfileInfoEditButton = ({
                   ref={fileInputRef}
                   accept="image/*"
                   onChange={handleChange}
+                  disabled={isUploading}
                 />
                 <button
                   type="button"
                   onClick={handleButtonClick}
                   className="flex-center semibold-12 md:semibold-16 z-50 rounded-lg px-3 py-2 text-purple"
+                  disabled={isUploading}
                 >
                   Upload new picture
                 </button>
@@ -180,6 +189,7 @@ const ProfileInfoEditButton = ({
                   type="text"
                   className="bg-white-200_gray-800 text-gray-900_white w-full outline-none"
                   autoComplete="off"
+                  disabled={isUploading}
                 />
               </div>
               {errors.name && (
@@ -198,6 +208,7 @@ const ProfileInfoEditButton = ({
                   type="text"
                   className="bg-white-200_gray-800 text-gray-900_white w-full outline-none"
                   autoComplete="off"
+                  disabled={isUploading}
                 />
               </div>
               {errors.role && (
@@ -206,8 +217,14 @@ const ProfileInfoEditButton = ({
                 </span>
               )}
             </div>
-            <Button height="h-14" width="w-full" submit>
-              Update Profile
+            <Button
+              height="h-14"
+              width="w-full"
+              submit
+              className={isUploading ? "animate-pulse" : ""}
+              disabled={isUploading}
+            >
+              {isUploading ? "Updating Profile..." : "Update Profile"}{" "}
             </Button>
           </form>
         </div>

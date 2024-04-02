@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, MouseEvent, useCallback, useRef, useEffect } from "react";
+import {
+  useState,
+  MouseEvent,
+  useCallback,
+  useRef,
+  useEffect,
+  DragEvent,
+} from "react";
 import Image from "next/image";
 import { useDropzone } from "react-dropzone";
 import { FiUpload } from "react-icons/fi";
@@ -26,6 +33,7 @@ const ProfileBannerEditButton = ({
 }) => {
   const { toast } = useToast();
   const [isRendered, setIsRendered] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [image, setImage] = useState<string | null>(bannerImage.url);
@@ -37,6 +45,7 @@ const ProfileBannerEditButton = ({
   };
 
   const onDrop = useCallback((acceptedFiles: any) => {
+    if (isUploading) return;
     setFile(acceptedFiles[0]);
     const imageURL = URL.createObjectURL(acceptedFiles[0]);
     setImage(imageURL);
@@ -47,6 +56,7 @@ const ProfileBannerEditButton = ({
     if (!hasImageChanged || !file) return;
 
     try {
+      setIsUploading(true);
       await deleteFiles([bannerImage.key]);
       const imgRes = await startUpload([file]);
       if (!imgRes || !imgRes[0].url) return;
@@ -61,7 +71,6 @@ const ProfileBannerEditButton = ({
       };
 
       await updateUser({
-        userEmail: "glen.mccallum@live.co.uk",
         userData: {
           bannerImage: imageData,
         },
@@ -74,12 +83,26 @@ const ProfileBannerEditButton = ({
       });
     } finally {
       setShowEditModal(false);
+      setIsUploading(false);
     }
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleButtonClick = () => {
+    if (isUploading) return;
     if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const getConditionalRootProps = () => {
+    if (isUploading) {
+      return {
+        onClick: (e: MouseEvent) => e.stopPropagation(),
+        onDragOver: (e: DragEvent) => e.preventDefault(),
+        onDrop: (e: DragEvent) => e.preventDefault(),
+      };
+    } else {
+      return getRootProps();
+    }
   };
 
   useEffect(() => {
@@ -135,15 +158,20 @@ const ProfileBannerEditButton = ({
               />
             )}
             <div
-              {...getRootProps()}
-              className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 ${isDragActive && "bg-white-200_gray-800"}`}
+              {...getConditionalRootProps()}
+              className={`flex-center h-44 w-full flex-col rounded-ten border border-dashed border-gray-400 ${isDragActive && "bg-white-200_gray-800"} ${isUploading && "cursor-not-allowed"}`}
             >
               <input
                 {...getInputProps()}
                 className="hidden"
+                disabled={isUploading}
                 ref={fileInputRef}
               />
-              <button type="button" onClick={handleButtonClick}>
+              <button
+                type="button"
+                onClick={handleButtonClick}
+                disabled={isUploading}
+              >
                 <FiUpload className="text-2xl text-purple" />
               </button>
               <p className="medium-14 text-gray-blue-100 mt-4">
@@ -156,8 +184,14 @@ const ProfileBannerEditButton = ({
                 High resolution images (png, jpg, gif)
               </span>
             </div>
-            <Button height="h-14" width="w-full" handleClick={handleSubmit}>
-              Update Profile
+            <Button
+              height="h-14"
+              width="w-full"
+              handleClick={handleSubmit}
+              disabled={isUploading}
+              className={isUploading ? "animate-pulse" : ""}
+            >
+              {isUploading ? "Updating Profile..." : "Update Profile"}
             </Button>
           </div>
         </div>

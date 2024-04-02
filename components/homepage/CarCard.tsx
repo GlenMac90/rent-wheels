@@ -20,6 +20,7 @@ const CarCard = ({
 }) => {
   const path = usePathname();
   const [liked, setLiked] = useState(data.isLikedByCurrentUser);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     id: carId,
     name,
@@ -35,10 +36,14 @@ const CarCard = ({
 
   const handleLikeClick = async () => {
     try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
       const updatedCar = await toggleLike({ carId, path });
       setLiked(updatedCar.likedStatus);
     } catch (error) {
       console.error("Error toggling like status", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -59,7 +64,11 @@ const CarCard = ({
             <FaRegEdit className="text-gray-900_white text-xl" />
           </Link>
         ) : (
-          <button className="self-start" onClick={handleLikeClick}>
+          <button
+            className="self-start"
+            onClick={handleLikeClick}
+            disabled={isSubmitting}
+          >
             <Image
               src={
                 liked ? "/icons/liked-heart.svg" : "/icons/unliked-heart.png"

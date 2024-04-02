@@ -124,10 +124,16 @@ export async function checkIfUserExists(
   }
 }
 
-export async function updateUser({ userEmail, userData }: UpdateUserDataProps) {
+export async function updateUser({ userData }: UpdateUserDataProps) {
   await connectToDB();
+
+  const verifiedUser = await authoriseUser();
+  if (!verifiedUser) {
+    throw new Error("User not authorised");
+  }
+
   try {
-    await User.findOneAndUpdate({ email: userEmail }, userData, {
+    await User.findByIdAndUpdate(verifiedUser.userId, userData, {
       upsert: true,
     });
     revalidatePath("/profile");

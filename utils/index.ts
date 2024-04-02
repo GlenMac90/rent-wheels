@@ -125,6 +125,34 @@ export async function imageURLToFile({ imageURL }: { imageURL: string }) {
   }
 }
 
+export const fetchAndConvertImages = async ({
+  editCarData,
+  setImageFiles,
+}: {
+  editCarData?: ICar;
+  setImageFiles: (files: File[]) => void;
+}) => {
+  if (!editCarData || !editCarData.imageData) return;
+
+  const imageAsFiles = await Promise.all(
+    editCarData.imageData.map(async (image) => {
+      return imageURLToFile({ imageURL: image.url });
+    })
+  );
+  const validFiles = imageAsFiles.filter((file): file is File => file !== null);
+  setImageFiles(validFiles);
+};
+
+export const convertImageToFile = async ({
+  imageURL,
+}: {
+  imageURL: string;
+}) => {
+  const imageAsFile = imageURLToFile({ imageURL });
+
+  return imageAsFile;
+};
+
 // carTitle: z
 //     .string()
 //     .min(1, 'Car title is required')
