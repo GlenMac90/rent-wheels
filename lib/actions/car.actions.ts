@@ -80,7 +80,7 @@ export async function deleteCar(carId: string) {
     }
 
     const imagePaths = car.imageData.map(
-      (image: ImageDataArrayType) => image.url
+      (image: ImageDataArrayType) => image.key
     );
 
     await deleteFiles(imagePaths);

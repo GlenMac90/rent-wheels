@@ -31,7 +31,6 @@ import {
 import CarDeleteButton from "./CarDeleteButton";
 
 const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
-  console.log(editCarData);
   const { toast } = useToast();
   const router = useRouter();
   const path = usePathname();

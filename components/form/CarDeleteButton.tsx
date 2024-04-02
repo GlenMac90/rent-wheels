@@ -1,4 +1,3 @@
-import Button from "../Button";
 import {
   Dialog,
   DialogContent,
@@ -6,10 +5,13 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
+import Button from "../Button";
 import { deleteCar } from "@/lib/actions/car.actions";
 
 const CarDeleteButton = ({ carId }: { carId: string }) => {
+  const router = useRouter();
   const { toast } = useToast();
   const handleClick = async () => {
     try {
@@ -18,6 +20,7 @@ const CarDeleteButton = ({ carId }: { carId: string }) => {
         variant: "info",
         title: "Car deleted successfully!",
       });
+      router.push("/");
     } catch (error) {
       toast({
         variant: "destructive",
