@@ -316,11 +316,11 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
         </div>
       </div>
 
-      <div className="flex-between w-full">
+      <div className="flex-between w-full flex-wrap">
         {/* Submit Button */}
 
         <Button
-          width="w-full md:w-fit md:px-4"
+          width={`${editCarData ? "w-fit" : "w-full md:w-fit"} px-4`}
           height="h-12"
           className="mt-8"
           submit

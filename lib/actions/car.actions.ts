@@ -116,6 +116,21 @@ export async function getAllCars() {
   }
 }
 
+export async function getCarsWithMostLikes() {
+  await connectToDB();
+  const user = await authoriseUser();
+
+  try {
+    const cars = await Car.find().sort({ likedBy: -1 }).limit(4).exec();
+    const formattedCarsArray = cars.map((car) => {
+      return formatCarData({ data: car, userId: user?.userId });
+    });
+    return formattedCarsArray;
+  } catch (error) {
+    throw new Error(`Failed to get all cars: ${error}`);
+  }
+}
+
 export async function deleteAllCars() {
   await connectToDB();
   try {

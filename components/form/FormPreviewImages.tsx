@@ -12,7 +12,7 @@ const FormPreviewImages = ({
   handleImageDelete: (index: number) => (e: MouseEvent) => void;
 }) => {
   return (
-    <div className="mt-6 flex w-full flex-wrap justify-center gap-4">
+    <div className="mt-6 flex w-full flex-col justify-center gap-4 sm:flex-row">
       {imageUrlStrings.map((image, index) => (
         <div key={image} className="relative flex">
           <button
@@ -27,7 +27,7 @@ const FormPreviewImages = ({
             alt="car image"
             width={180}
             height={180}
-            className="w-full max-w-60 object-contain"
+            className="w-full object-contain sm:max-w-80"
           />
         </div>
       ))}

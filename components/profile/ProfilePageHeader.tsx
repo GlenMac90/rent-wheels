@@ -12,7 +12,7 @@ const ProfilePageHeader = ({ data }: { data: ProfilePageHeaderProps }) => {
       <div className="relative flex h-36 w-full md:h-48">
         <Image
           src={bannerImage.url}
-          blurDataURL={bannerImage.blurDataURL}
+          blurDataURL={bannerImage.blurDataURL ?? "/fallback/no-user-image.png"}
           placeholder="blur"
           alt="Banner Image"
           fill

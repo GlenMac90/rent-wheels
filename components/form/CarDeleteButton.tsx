@@ -33,7 +33,7 @@ const CarDeleteButton = ({ carId }: { carId: string }) => {
     <Dialog>
       <DialogTrigger>
         <Button
-          width="w-full md:w-fit md:px-4"
+          width="w-full md:w-fit px-4"
           height="h-12"
           className="mt-8"
           deleteButton

@@ -149,7 +149,9 @@ const ProfileBannerEditButton = ({
             {image && (
               <Image
                 src={image}
-                blurDataURL={bannerImage.blurDataURL}
+                blurDataURL={
+                  bannerImage.blurDataURL ?? "/fallback/no-user-image.png"
+                }
                 placeholder="blur"
                 alt="Profile Image"
                 height={150}

@@ -13,6 +13,7 @@ export interface ICar extends Document {
   imageData: ImageDataArrayType[];
   likedBy: string[];
   isLikedByCurrentUser?: boolean;
+  likes?: number;
 }
 
 const carSchema = new mongoose.Schema({

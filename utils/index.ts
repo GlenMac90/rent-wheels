@@ -104,6 +104,7 @@ export const formatCarData = ({
     dailyPrice: data.dailyPrice,
     imageData: formatImageData(data.imageData),
     isLikedByCurrentUser,
+    likes: data.likedBy.length,
   };
 };
 

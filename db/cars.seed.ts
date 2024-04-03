@@ -46,12 +46,26 @@ const generateRandomImages = async () => {
     const { blurDataURL, width, height } = await getBlurData(img);
     imageDataArray.push({
       url: img,
+      key: img,
       blurDataURL,
       width,
       height,
     });
   }
   return imageDataArray;
+};
+
+const getRandomUsers = (users: IUser[]) => {
+  let count = 0;
+  const randomNumber = Math.round(Math.random() * 7);
+  const randomUsers: string[] = [];
+  while (count < randomNumber) {
+    const randomIndex = Math.floor(Math.random() * users.length);
+    if (randomUsers.includes(users[randomIndex].id)) return;
+    randomUsers.push(users[randomIndex].id);
+    count++;
+  }
+  return randomUsers;
 };
 
 export const createCars = async (users: IUser[]): Promise<ICar[]> => {
@@ -61,6 +75,7 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
       const shouldHaveCar = Math.random() < 0.8;
       if (shouldHaveCar) {
         const numberOfCars = Math.floor(Math.random() * 3) + 1;
+        const randomListOfUsers = getRandomUsers(users);
 
         const carCreatePromises = Array.from(
           { length: numberOfCars },
@@ -76,6 +91,7 @@ export const createCars = async (users: IUser[]): Promise<ICar[]> => {
               peopleCapacity: assignRandomCarPeopleCapacity(),
               dailyPrice: generateRandomDailyPrice(),
               imageData,
+              likedBy: randomListOfUsers,
             });
           }
         );

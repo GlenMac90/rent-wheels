@@ -75,9 +75,11 @@ export async function getProfileImage() {
       image: 1,
     }
   );
-  const { url } = user.image;
-
-  return url;
+  if (user.image && user.image.url) {
+    return user.image.url;
+  } else {
+    return null;
+  }
 }
 
 export async function validateUserEmail(email: string) {
@@ -285,11 +287,11 @@ export async function getProfilePageCars() {
         height: image?.height,
       },
       bannerImage: {
-        url: bannerImage.url,
+        url: bannerImage?.url,
         key: bannerImage?.key,
-        blurDataURL: bannerImage.blurDataURL,
-        width: bannerImage.width,
-        height: bannerImage.height,
+        blurDataURL: bannerImage?.blurDataURL,
+        width: bannerImage?.width,
+        height: bannerImage?.height,
       },
       role,
       name,
