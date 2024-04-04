@@ -3,11 +3,9 @@ import { Suspense } from "react";
 import SearchBar from "@/components/searchbar/SearchBar";
 import SearchPageFilters from "@/components/search-page/SearchPageFilters";
 import SearchResults from "@/components/search-page/SearchResults";
-import { validateUserSession } from "@/lib/actions/user.actions";
 import { SearchParams, fetchSearchResults } from "@/lib/actions/car.actions";
 
 const Search = async ({ searchParams }: { searchParams: SearchParams }) => {
-  await validateUserSession();
   const { cars, moreCars } = await fetchSearchResults({
     searchQuery: searchParams,
   });

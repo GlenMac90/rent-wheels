@@ -35,7 +35,7 @@ export const assignCarsToUsers = async ({
       });
 
       const updatedUser = await updateUser({
-        userEmail: user.email,
+        userId: user._id.toString(),
         userData: {
           ownedCars,
           rentedCars,

@@ -90,7 +90,7 @@ const SignUpForm = () => {
 
   return (
     <form
-      className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
+      className="bg-white_gray-850 flex h-fit w-full max-w-80 flex-col gap-4 rounded-ten p-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Username Field */}

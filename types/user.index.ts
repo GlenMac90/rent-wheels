@@ -10,6 +10,7 @@ export interface CreateUserDataProps {
 }
 
 export interface UpdateUserDataProps {
+  userId?: string;
   userData: {
     username?: string;
     email?: string;

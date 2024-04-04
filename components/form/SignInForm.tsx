@@ -101,7 +101,7 @@ const SignInForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white_gray-850 flex w-full max-w-80 flex-col gap-4 rounded-ten p-6"
+      className="bg-white_gray-850 flex h-fit w-full max-w-80 flex-col gap-4 rounded-ten p-6"
     >
       {/* Email field */}
 
