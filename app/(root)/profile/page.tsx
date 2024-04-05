@@ -9,7 +9,7 @@ const Profile = async () => {
 
   return (
     <main className="page-styles">
-      <section className="flex w-full max-w-[82rem] flex-col items-center gap-6">
+      <section className="flex w-full max-w-[85rem] flex-col items-center gap-6 px-6">
         <h3 className="semibold-20 text-gray-900_white w-full">Profile</h3>
         <ProfilePageHeader data={profileData} />
         <ProfileRentedCars cars={rentedCars} />

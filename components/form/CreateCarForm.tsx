@@ -223,7 +223,7 @@ const CreateCarForm = ({ editCarData }: { editCarData?: ICar }) => {
 
   return (
     <form
-      className="bg-white_gray-850 h-fit w-full max-w-[53.25rem] rounded-ten p-6"
+      className="bg-white_gray-850 h-fit w-full max-w-[53.25rem] rounded-ten p-6 shadow-md"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h3 className="semibold-20 text-gray-900_white">Add a Car for Rent</h3>

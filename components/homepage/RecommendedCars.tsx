@@ -12,13 +12,13 @@ const RecommendedCars = ({ cars }: { cars: ICar[] }) => {
     <section className="flex w-full flex-col gap-5 pb-6">
       {/* Heading a show more button */}
 
-      <h3 className="semibold-14 md:semibold-16 text-gray-400">
+      <h3 className="semibold-14 md:semibold-16 px-6 text-gray-400">
         Recommended Cars
       </h3>
 
       {/* Map over car cards */}
 
-      <div className="flex flex-col gap-5 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="flex flex-col gap-5 px-6 pb-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cars.map((car) => (
           <CarCard key={car.id} data={car} />
         ))}

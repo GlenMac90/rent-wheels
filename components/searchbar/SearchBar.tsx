@@ -110,146 +110,154 @@ const SearchBar = ({ searchPage }: { searchPage?: boolean }) => {
   };
 
   return (
-    <form
-      className="bg-white-200_gray-900 md:bg-white_gray-850 flex w-full flex-col rounded-ten md:flex-row md:px-4 md:py-6"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div
-        className={`flex w-full flex-col gap-5  md:gap-4 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
+    <div className={`flex w-full ${!searchPage && "px-6 pb-6"}`}>
+      <form
+        className="bg-white-200_gray-900 md:bg-white_gray-850 flex w-full flex-col rounded-ten shadow-md md:flex-row md:px-4 md:py-6"
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div
-          className={`bg-white_gray-850 flex w-full flex-col gap-5 rounded-ten px-3 py-5  md:gap-4 md:p-0 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
+          className={`flex w-full flex-col gap-5  md:gap-4 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
         >
           <div
-            className={`${outerDivStyles} ${searchPage ? "xl:w-1/3" : "md:w-1/3"}`}
+            className={`bg-white_gray-850 flex w-full flex-col gap-5 rounded-ten px-3 py-5  md:gap-4 md:p-0 ${searchPage ? "xl:flex-row" : "md:flex-row"}`}
           >
-            <div className={innerDivStyles}>
-              <Image
-                src="/icons/mark.svg"
-                height={16}
-                width={16}
-                alt="Icon displaying the location input on the form"
-              />
-              <label className={labelStyles}>Location</label>
-            </div>
-            <div className={inputDivStyles}>
-              <input
-                type="text"
-                autoComplete="off"
-                {...register("location")}
-                placeholder="Select your location"
-                className={inputStyles}
-              />
-              <ArrowDownIcon />
-            </div>
-            {errors.location && (
-              <span className={errorMessageStyles}>
-                {errors.location.message}
-              </span>
-            )}
-          </div>
-          <div
-            className={`flex w-full flex-col gap-5 md:flex-row md:gap-4 ${searchPage ? "xl:w-2/3" : "md:w-2/3"}`}
-          >
-            <div className={outerDivStyles}>
+            <div
+              className={`${outerDivStyles} ${searchPage ? "xl:w-1/3" : "md:w-1/3"}`}
+            >
               <div className={innerDivStyles}>
                 <Image
-                  src="/icons/calendar.svg"
+                  src="/icons/mark.svg"
                   height={16}
                   width={16}
                   alt="Icon displaying the location input on the form"
                 />
-                <label className={labelStyles}>Available From</label>
+                <label className={labelStyles}>Location</label>
               </div>
-              <Popover>
-                <PopoverTrigger>
-                  <div className={inputDivStyles}>
-                    <span className={placeholderStyles}>
-                      {selectedFromDate || parsedQuery[0] || "Select your date"}
-                    </span>
-                    <ArrowDownIcon />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    className={calendarStyles}
-                    mode="single"
-                    disabled={(date) =>
-                      date < new Date() || date >= availableTo
-                    }
-                    selected={availableFrom ?? initialData.availableFrom}
-                    onSelect={(selectedDate) =>
-                      handleDateSelect(selectedDate, "availableFrom")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              {errors.availableFrom && !availableFrom && (
-                <span className={errorMessageStyles}>Please select a date</span>
+              <div className={inputDivStyles}>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  {...register("location")}
+                  placeholder="Select your location"
+                  className={inputStyles}
+                />
+                <ArrowDownIcon />
+              </div>
+              {errors.location && (
+                <span className={errorMessageStyles}>
+                  {errors.location.message}
+                </span>
               )}
             </div>
-            <div className={outerDivStyles}>
-              <div className={innerDivStyles}>
-                <Image
-                  src="/icons/calendar.svg"
-                  height={16}
-                  width={16}
-                  alt="Icon displaying the location input on the form"
-                />
-                <label className={labelStyles}>Available To</label>
-              </div>
-              <Popover>
-                <PopoverTrigger>
-                  <div className={inputDivStyles}>
-                    <span className={placeholderStyles}>
-                      {selectedToDate || parsedQuery[1] || "Select your date"}
-                    </span>
-                    <ArrowDownIcon />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    className={calendarStyles}
-                    mode="single"
-                    disabled={(date) =>
-                      date < new Date() || date <= availableFrom
-                    }
-                    selected={availableTo ?? initialData.availableTo}
-                    onSelect={(selectedDate) =>
-                      handleDateSelect(selectedDate, "availableTo")
-                    }
-                    initialFocus
+            <div
+              className={`flex w-full flex-col gap-5 md:flex-row md:gap-4 ${searchPage ? "xl:w-2/3" : "md:w-2/3"}`}
+            >
+              <div className={outerDivStyles}>
+                <div className={innerDivStyles}>
+                  <Image
+                    src="/icons/calendar.svg"
+                    height={16}
+                    width={16}
+                    alt="Icon displaying the location input on the form"
                   />
-                </PopoverContent>
-              </Popover>
-              {errors.availableTo && !availableTo && (
-                <span className={errorMessageStyles}>Please select a date</span>
-              )}
+                  <label className={labelStyles}>Available From</label>
+                </div>
+                <Popover>
+                  <PopoverTrigger>
+                    <div className={inputDivStyles}>
+                      <span className={placeholderStyles}>
+                        {selectedFromDate ||
+                          parsedQuery[0] ||
+                          "Select your date"}
+                      </span>
+                      <ArrowDownIcon />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      className={calendarStyles}
+                      mode="single"
+                      disabled={(date) =>
+                        date < new Date() || date >= availableTo
+                      }
+                      selected={availableFrom ?? initialData.availableFrom}
+                      onSelect={(selectedDate) =>
+                        handleDateSelect(selectedDate, "availableFrom")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                {errors.availableFrom && !availableFrom && (
+                  <span className={errorMessageStyles}>
+                    Please select a date
+                  </span>
+                )}
+              </div>
+              <div className={outerDivStyles}>
+                <div className={innerDivStyles}>
+                  <Image
+                    src="/icons/calendar.svg"
+                    height={16}
+                    width={16}
+                    alt="Icon displaying the location input on the form"
+                  />
+                  <label className={labelStyles}>Available To</label>
+                </div>
+                <Popover>
+                  <PopoverTrigger>
+                    <div className={inputDivStyles}>
+                      <span className={placeholderStyles}>
+                        {selectedToDate || parsedQuery[1] || "Select your date"}
+                      </span>
+                      <ArrowDownIcon />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      className={calendarStyles}
+                      mode="single"
+                      disabled={(date) =>
+                        date < new Date() || date <= availableFrom
+                      }
+                      selected={availableTo ?? initialData.availableTo}
+                      onSelect={(selectedDate) =>
+                        handleDateSelect(selectedDate, "availableTo")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                {errors.availableTo && !availableTo && (
+                  <span className={errorMessageStyles}>
+                    Please select a date
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <Button
-          width={`w-full ${searchPage ? "xl:w-[10rem]" : "md:w-[4.625rem] lg:w-[10rem]"} `}
-          height="h-[3rem] md:h-[3.5rem]"
-          className="gap-1.5 self-end rounded-md"
-          submit
-        >
-          <Image
-            src="/icons/search-icon.svg"
-            height={14}
-            width={14}
-            alt="Search icon for search bar"
-          />
-          <span
-            className={`semibold-14 lg:medium-16 text-white  ${searchPage ? "flex" : "md:hidden lg:flex"}`}
+          <Button
+            width={`w-full ${searchPage ? "xl:w-[10rem]" : "md:w-[4.625rem] lg:w-[10rem]"} `}
+            height="h-[3rem] md:h-[3.5rem]"
+            className="gap-1.5 self-end rounded-md"
+            submit
           >
-            Search
-          </span>
-        </Button>
-      </div>
-    </form>
+            <Image
+              src="/icons/search-icon.svg"
+              height={14}
+              width={14}
+              alt="Search icon for search bar"
+            />
+            <span
+              className={`semibold-14 lg:medium-16 text-white  ${searchPage ? "flex" : "md:hidden lg:flex"}`}
+            >
+              Search
+            </span>
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

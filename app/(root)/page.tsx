@@ -9,7 +9,7 @@ export default async function Home() {
   const popularCars = await getCarsWithMostLikes();
   return (
     <main className="page-styles">
-      <section className="flex w-full max-w-[82rem] flex-col items-center gap-6">
+      <section className="flex w-full max-w-[85rem] flex-col items-center">
         <Hero />
         <SearchBar />
         <PopularCars cars={popularCars} />

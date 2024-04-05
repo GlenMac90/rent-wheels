@@ -10,7 +10,7 @@ const EditCar = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main className="page-styles">
+    <main className="page-styles px-6">
       <CreateCarForm editCarData={carData} />
     </main>
   );
