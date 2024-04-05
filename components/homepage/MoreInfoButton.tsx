@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useSession } from "next-auth/react";
 
 import { ICar } from "@/lib/models/car.model";
 import Button from "../Button";
@@ -9,6 +10,7 @@ import CarModalScreenOne from "./CarModalScreenOne";
 import CarModalScreenTwo from "./CarModalScreenTwo";
 
 const MoreInfoButton = ({ data }: { data: ICar }) => {
+  const { data: session } = useSession();
   const [isRendered, setIsRendered] = useState(false);
   const [showModalScreenTwo, setShowModalScreenTwo] = useState(false);
 
@@ -35,6 +37,14 @@ const MoreInfoButton = ({ data }: { data: ICar }) => {
   }, []);
 
   if (!isRendered) return null;
+
+  if (!session) {
+    return (
+      <Button height="h-11" width="w-[7.25rem]" linkPath="/sign-in">
+        More Info
+      </Button>
+    );
+  }
 
   return (
     <Dialog onOpenChange={handleClose}>

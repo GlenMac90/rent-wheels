@@ -48,7 +48,7 @@ const CarCard = ({
   };
 
   return (
-    <div className="bg-white_gray-850 w-full min-w-60 flex-col rounded-ten p-4 md:min-w-80 md:p-6 lg:min-w-full">
+    <div className="bg-white_gray-850 w-full min-w-60 flex-col rounded-ten p-4 shadow-md md:min-w-80 md:p-6 lg:min-w-full">
       <div className="flex-between w-full">
         {/* Car title and name */}
 

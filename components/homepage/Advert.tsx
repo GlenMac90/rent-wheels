@@ -7,7 +7,7 @@ const Advert = ({ title, description, left = false }: AdvertProps) => {
     // background image is different for left and right adverts
 
     <div
-      className={`${left ? "flex bg-[url('/advert/advert-bg-1.png')]" : "hidden bg-[url('/advert/advert-bg-2.png')] md:flex"} h-[14.5rem] w-full flex-col justify-between rounded-ten bg-cover p-4 text-white md:h-[22.5rem] md:p-6`}
+      className={`${left ? "flex bg-[url('/advert/advert-bg-1.png')]" : "hidden bg-[url('/advert/advert-bg-2.png')] md:flex"} h-[14.5rem] w-full flex-col justify-between rounded-ten bg-cover p-4 text-white shadow-md md:h-[22.5rem] md:p-6`}
     >
       {/* Advert title and description */}
 

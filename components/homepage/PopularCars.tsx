@@ -10,7 +10,7 @@ const PopularCars = ({ cars }: { cars: ICar[] }) => {
     <section className="flex w-full flex-col gap-5">
       {/* Heading a show more button */}
 
-      <div className="flex-between w-full">
+      <div className="flex-between w-full px-6">
         <h3 className="semibold-14 md:semibold-16 text-gray-400">
           Popular Cars
         </h3>
@@ -24,7 +24,7 @@ const PopularCars = ({ cars }: { cars: ICar[] }) => {
 
       {/* Map over car cards */}
 
-      <div className="relative flex gap-5 overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4">
+      <div className="relative flex gap-5 overflow-auto px-6 pb-6 lg:grid lg:grid-cols-3 xl:grid-cols-4">
         {cars.map((car) => (
           <CarCard key={car.id} data={car} />
         ))}

@@ -21,7 +21,7 @@ const SearchResults = ({
   };
   return (
     <section className="flex w-full flex-col gap-5">
-      <div className="flex flex-col gap-5 md:grid md:grid-cols-2 xl:grid-cols-3">
+      <div className="flex flex-col gap-5 px-6 md:grid md:grid-cols-2 xl:grid-cols-3">
         {cars.map((car) => (
           <CarCard key={car.id} data={car} />
         ))}

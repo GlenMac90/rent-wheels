@@ -11,10 +11,12 @@ const Search = async ({ searchParams }: { searchParams: SearchParams }) => {
   });
   return (
     <main className="search-page-styles">
-      <section className="flex w-full max-w-[82rem] flex-col lg:flex-row">
+      <section className="flex w-full max-w-[85rem] flex-col lg:flex-row">
         <SearchPageFilters />
-        <main className="bg-white-200_gray-950 flex w-full flex-col gap-8 overflow-scroll p-6 lg:pr-0">
-          <SearchBar searchPage />
+        <main className="bg-white-200_gray-950 no-scrollbar flex w-full flex-col overflow-scroll py-6">
+          <div className="flex w-full px-6 pb-8">
+            <SearchBar searchPage />
+          </div>
           <Suspense fallback={<div>Loading...</div>}>
             <SearchResults cars={cars} moreCars={moreCars} />
           </Suspense>

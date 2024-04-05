@@ -8,7 +8,7 @@ const ProfilePageHeader = ({ data }: { data: ProfilePageHeaderProps }) => {
   const { image, bannerImage, name, role } = data;
 
   return (
-    <header className="flex w-full flex-col rounded-ten">
+    <header className="flex w-full flex-col rounded-ten shadow-md">
       <div className="relative flex h-36 w-full md:h-48">
         <Image
           src={bannerImage.url}
