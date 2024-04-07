@@ -111,7 +111,17 @@ const ProfileInfoEditButton = ({
     setIsRendered(true);
   }, []);
 
-  if (!isRendered) return null;
+  if (!isRendered)
+    return (
+      <Button
+        height="h-9 md:h-12"
+        width="w-28 md:w-32"
+        className="self-end"
+        disabled
+      >
+        Edit Profile
+      </Button>
+    );
 
   return (
     <Dialog
