@@ -58,7 +58,7 @@ const MoreInfoButton = ({ data }: { data: ICar }) => {
 
       {showModalScreenTwo ? (
         <DialogContent className="flex w-full max-w-[31.25rem] p-0">
-          <CarModalScreenTwo {...modalProps} />
+          <CarModalScreenTwo {...modalProps} carId={data.id} />
         </DialogContent>
       ) : (
         <DialogContent className="flex w-full max-w-[22.5rem] p-0 lg:max-w-5xl">

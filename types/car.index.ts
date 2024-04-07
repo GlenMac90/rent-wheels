@@ -6,6 +6,13 @@ export interface CarModalScreenOneProps {
   handleButtonClick: () => void;
 }
 
+export interface CarModalScreenTwoProps {
+  data: ICar;
+  handleClose: () => void;
+  handleButtonClick: () => void;
+  carId: string;
+}
+
 export interface ImageDataArrayType {
   url: string;
   key: string;

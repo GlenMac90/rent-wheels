@@ -8,5 +8,6 @@ export const config = {
     "/search",
     "/cars/new",
     "/cars/:path*",
+    "/transaction/:path*",
   ],
 };
