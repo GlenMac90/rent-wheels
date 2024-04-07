@@ -52,7 +52,7 @@ const ProfileBannerEditButton = ({
   }, []);
 
   const handleSubmit = async () => {
-    const hasImageChanged = image !== "/dummy-profile-image.jpg";
+    const hasImageChanged = image !== bannerImage.url;
     if (!hasImageChanged || !file) return;
 
     try {
