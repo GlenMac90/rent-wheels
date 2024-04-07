@@ -114,7 +114,7 @@ export async function confirmTransaction(transactionId: string) {
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       transactionId,
       {
-        pending: true,
+        pending: false,
       }
     );
 

@@ -18,7 +18,7 @@ const transactionSchema = new mongoose.Schema({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
   },
-  pending: { type: Boolean, default: false },
+  pending: { type: Boolean, default: true },
 });
 
 const Transaction =
