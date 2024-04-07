@@ -30,7 +30,7 @@ const CarModalScreenTwo = ({ handleClose, carId }: CarModalScreenTwoProps) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<PickupDropoffFields>({
     resolver: zodResolver(pickupDropoffSchema),
   });
@@ -236,8 +236,8 @@ const CarModalScreenTwo = ({ handleClose, carId }: CarModalScreenTwoProps) => {
             )}
           </div>
         </div>
-        <Button width="w-full" height="h-14" submit>
-          Rent Now
+        <Button width="w-full" height="h-14" submit disabled={isSubmitting}>
+          {isSubmitting ? "Renting..." : "Rent Now"}
         </Button>
       </form>
     </div>
