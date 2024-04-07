@@ -1,6 +1,11 @@
 import { ImageDataArrayType } from "@/types/car.index";
 import mongoose, { Document } from "mongoose";
 
+export interface rentalPeriod {
+  startDate: Date;
+  endDate: Date;
+}
+
 export interface ICar extends Document {
   owner: string;
   name: string;
@@ -14,6 +19,7 @@ export interface ICar extends Document {
   likedBy: string[];
   isLikedByCurrentUser?: boolean;
   likes?: number;
+  rentalPeriod?: rentalPeriod[];
 }
 
 const carSchema = new mongoose.Schema({
@@ -37,6 +43,13 @@ const carSchema = new mongoose.Schema({
     },
   ],
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  likes: { type: Number, default: 0 },
+  rentalPeriod: [
+    {
+      startDate: { type: Date, required: true },
+      endDate: { type: Date, required: true },
+    },
+  ],
 });
 
 const Car = mongoose.models.Car || mongoose.model("Car", carSchema);

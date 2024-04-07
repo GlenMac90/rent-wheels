@@ -7,14 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { DialogClose } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
 import ArrowDownIcon from "../ArrowDownIcon";
 import { formatDate } from "@/utils";
 import Button from "../Button";
-import { CarModalScreenOneProps } from "@/types/car.index";
+import { CarModalScreenTwoProps } from "@/types/car.index";
+import { createTransaction } from "@/lib/actions/transaction.actions";
 
-const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
+const CarModalScreenTwo = ({ handleClose, carId }: CarModalScreenTwoProps) => {
+  const router = useRouter();
+  const { toast } = useToast();
   const [selectedPickupDate, setSelectedPickupDate] =
     useState<string>("Select your date");
   const [selectedDropoffDate, setSelectedDropoffDate] =
@@ -30,8 +35,25 @@ const CarModalScreenTwo = ({ handleClose }: CarModalScreenOneProps) => {
     resolver: zodResolver(pickupDropoffSchema),
   });
 
-  const onSubmit: SubmitHandler<PickupDropoffFields> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<PickupDropoffFields> = async (data) => {
+    try {
+      const newTransaction = await createTransaction({
+        rentalData: {
+          carId,
+          startDate: data.pickupDate,
+          endDate: data.dropoffDate,
+        },
+      });
+      if (newTransaction) {
+        router.push(`/transaction/${newTransaction}`);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "There was a problem processing your request. Please try again.",
+      });
+      console.error(error);
+    }
   };
 
   const handleDateSelect = (
