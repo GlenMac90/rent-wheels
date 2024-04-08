@@ -24,8 +24,12 @@ export async function POST(request: Request) {
     const { metadata } = event.data.object;
     const transactionId = metadata!.transactionId;
 
-    const updatedTransaction = await confirmTransaction(transactionId);
-    return NextResponse.json({ message: "Success", updatedTransaction });
+    try {
+      const updatedTransaction = await confirmTransaction(transactionId);
+      return NextResponse.json({ message: "Success", updatedTransaction });
+    } catch (error) {
+      console.error(error);
+    }
   }
   return new Response("", { status: 200 });
 }

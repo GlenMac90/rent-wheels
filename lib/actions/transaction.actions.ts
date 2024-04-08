@@ -168,8 +168,8 @@ export async function checkoutTransaction({
       carId,
     },
     mode: "payment",
-    success_url: `https://rent-wheels-liart.vercel.app/checkout?success=true`,
-    cancel_url: `https://rent-wheels-liart.vercel.app/checkout?success=false`,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=true`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=false`,
   });
   redirect(session.url!);
 }
