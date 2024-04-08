@@ -84,7 +84,10 @@ export async function getTransactionById(transactionId: string): Promise<{
     return {
       id: id.toString(),
       price,
-      rentalPeriod,
+      rentalPeriod: {
+        startDate: rentalPeriod.startDate,
+        endDate: rentalPeriod.endDate,
+      },
       pending,
       carId: carId.toString(),
       userId: userId.toString(),

@@ -1,11 +1,11 @@
 const Checkout = async ({
-  params,
+  searchParams,
 }: {
-  params: {
+  searchParams: {
     success: string;
   };
 }) => {
-  console.log(params.success);
+  console.log(searchParams.success);
   return (
     <main className="page-styles">
       <h1>Checkout</h1>
