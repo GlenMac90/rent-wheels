@@ -6,29 +6,23 @@ import { confirmTransaction } from "@/lib/actions/transaction.actions";
 
 export async function POST(request: Request) {
   const body = await request.text();
-  console.log(body);
 
   const sig = request.headers.get("stripe-signature") as string;
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  console.log(sig);
-  console.log(endpointSecret);
 
   let event;
-  console.log(event);
 
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
-    return NextResponse.json({ message: "Webhook Error", error: err });
+    return NextResponse.json({ message: "Webhook error", error: err });
   }
 
   const eventType = event.type;
 
   if (eventType === "checkout.session.completed") {
-    const session = event.data.object as any;
-    console.log(session);
-    const transactionId = session.metadata.transactionId;
-    console.log(transactionId);
+    const { metadata } = event.data.object;
+    const transactionId = metadata!.transactionId;
 
     const updatedTransaction = await confirmTransaction(transactionId);
     return NextResponse.json({ message: "Success", updatedTransaction });
