@@ -103,16 +103,16 @@ export async function confirmTransaction(transactionId: string) {
   try {
     const transaction = await Transaction.findById(transactionId);
 
-    const { carId, userId, rentalData } = transaction;
-    const { startDate, endDate } = rentalData;
+    const { carId, userId, rentalPeriod } = transaction;
+    const { startDate, endDate } = rentalPeriod;
 
-    await User.findByIdAndUpdate(userId, {
+    await User.findByIdAndUpdate(userId.toString(), {
       $addToSet: {
-        rentedCars: carId,
+        rentedCars: carId.toString(),
       },
     });
 
-    await Car.findByIdAndUpdate(carId, {
+    await Car.findByIdAndUpdate(carId.toString(), {
       $addToSet: {
         rentalPeriod: { startDate, endDate },
       },
