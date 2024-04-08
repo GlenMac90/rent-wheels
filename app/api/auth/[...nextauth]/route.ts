@@ -41,7 +41,7 @@ const authOptions = {
             name: user.name,
           };
         } catch (error) {
-          console.error("Error authorizing user", error);
+          console.error("Error authorising user", error);
           return null;
         }
       },
