@@ -144,7 +144,7 @@ export interface TransactionDataProps {
 export async function checkoutTransaction({
   transaction,
 }: TransactionDataProps) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
   const { id: transactionId, price, userId: buyerId, carId } = transaction;
 
   const amount = Number(price * 100);

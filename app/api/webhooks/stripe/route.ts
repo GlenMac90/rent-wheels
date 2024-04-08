@@ -6,11 +6,15 @@ import { confirmTransaction } from "@/lib/actions/transaction.actions";
 
 export async function POST(request: Request) {
   const body = await request.text();
+  console.log(body);
 
   const sig = request.headers.get("stripe-signature") as string;
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+  console.log(sig);
+  console.log(endpointSecret);
 
   let event;
+  console.log(event);
 
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
@@ -21,10 +25,13 @@ export async function POST(request: Request) {
   const eventType = event.type;
 
   if (eventType === "checkout.session.completed") {
-    const session = event.data.object as any; // or as { transactionId: string; } for more specific typing
+    const session = event.data.object as any;
+    console.log(session);
     const transactionId = session.metadata.transactionId;
+    console.log(transactionId);
 
     const updatedTransaction = await confirmTransaction(transactionId);
     return NextResponse.json({ message: "Success", updatedTransaction });
   }
+  return new Response("", { status: 200 });
 }
