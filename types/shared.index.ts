@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, ChangeEvent } from "react";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -7,7 +7,10 @@ export interface ButtonProps {
   className?: string;
   submit?: boolean;
   linkPath?: string;
-  handleClick?: () => void | Promise<void>;
+  handleClick?: () =>
+    | void
+    | Promise<void>
+    | ((e: ChangeEvent<HTMLInputElement>) => void);
   disabled?: boolean;
   deleteButton?: boolean;
 }

@@ -31,6 +31,7 @@ const SearchResults = ({
           height="h-9 md:h-14"
           width="w-[7.5rem] md:w-[14.25rem]"
           className="semibold-12 md:semibold-16 mt-8 self-center"
+          // @ts-ignore
           handleClick={setChange}
         >
           Show More Cars
