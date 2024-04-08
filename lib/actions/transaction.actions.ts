@@ -2,9 +2,11 @@
 
 import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
-import Transaction from "../models/transaction.model";
+import Transaction, { ITransaction } from "../models/transaction.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
+import Stripe from "stripe";
+import { redirect } from "next/navigation";
 
 interface RentalDataProps {
   carId: string;
@@ -122,4 +124,35 @@ export async function confirmTransaction(transactionId: string) {
   } catch (error) {
     throw new Error("Failed to confirm transaction");
   }
+}
+
+export async function checkoutTransaction(transaction: ITransaction) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
+  const { id: transactionId, price, userId: buyerId, carId } = transaction;
+
+  const amount = Number(price * 100);
+
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "gdp",
+          unit_amount: amount,
+          product_data: {
+            name: `Car rental: ${transactionId.toString()}`,
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    metadata: {
+      buyerId,
+      transactionId,
+      carId,
+    },
+    mode: "payment",
+    success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/transaction/${transactionId}?success=true`,
+    cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/transaction/${transactionId}?success=false`,
+  });
+  redirect(session.url!);
 }

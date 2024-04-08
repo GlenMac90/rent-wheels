@@ -1,3 +1,4 @@
+import StripeCheckout from "@/components/StripeCheckout";
 import { getTransactionById } from "@/lib/actions/transaction.actions";
 import { redirect } from "next/navigation";
 
@@ -11,11 +12,7 @@ const Transaction = async ({ params }: { params: { id: string } }) => {
   const { userId, carId, price } = transaction;
 
   console.log(userId, carId, price);
-  return (
-    <div className="page-styles">
-      <div className="flex-center">We are on the transaction page</div>
-    </div>
-  );
+  return <StripeCheckout />;
 };
 
 export default Transaction;
