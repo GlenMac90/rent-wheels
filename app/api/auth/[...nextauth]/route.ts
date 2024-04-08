@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import User from "@/lib/models/user.model";
 
-export const authOptions = {
+const authOptions = {
   pages: {
     signIn: "/sign-in",
   },
