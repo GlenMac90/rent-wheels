@@ -9,10 +9,13 @@ const Transaction = async ({ params }: { params: { id: string } }) => {
     redirect("/");
   }
 
-  const { userId, carId, price } = transaction;
-
-  console.log(userId, carId, price);
-  return <StripeCheckout />;
+  return (
+    <main className="page-styles">
+      <div className="flex-center">
+        <StripeCheckout transaction={transaction} />
+      </div>
+    </main>
+  );
 };
 
 export default Transaction;

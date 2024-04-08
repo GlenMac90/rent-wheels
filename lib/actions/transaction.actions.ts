@@ -2,7 +2,7 @@
 
 import { authoriseUser } from "../auth";
 import Car from "../models/car.model";
-import Transaction, { ITransaction } from "../models/transaction.model";
+import Transaction from "../models/transaction.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Stripe from "stripe";
@@ -46,18 +46,6 @@ export async function createTransaction({
   try {
     const newTransaction = await Transaction.create(fullCarData);
 
-    await User.findByIdAndUpdate(user.userId, {
-      $addToSet: {
-        rentedCars: carId,
-      },
-    });
-
-    await Car.findByIdAndUpdate(carId, {
-      $addToSet: {
-        rentalPeriod: { startDate, endDate },
-      },
-    });
-
     return newTransaction.id.toString();
   } catch (error: any) {
     console.error(error);
@@ -69,7 +57,14 @@ export async function createTransaction({
   }
 }
 
-export async function getTransactionById(transactionId: string) {
+export async function getTransactionById(transactionId: string): Promise<{
+  id: string;
+  price: number;
+  rentalPeriod: { startDate: Date; endDate: Date };
+  pending: boolean;
+  carId: string;
+  userId: string;
+}> {
   await connectToDB();
 
   const user = await authoriseUser();
@@ -84,9 +79,10 @@ export async function getTransactionById(transactionId: string) {
       throw new Error("User not authorised to view transaction");
     }
 
-    const { price, rentalPeriod, pending, carId, userId } = transaction;
+    const { price, rentalPeriod, pending, carId, userId, id } = transaction;
 
     return {
+      id: id.toString(),
       price,
       rentalPeriod,
       pending,
@@ -101,17 +97,23 @@ export async function getTransactionById(transactionId: string) {
 export async function confirmTransaction(transactionId: string) {
   await connectToDB();
 
-  const user = await authoriseUser();
-  if (!user || !user.userId) {
-    throw new Error("User not authorised to create transaction");
-  }
-
   try {
     const transaction = await Transaction.findById(transactionId);
 
-    if (user.userId !== transaction.userId) {
-      throw new Error("User not authorised to view transaction");
-    }
+    const { carId, userId, rentalData } = transaction;
+    const { startDate, endDate } = rentalData;
+
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: {
+        rentedCars: carId,
+      },
+    });
+
+    await Car.findByIdAndUpdate(carId, {
+      $addToSet: {
+        rentalPeriod: { startDate, endDate },
+      },
+    });
 
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       transactionId,
@@ -120,13 +122,25 @@ export async function confirmTransaction(transactionId: string) {
       }
     );
 
-    return updatedTransaction;
+    return updatedTransaction.id.toString();
   } catch (error) {
     throw new Error("Failed to confirm transaction");
   }
 }
 
-export async function checkoutTransaction(transaction: ITransaction) {
+export interface TransactionDataProps {
+  transaction: {
+    id: string;
+    userId: string;
+    carId: string;
+    price: number;
+    rentalPeriod: { startDate: Date; endDate: Date };
+  };
+}
+
+export async function checkoutTransaction({
+  transaction,
+}: TransactionDataProps) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
   const { id: transactionId, price, userId: buyerId, carId } = transaction;
 
@@ -136,7 +150,7 @@ export async function checkoutTransaction(transaction: ITransaction) {
     line_items: [
       {
         price_data: {
-          currency: "gdp",
+          currency: "gbp",
           unit_amount: amount,
           product_data: {
             name: `Car rental: ${transactionId.toString()}`,
@@ -151,8 +165,8 @@ export async function checkoutTransaction(transaction: ITransaction) {
       carId,
     },
     mode: "payment",
-    success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/transaction/${transactionId}?success=true`,
-    cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/transaction/${transactionId}?success=false`,
+    success_url: `https://localhost:3002/checkout?success=true`,
+    cancel_url: `https://localhost:3002/checkout?success=false`,
   });
   redirect(session.url!);
 }

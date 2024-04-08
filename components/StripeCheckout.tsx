@@ -1,21 +1,31 @@
 "use client";
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "./CheckoutForm";
+import {
+  TransactionDataProps,
+  checkoutTransaction,
+} from "@/lib/actions/transaction.actions";
+import React from "react";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
-
-const StripeCheckout = () => {
-  const options = {
-    clientSecret: process.env.STRIPE_SECRET_KEY,
+const StripeCheckout = ({ transaction }: TransactionDataProps) => {
+  const { id, userId, carId, price, rentalPeriod } = transaction;
+  const onCheckout = async () => {
+    const transaction = {
+      id,
+      userId,
+      carId,
+      price,
+      rentalPeriod,
+    };
+    await checkoutTransaction({ transaction });
   };
   return (
-    <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm />
-    </Elements>
+    <form action={onCheckout} method="POST">
+      <section>
+        <button type="submit" className="rounded bg-purple p-6" role="link">
+          Buy Now
+        </button>
+      </section>
+    </form>
   );
 };
 
