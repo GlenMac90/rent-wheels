@@ -22,7 +22,9 @@ export async function POST(request: Request) {
 
   if (eventType === "checkout.session.completed") {
     const session = event.data.object as any; // or as { transactionId: string; } for more specific typing
-    const transactionId = session.transactionId;
+    console.log(session);
+    const transactionId = session.metadata.transactionId;
+    console.log(transactionId);
 
     const updatedTransaction = await confirmTransaction(transactionId);
     return NextResponse.json({ message: "Success", updatedTransaction });
