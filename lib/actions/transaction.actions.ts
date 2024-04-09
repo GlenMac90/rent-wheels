@@ -134,10 +134,8 @@ export async function confirmTransaction(transactionId: string) {
 export interface TransactionDataProps {
   transaction: {
     id: string;
-    userId: string;
-    carId: string;
     price: number;
-    rentalPeriod: { startDate: Date; endDate: Date };
+    rentalPeriod?: { startDate: Date; endDate: Date };
   };
 }
 
@@ -145,7 +143,7 @@ export async function checkoutTransaction({
   transaction,
 }: TransactionDataProps) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
-  const { id: transactionId, price, userId: buyerId, carId } = transaction;
+  const { id: transactionId, price } = transaction;
 
   const amount = Number(price * 100);
 
@@ -163,9 +161,7 @@ export async function checkoutTransaction({
       },
     ],
     metadata: {
-      buyerId,
       transactionId,
-      carId,
     },
     mode: "payment",
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=true`,

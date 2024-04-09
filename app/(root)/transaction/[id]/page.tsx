@@ -9,8 +9,6 @@ const Transaction = async ({ params }: { params: { id: string } }) => {
     redirect("/");
   }
 
-  console.log(transaction);
-
   return (
     <main className="page-styles">
       <div className="flex-center">

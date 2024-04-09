@@ -4,25 +4,23 @@ import {
   TransactionDataProps,
   checkoutTransaction,
 } from "@/lib/actions/transaction.actions";
-import React from "react";
 
 const StripeCheckout = ({ transaction }: TransactionDataProps) => {
-  const { id, userId, carId, price, rentalPeriod } = transaction;
+  const { id, price, rentalPeriod } = transaction;
   const onCheckout = async () => {
     const transaction = {
       id,
-      userId,
-      carId,
       price,
-      rentalPeriod,
     };
     await checkoutTransaction({ transaction });
   };
+  console.log(rentalPeriod);
   return (
-    <form action={onCheckout} method="POST">
-      <section>
+    <form action={onCheckout} method="POST" className="flex">
+      <section className="flex flex-col">
+        <label>{price}</label>
         <button type="submit" className="rounded bg-purple p-6" role="link">
-          Buy Now
+          Proceed To Checkout
         </button>
       </section>
     </form>
