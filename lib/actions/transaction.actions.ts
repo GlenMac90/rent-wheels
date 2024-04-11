@@ -7,6 +7,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Stripe from "stripe";
 import { redirect } from "next/navigation";
+import { formatCarData } from "@/utils";
 
 interface RentalDataProps {
   carId: string;
@@ -62,7 +63,7 @@ export async function getTransactionById(transactionId: string): Promise<{
   price: number;
   rentalPeriod: { startDate: Date; endDate: Date };
   pending: boolean;
-  carId: string;
+  carData: any;
   userId: string;
 }> {
   await connectToDB();
@@ -81,6 +82,10 @@ export async function getTransactionById(transactionId: string): Promise<{
 
     const { price, rentalPeriod, pending, carId, userId, id } = transaction;
 
+    const car = await Car.findById(carId);
+
+    const formattedCarData = formatCarData({ data: car, userId: user.userId });
+
     return {
       id: id.toString(),
       price,
@@ -89,7 +94,7 @@ export async function getTransactionById(transactionId: string): Promise<{
         endDate: rentalPeriod.endDate,
       },
       pending,
-      carId: carId.toString(),
+      carData: formattedCarData,
       userId: userId.toString(),
     };
   } catch (error) {
@@ -168,4 +173,21 @@ export async function checkoutTransaction({
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=false`,
   });
   redirect(session.url!);
+}
+
+export async function cancelTransaction(transactionId: string) {
+  await connectToDB();
+
+  const user = await authoriseUser();
+  if (!user || !user.userId) {
+    throw new Error("User not authorised to create transaction");
+  }
+
+  try {
+    const deletedTransaction =
+      await Transaction.findByIdAndDelete(transactionId);
+    return deletedTransaction.id.toString();
+  } catch (error) {
+    throw new Error("Failed to cancel transaction");
+  }
 }
