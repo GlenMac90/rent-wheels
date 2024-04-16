@@ -25,7 +25,7 @@ const CancelTransaction = ({ transactionId }: { transactionId: string }) => {
         variant: "info",
         title: "Transaction Cancelled!",
       });
-      router.push("/");
+      router.push("/checkout/cancelled");
     } catch (error) {
       toast({
         variant: "destructive",

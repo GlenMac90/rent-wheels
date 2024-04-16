@@ -99,3 +99,21 @@ export const profileDummyData = {
   profileImage: "/dummy-images/dummy-profile-image.jpg",
   bannerImage: "/dummy-images/dummy-banner-image.webp",
 };
+
+export const successPageData = {
+  success: {
+    heading: "Thank you for your purchase!",
+    icon: "/payment-status/payment-success.png",
+    message: "Payment Successful",
+  },
+  failed: {
+    heading: "There was a n error making payment",
+    icon: "/payment-status/payment-failed.png",
+    message: "Payment Unseccessful.",
+  },
+  cancelled: {
+    heading: "You cancelled the payment",
+    icon: "/payment-status/payment-cancelled.png",
+    message: "Payment Cancelled",
+  },
+};

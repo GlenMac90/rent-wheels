@@ -169,8 +169,8 @@ export async function checkoutTransaction({
       transactionId,
     },
     mode: "payment",
-    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=true`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout?success=false`,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/${transactionId}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/${transactionId}`,
   });
   redirect(session.url!);
 }

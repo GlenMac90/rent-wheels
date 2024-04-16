@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { FaCheck } from "react-icons/fa";
 
 import StripeCheckout from "@/components/StripeCheckout";
 import { getTransactionById } from "@/lib/actions/transaction.actions";
@@ -103,7 +104,7 @@ const Transaction = async ({ params }: { params: { id: string } }) => {
           </div>
 
           {/* Price */}
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col gap-2">
             <p className="light-12 lg:light-20 text-gray-400">
               {formattedStartDate} - {formattedEndDate}
             </p>
@@ -117,9 +118,12 @@ const Transaction = async ({ params }: { params: { id: string } }) => {
                   <CancelTransaction transactionId={transaction.id} />
                 </div>
               ) : (
-                <p className="bold-20 lg:bold-28 text-gray-900_white">
-                  Confirmed
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="bold-20 lg:bold-28 text-gray-900_white flex">
+                    Confirmed
+                  </p>
+                  <FaCheck className="text-2xl text-green-500" />
+                </div>
               )}
             </div>
           </div>
