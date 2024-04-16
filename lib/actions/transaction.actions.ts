@@ -114,6 +114,7 @@ export async function confirmTransaction(transactionId: string) {
     await User.findByIdAndUpdate(userId.toString(), {
       $addToSet: {
         rentedCars: carId.toString(),
+        transactions: transactionId,
       },
     });
 

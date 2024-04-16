@@ -49,6 +49,12 @@ const userSchema = new mongoose.Schema({
       ref: "Car",
     },
   ],
+  transactions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transaction",
+    },
+  ],
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
