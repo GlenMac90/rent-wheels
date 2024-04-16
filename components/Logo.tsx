@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "next-themes";
 
 const Logo = () => {
   const { theme } = useTheme();
