@@ -1,15 +1,11 @@
-"use client";
-
-import { useState } from "react";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { TbSteeringWheel } from "react-icons/tb";
 import { FaRegEdit } from "react-icons/fa";
 
 import { ICar } from "@/lib/models/car.model";
-import { toggleLike } from "@/lib/actions/car.actions";
 import MoreInfoButton from "./MoreInfoButton";
+import LikeButton from "./LikeButton";
 
 const CarCard = ({
   canEdit = false,
@@ -18,9 +14,6 @@ const CarCard = ({
   canEdit?: boolean;
   data: ICar;
 }) => {
-  const path = usePathname();
-  const [liked, setLiked] = useState(data.isLikedByCurrentUser);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     id: carId,
     name,
@@ -31,21 +24,6 @@ const CarCard = ({
     peopleCapacity,
     dailyPrice,
   } = data;
-
-  // Function to handle like button click
-
-  const handleLikeClick = async () => {
-    try {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
-      const updatedCar = await toggleLike({ carId, path });
-      setLiked(updatedCar.likedStatus);
-    } catch (error) {
-      console.error("Error toggling like status", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div className="bg-white_gray-850 w-full min-w-60 flex-col rounded-ten p-4 shadow-md md:min-w-80 md:p-6 lg:min-w-full">
@@ -64,21 +42,7 @@ const CarCard = ({
             <FaRegEdit className="text-gray-900_white text-xl" />
           </Link>
         ) : (
-          <button
-            className="self-start"
-            onClick={handleLikeClick}
-            disabled={isSubmitting}
-          >
-            <Image
-              src={
-                liked ? "/icons/liked-heart.svg" : "/icons/unliked-heart.png"
-              }
-              height={24}
-              width={24}
-              alt={`Icon showing the liked status of the car which is currently ${liked}`}
-              className="shrink-0"
-            />
-          </button>
+          <LikeButton likedStatus={data.isLikedByCurrentUser} carId={carId} />
         )}
       </div>
 
