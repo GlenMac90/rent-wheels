@@ -5,11 +5,8 @@ import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 
 import Logo from "../Logo";
-import NavBarLinks from "./NavBarLinks";
-import ThemeSwitcher from "./ThemeSwitcher";
 import Button from "../Button";
-import Avatar from "./Avatar";
-import MobileNavBar from "./MobileNavBar";
+import { NavBarLinks, ThemeSwitcher, Avatar, MobileNavBar } from ".";
 
 const NavBar = ({ profileImage }: { profileImage: string | null }) => {
   const { data: session } = useSession();

@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
 import { FaCheck } from "react-icons/fa";
 
-import StripeCheckout from "@/components/StripeCheckout";
 import { getTransactionById } from "@/lib/actions/transaction.actions";
-import ImageGallery from "@/components/ImageGallery";
 import { formatDate } from "@/utils";
-import CancelTransaction from "@/components/CancelTransaction";
+import { ImageGallery, StripeCheckout, CancelTransaction } from "@/components";
 
 const Transaction = async ({ params }: { params: { id: string } }) => {
   const transaction = await getTransactionById(params.id);

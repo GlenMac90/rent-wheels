@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { ChangeEvent } from "react";
 import CarCard from "@/components/homepage/CarCard";
 import Button from "@/components/Button";
 import { ICar } from "@/lib/models/car.model";
@@ -15,7 +15,7 @@ const SearchResults = ({
 }) => {
   const [page, setPage] = useURLQuery("page", "");
 
-  const setChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newPage = page ? parseInt(page) + 1 : 2;
     setPage(newPage.toString());
   };

@@ -3,17 +3,22 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { useTheme } from "@/providers/ThemeProvider";
-
 const Logo = () => {
-  const { theme } = useTheme();
   return (
     <Link href="/">
       <Image
         height={30}
         width={90}
-        src={theme === "light" ? "/logo-light.png" : "/logo-dark.png"}
+        src={"/logo-light.png"}
         alt="Rent Wheels Logo"
+        className="dark:hidden"
+      />
+      <Image
+        height={30}
+        width={90}
+        src={"/logo-dark.png"}
+        alt="Rent Wheels Logo"
+        className="hidden dark:block"
       />
     </Link>
   );

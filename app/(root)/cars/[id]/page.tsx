@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { getCarById } from "@/lib/actions/car.actions";
 import CreateCarForm from "@/components/form/CreateCarForm";
-import { redirect } from "next/navigation";
 
 const EditCar = async ({ params }: { params: { id: string } }) => {
   const carData = await getCarById({ carId: params.id });

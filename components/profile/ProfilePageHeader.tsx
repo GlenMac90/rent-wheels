@@ -1,8 +1,7 @@
 import Image from "next/image";
 
-import ProfileInfoEditButton from "./ProfileInfoEditButton";
-import ProfileBannerEditButton from "./ProfileBannerEditButton";
 import { ProfilePageHeaderProps } from "@/types/user.index";
+import { ProfileBannerEditButton, ProfileInfoEditButton } from ".";
 
 const ProfilePageHeader = ({ data }: { data: ProfilePageHeaderProps }) => {
   const { image, bannerImage, name, role } = data;

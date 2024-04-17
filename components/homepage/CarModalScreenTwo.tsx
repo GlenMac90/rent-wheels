@@ -11,11 +11,10 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
 import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
-import ArrowDownIcon from "../ArrowDownIcon";
 import { formatDate } from "@/utils";
-import Button from "../Button";
 import { CarModalScreenTwoProps } from "@/types/car.index";
 import { createTransaction } from "@/lib/actions/transaction.actions";
+import { Button, ArrowDownIcon } from "..";
 
 const CarModalScreenTwo = ({ handleClose, carId }: CarModalScreenTwoProps) => {
   const router = useRouter();

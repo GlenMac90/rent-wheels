@@ -1,27 +1,15 @@
+import { UseFormSetValue } from "react-hook-form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
-
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 
 import { FormRowContainer } from ".";
 import { carTypes } from "@/constants";
-import { UseFormSetValue } from "react-hook-form";
-
-export type CarFieldType = {
-  carTitle: string;
-  carType: string;
-  rentPrice: number;
-  capacity: number;
-  transmission: string;
-  location: string;
-  fuelCapacity: number;
-  carDescription: string;
-  images?: string[] | undefined;
-};
+import { CarFieldType } from "@/types/car.index";
 
 const CarTypeField = ({
   errors,

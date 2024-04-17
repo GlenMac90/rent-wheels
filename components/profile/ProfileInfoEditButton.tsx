@@ -34,6 +34,8 @@ const ProfileInfoEditButton = ({
   const [profileImageFile, setProfileImageFile] = useState<File[] | null>(null);
   const { startUpload } = useUploadThing("media");
 
+  // Function to handle file open click
+
   const handleButtonClick = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
@@ -52,6 +54,7 @@ const ProfileInfoEditButton = ({
     },
   });
 
+  // Submit Handler
   const onSubmit: SubmitHandler<ProfileFormFields> = async (userData) => {
     const { image } = userData;
     let imageData = profileImage;
@@ -61,23 +64,28 @@ const ProfileInfoEditButton = ({
     try {
       setIsUploading(true);
 
-      if (hasImageChanged && profileImageFile) {
-        await deleteFiles([profileImage.key]);
-        const imgRes = await startUpload(profileImageFile);
+      // Check if the image has changed
+      if (!hasImageChanged || !profileImageFile) return;
+      const imgRes = await startUpload(profileImageFile);
 
-        if (!imgRes || !imgRes[0].url) return;
-        setImage(imgRes[0].url);
-        const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
+      if (!imgRes || !imgRes[0].url) return;
 
-        imageData = {
-          url: imgRes[0].url,
-          key: imgRes[0].key,
-          blurDataURL,
-          width,
-          height,
-        };
-      }
+      // Only delete the images if the previous images have been successfully uploaded
+      await deleteFiles([profileImage.key]);
+      setImage(imgRes[0].url);
 
+      // Get the blur data
+      const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
+
+      imageData = {
+        url: imgRes[0].url,
+        key: imgRes[0].key,
+        blurDataURL,
+        width,
+        height,
+      };
+
+      // Update the user with the new image info
       await updateUser({
         userData: {
           image: imageData,
@@ -107,10 +115,12 @@ const ProfileInfoEditButton = ({
     }
   };
 
+  // Set isRendered to true after the component has mounted
   useEffect(() => {
     setIsRendered(true);
   }, []);
 
+  // If the component has not been rendered, show a disabled button
   if (!isRendered)
     return (
       <Button

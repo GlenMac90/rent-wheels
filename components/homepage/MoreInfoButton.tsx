@@ -6,8 +6,7 @@ import { useSession } from "next-auth/react";
 
 import { ICar } from "@/lib/models/car.model";
 import Button from "../Button";
-import CarModalScreenOne from "./CarModalScreenOne";
-import CarModalScreenTwo from "./CarModalScreenTwo";
+import { CarModalScreenTwo, CarModalScreenOne } from ".";
 
 const MoreInfoButton = ({ data }: { data: ICar }) => {
   const { data: session } = useSession();
@@ -36,7 +35,13 @@ const MoreInfoButton = ({ data }: { data: ICar }) => {
     setIsRendered(true);
   }, []);
 
-  if (!isRendered) return null;
+  if (!isRendered) {
+    return (
+      <Button height="h-11" width="w-[7.25rem]" disabled>
+        More Info
+      </Button>
+    );
+  }
 
   if (!session) {
     return (
