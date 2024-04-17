@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import CarCard from "./CarCard";
 import { ICar } from "@/lib/models/car.model";
 

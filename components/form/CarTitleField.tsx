@@ -1,17 +1,6 @@
 import { UseFormRegister } from "react-hook-form";
 import { FormRowContainer } from ".";
-
-export type CarTitleFieldProps = {
-  carTitle: string;
-  carType: string;
-  rentPrice: number;
-  capacity: number;
-  transmission: string;
-  location: string;
-  fuelCapacity: number;
-  carDescription: string;
-  images?: string[] | undefined;
-};
+import { CarTitleFieldProps } from "@/types/car.index";
 
 const CarTitleField = ({
   errors,

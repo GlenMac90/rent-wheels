@@ -107,7 +107,7 @@ export const successPageData = {
     message: "Payment Successful",
   },
   failed: {
-    heading: "There was a n error making payment",
+    heading: "There was an error making payment",
     icon: "/payment-status/payment-failed.png",
     message: "Payment Unseccessful.",
   },

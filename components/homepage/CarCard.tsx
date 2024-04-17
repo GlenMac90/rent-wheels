@@ -4,8 +4,7 @@ import { TbSteeringWheel } from "react-icons/tb";
 import { FaRegEdit } from "react-icons/fa";
 
 import { ICar } from "@/lib/models/car.model";
-import MoreInfoButton from "./MoreInfoButton";
-import LikeButton from "./LikeButton";
+import { LikeButton, MoreInfoButton } from ".";
 
 const CarCard = ({
   canEdit = false,

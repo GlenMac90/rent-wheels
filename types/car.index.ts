@@ -20,3 +20,27 @@ export interface ImageDataArrayType {
   width: number | undefined;
   height: number | undefined;
 }
+
+export type CarFieldType = {
+  carTitle: string;
+  carType: string;
+  rentPrice: number;
+  capacity: number;
+  transmission: string;
+  location: string;
+  fuelCapacity: number;
+  carDescription: string;
+  images?: string[] | undefined;
+};
+
+export type CarTitleFieldProps = {
+  carTitle: string;
+  carType: string;
+  rentPrice: number;
+  capacity: number;
+  transmission: string;
+  location: string;
+  fuelCapacity: number;
+  carDescription: string;
+  images?: string[] | undefined;
+};

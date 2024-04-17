@@ -1,9 +1,7 @@
 "use client";
 
 import { OptionalSearchFiltersProps } from "@/types/searchpage.index";
-import CarTypeFilters from "./CarTypeFilters";
-import CarCapacityFilters from "./CarCapacityFilters";
-import CarMaxPriceFilter from "./CarMaxPriceFilter";
+import { CarTypeFilters, CarCapacityFilters, CarMaxPriceFilter } from ".";
 
 const OptionalSearchFilters = ({
   mobileFilters,

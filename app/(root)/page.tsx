@@ -1,7 +1,5 @@
 import SearchBar from "@/components/searchbar/SearchBar";
-import Hero from "@/components/homepage/Hero";
-import PopularCars from "@/components/homepage/PopularCars";
-import RecommendedCars from "@/components/homepage/RecommendedCars";
+import { Hero, PopularCars, RecommendedCars } from "@/components/homepage";
 import { getAllCars, getCarsWithMostLikes } from "@/lib/actions/car.actions";
 
 export default async function Home() {

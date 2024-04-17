@@ -9,7 +9,7 @@ import { PopoverClose } from "@radix-ui/react-popover";
 import { FormRowContainer } from ".";
 import { carCapacity } from "@/constants";
 import { UseFormSetValue } from "react-hook-form";
-import { CarFieldType } from "./CarTypeField";
+import { CarFieldType } from "@/types/car.index";
 
 const CarCapacityField = ({
   errors,

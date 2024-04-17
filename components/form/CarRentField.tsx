@@ -1,6 +1,6 @@
 import { UseFormSetValue } from "react-hook-form";
 import { FormRowContainer } from ".";
-import { CarFieldType } from "./CarTypeField";
+import { CarFieldType } from "@/types/car.index";
 
 const CarRentField = ({
   errors,

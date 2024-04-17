@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
-import OptionalSearchFilters from "./OptionalSearchFilters";
-import MobileSearchFilters from "./MobileSearchFilters";
-import CarNameFilter from "./CarNameFilter";
+import { CarNameFilter, OptionalSearchFilters, MobileSearchFilters } from ".";
 
 const SearchPageFilters = () => {
   const searchParams = useSearchParams();

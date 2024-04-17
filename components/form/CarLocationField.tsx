@@ -1,6 +1,6 @@
 import { UseFormRegister } from "react-hook-form";
 import { FormRowContainer } from ".";
-import { CarTitleFieldProps } from "./CarTitleField";
+import { CarTitleFieldProps } from "@/types/car.index";
 
 const CarLocationField = ({
   errors,

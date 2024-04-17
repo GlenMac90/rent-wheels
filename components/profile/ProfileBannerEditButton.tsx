@@ -40,9 +40,7 @@ const ProfileBannerEditButton = ({
   const [file, setFile] = useState<File | null>(null);
   const { startUpload } = useUploadThing("media");
 
-  const handleInnerClick = (e: MouseEvent) => {
-    e.stopPropagation();
-  };
+  // Function to handle the file drop
 
   const onDrop = useCallback((acceptedFiles: any) => {
     if (isUploading) return;
@@ -51,17 +49,26 @@ const ProfileBannerEditButton = ({
     setImage(imageURL);
   }, []);
 
+  // Submit Handler
+
   const handleSubmit = async () => {
+    // Check if the image has changed
     const hasImageChanged = image !== bannerImage.url;
+    // If the image has not changed or there is no file, return
     if (!hasImageChanged || !file) return;
 
     try {
       setIsUploading(true);
+      // Delete the previous images for uploadthing
       await deleteFiles([bannerImage.key]);
+      // Start uploading the new image
       const imgRes = await startUpload([file]);
+      // If there is no image, return
       if (!imgRes || !imgRes[0].url) return;
+      // Get the blur data
       const { blurDataURL, width, height } = await getBlurData(imgRes[0].url);
 
+      // Create the image data
       const imageData = {
         url: imgRes[0].url,
         key: imgRes[0].key,
@@ -70,24 +77,28 @@ const ProfileBannerEditButton = ({
         height,
       };
 
+      // Update the user
       await updateUser({
         userData: {
           bannerImage: imageData,
         },
       });
     } catch (error) {
+      // If there is an error, show a toast
       toast({
         variant: "destructive",
         title: "Failed to update profile",
         description: "Please try again later",
       });
     } finally {
+      // Reset the state
       setShowEditModal(false);
       setIsUploading(false);
     }
   };
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  // Function to handle the file input click
   const handleButtonClick = () => {
     if (isUploading) return;
     if (fileInputRef.current) fileInputRef.current.click();
@@ -105,10 +116,13 @@ const ProfileBannerEditButton = ({
     }
   };
 
+  // Set the isRendered state to true
+
   useEffect(() => {
     setIsRendered(true);
   }, []);
 
+  // If the component is not rendered, return a disabled button
   if (!isRendered)
     return (
       <button
@@ -134,10 +148,7 @@ const ProfileBannerEditButton = ({
         </button>
       </DialogTrigger>
       <DialogContent className="flex w-full max-w-[500px]">
-        <div
-          className="bg-white_gray-850 flex h-fit w-full max-w-[500px] flex-col gap-8 rounded-ten px-4 py-8 md:p-8"
-          onClick={handleInnerClick}
-        >
+        <div className="bg-white_gray-850 flex h-fit w-full max-w-[500px] flex-col gap-8 rounded-ten px-4 py-8 md:p-8">
           <div className="flex-between w-full">
             <div className="flex flex-col gap-2">
               <span className="text-gray-900_white bold-18 md:bold-20">
