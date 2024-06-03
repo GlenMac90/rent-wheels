@@ -83,16 +83,16 @@ const SignInForm = () => {
     }
   };
 
-  // sign in with Github
+  // sign in with OAuth Provider
 
-  const handleGithubSignIn = async () => {
+  const handleOAuthSignIn = async (OAuthProvider: string) => {
     try {
-      await signIn("github");
+      await signIn(OAuthProvider);
     } catch (error) {
-      console.error("Error signing in with Github", error);
+      console.error(`Error signing in with ${OAuthProvider}`, error);
       toast({
         variant: "destructive",
-        title: "Error signing in with Github",
+        title: `Error signing in with ${OAuthProvider}`,
         description: "Please try again",
       });
     }
@@ -162,7 +162,19 @@ const SignInForm = () => {
 
       {/* Sign In with Github button */}
 
-      <Button height="h-10" width="w-full" handleClick={handleGithubSignIn}>
+      <Button
+        height="h-10"
+        width="w-full"
+        handleClick={() => handleOAuthSignIn("google")}
+      >
+        Sign In With Google
+      </Button>
+
+      <Button
+        height="h-10"
+        width="w-full"
+        handleClick={() => handleOAuthSignIn("github")}
+      >
         Sign In With Github
       </Button>
     </form>

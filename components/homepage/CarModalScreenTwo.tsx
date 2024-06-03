@@ -14,7 +14,8 @@ import { pickupDropoffSchema, PickupDropoffFields } from "@/schemas";
 import { formatDate } from "@/utils";
 import { CarModalScreenTwoProps } from "@/types/car.index";
 import { createTransaction } from "@/lib/actions/transaction.actions";
-import { Button, ArrowDownIcon } from "..";
+import ArrowDownIcon from "../ArrowDownIcon";
+import Button from "../Button";
 
 const CarModalScreenTwo = ({ handleClose, carId }: CarModalScreenTwoProps) => {
   const router = useRouter();
