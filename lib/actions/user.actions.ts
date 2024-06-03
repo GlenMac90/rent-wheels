@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { Session, getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 import User from "../models/user.model";
 import Car from "../models/car.model";
@@ -318,7 +319,11 @@ export async function checkActiveSessionHasAccount(session: Session | null) {
 
     if (user) return;
 
-    await User.create({ email: session.user.email, name: session.user.name });
+    await User.create({
+      email: session.user.email,
+      name: session.user.name,
+      password: uuidv4(),
+    });
   } catch (error) {
     throw new Error(`Failed to check active session has account: ${error}`);
   }
