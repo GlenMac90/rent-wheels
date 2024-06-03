@@ -7,6 +7,7 @@ import Provider from "@/providers/ThemeProvider";
 
 import { Plus_Jakarta_Sans as PlusJakartaSans } from "next/font/google";
 import "./globals.css";
+import { checkActiveSessionHasAccount } from "@/lib/actions/user.actions";
 
 // Load Jakarta font
 
@@ -25,6 +26,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
+  await checkActiveSessionHasAccount(session);
   return (
     <html lang="en">
       <SessionProvider session={session}>

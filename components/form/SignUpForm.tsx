@@ -88,6 +88,19 @@ const SignUpForm = () => {
     setSecondPassword(e.target.value);
   };
 
+  const handleOAuthSignIn = async (OAuthProvider: string) => {
+    try {
+      await signIn(OAuthProvider);
+    } catch (error) {
+      console.error(`Error signing in with ${OAuthProvider}`, error);
+      toast({
+        variant: "destructive",
+        title: `Error signing in with ${OAuthProvider}`,
+        description: "Please try again",
+      });
+    }
+  };
+
   return (
     <form
       className="bg-white_gray-850 flex h-fit w-full max-w-80 flex-col gap-4 rounded-ten p-6"
@@ -206,6 +219,21 @@ const SignUpForm = () => {
       </p>
 
       {/* Sign In Button */}
+      <Button
+        height="h-10"
+        width="w-full"
+        handleClick={() => handleOAuthSignIn("google")}
+      >
+        Sign Up With Google
+      </Button>
+
+      <Button
+        height="h-10"
+        width="w-full"
+        handleClick={() => handleOAuthSignIn("github")}
+      >
+        Sign Up With Github
+      </Button>
 
       <Button height="h-10" width="w-full" linkPath="/sign-in">
         Sign In

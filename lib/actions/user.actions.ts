@@ -2,7 +2,7 @@
 
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import User from "../models/user.model";
@@ -306,5 +306,19 @@ export async function getProfilePageCars() {
     };
   } catch (error) {
     throw new Error(`Failed to get rented cars: ${error}`);
+  }
+}
+
+export async function checkActiveSessionHasAccount(session: Session | null) {
+  try {
+    if (!session || !session.user) return;
+
+    const user = await User.findOne({ email: session.user.email });
+
+    if (user) return;
+
+    await User.create({ email: session.user.email, name: session.user.name });
+  } catch (error) {
+    throw new Error(`Failed to check active session has account: ${error}`);
   }
 }
