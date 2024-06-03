@@ -310,6 +310,7 @@ export async function getProfilePageCars() {
 }
 
 export async function checkActiveSessionHasAccount(session: Session | null) {
+  console.log("SESSION INFORMATION:", session);
   try {
     if (!session || !session.user) return;
 
